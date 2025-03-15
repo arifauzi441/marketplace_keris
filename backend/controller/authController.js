@@ -11,7 +11,7 @@ const register = async(req, res, next ) => {
         let data = {email, password, seller_address, status: "belum diterima"}
 
         await Seller.create(data,{fields: ["email", "password", "seller_address", "status"]})
-        res.status(201).json({msg: "Berhasil melakukan registrasi"})
+        res.status(201).json({msg: "Berhasil melakukan registrasi, menunggu konfirmasi"})
     } catch (error) {
         console.log(error)
         res.status(400).json({msg: error})
@@ -28,6 +28,7 @@ const login = async(req, res, next) => {
 
         if(password !== data.password) return res.status(401).json({msg: "Password salah"})
 
+        if(data.status === "belum diterima") return res.status(401).json({msg: "register dalam status belum diterima"})
         token = jwt.sign({
             id : data.id_seller,
             email : data.email
