@@ -13,7 +13,7 @@ const Seller = db.define(`Seller`,{
     seller_address: DataTypes.STRING,
     seller_phone: DataTypes.STRING,
     seller_photo: DataTypes.STRING,
-    status: DataTypes.ENUM(`diterima`,`ditolak`),
+    status: DataTypes.ENUM(`diterima`,`belum diterima`),
 })
 
 module.exports = Seller;
