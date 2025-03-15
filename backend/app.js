@@ -4,11 +4,14 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require(`cors`)
+require(`dotenv`).config()
 var {db, connectDB} = require(`./config/db`)
 var {Seller, Product, ProductPict} = require(`./model/Associations`)
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var authRouter = require(`./routes/auth`)
+var productRouter = require(`./routes/product`)
 
 var app = express();
 
@@ -25,12 +28,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 (async () => {
   await connectDB();
-  await db.sync({ alter: true }); // Gunakan { force: true } jika ingin menghapus tabel lama dan membuat baru
+  await db.sync({ alter: true })
   console.log('Database synced successfully.');
 })();
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use(`/auth`, authRouter)
+app.use(`/product`, productRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -45,7 +50,8 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  console.log(err)
+  res.json({msg: err})
 });
 
 module.exports = app;
