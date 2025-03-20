@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:mobile/dashboard.dart';
+import 'package:mobile/login_api.dart';
 import 'package:mobile/register.dart';
 
 class Login extends StatefulWidget {
@@ -10,23 +12,163 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  String email = '';
+  String password = '';
+  String errorMsg = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+        backgroundColor: Colors.white,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height * 0.5,
+                width: MediaQuery.of(context).size.width * 0.8,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.green, width: 3),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black12,
+                          spreadRadius: 5,
+                          blurRadius: 3,
+                          offset: Offset(12, 12))
+                    ]),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      height: 50,
+                      width: 100,
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.vertical(
+                              top: Radius.zero, bottom: Radius.circular(20))),
+                      child: Center(
+                        child: Text(
+                          "Login",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        (errorMsg.isNotEmpty)
+                            ? Text(errorMsg,
+                                style: TextStyle(color: Colors.red), textAlign: TextAlign.center,)
+                            : SizedBox(
+                                height: 0,
+                              ),
+                        getTextField(context, "Email"),
+                        getTextField(context, "Password"),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 110,
+                          height: 35,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Material(
+                              color: Colors.green,
+                              child: InkWell(
+                                onTap: () async {
+                                  try {
+                                    var result =
+                                        await LoginApi.login(email, password);
+                                    if (!mounted) return;
+                                    
+                                    if (result.token != "") {
+                                      if (!mounted) return;
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Dashboard()));
+                                    }
+
+                                    setState(() {
+                                      errorMsg = result.msg;
+                                    });
+                                  } catch (e) {
+                                    print(e);
+                                  }
+                                },
+                                child: Center(
+                                  child: Text(
+                                    "Masuk",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 30),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("Belum punya akun ? "),
+                                InkWell(
+                                    onTap: () => {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Register()))
+                                        },
+                                    child: Text(
+                                      "Daftar",
+                                      style: TextStyle(color: Colors.green),
+                                    ))
+                              ]),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ));
+  }
+
+  Container getTextField(BuildContext context, String label) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      width: MediaQuery.of(context).size.width * 0.8 * 0.8,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ElevatedButton(
-              onPressed: () => {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Dashboard()))
-                  },
-              child: Text("Halaman Dashboard")),
-          ElevatedButton(
-              onPressed: () => {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Register()))
-                  },
-              child: Text("Halaman Register"))
+          Text(label),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.5 * 0.10,
+            child: TextField(
+              onChanged: (value) => setState(() {
+                (label == "Email") ? email = value : password = value;
+              }),
+              decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20))),
+            ),
+          )
         ],
       ),
     );

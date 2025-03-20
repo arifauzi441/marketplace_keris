@@ -24,17 +24,17 @@ const login = async(req, res, next) => {
         let token = "";
         let data = await Seller.findOne({where: {email}})
 
-        if(!data) return res.status(404).json({msg: "email tidak ditemukan"})
+        if(!data) return res.status(404).json({msg: "email tidak ditemukan", token: ""})
 
-        if(password !== data.password) return res.status(401).json({msg: "Password salah"})
+        if(password !== data.password) return res.status(401).json({msg: "Password salah", token: ""})
 
-        if(data.status === "belum diterima") return res.status(401).json({msg: "register dalam status belum diterima"})
+        if(data.status === "belum diterima") return res.status(401).json({msg: "register dalam status belum diterima", token: ""})
         token = jwt.sign({
             id : data.id_seller,
             email : data.email
         }, process.env.JWT_SECRET,{expiresIn: "1h"})
 
-        res.status(200).json({token})
+        res.status(200).json({msg: "Berhasil Login", token})
     } catch (error) {
         console.log(error)
         res.status(401).json({msg: error})
