@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:mobile/add_item.dart';
 import 'package:mobile/dashboard.dart';
 import 'package:mobile/login_api.dart';
 import 'package:mobile/register.dart';
@@ -61,8 +61,11 @@ class _LoginState extends State<Login> {
                     Column(
                       children: [
                         (errorMsg.isNotEmpty)
-                            ? Text(errorMsg,
-                                style: TextStyle(color: Colors.red), textAlign: TextAlign.center,)
+                            ? Text(
+                                errorMsg,
+                                style: TextStyle(color: Colors.red),
+                                textAlign: TextAlign.center,
+                              )
                             : SizedBox(
                                 height: 0,
                               ),
@@ -86,7 +89,7 @@ class _LoginState extends State<Login> {
                                     var result =
                                         await LoginApi.login(email, password);
                                     if (!mounted) return;
-                                    
+
                                     if (result.token != "") {
                                       if (!mounted) return;
                                       Navigator.pushReplacement(
@@ -130,7 +133,7 @@ class _LoginState extends State<Login> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      Register()))
+                                                      AddItem()))
                                         },
                                     child: Text(
                                       "Daftar",
@@ -162,11 +165,15 @@ class _LoginState extends State<Login> {
               onChanged: (value) => setState(() {
                 (label == "Email") ? email = value : password = value;
               }),
+              cursorColor: Colors.green,
               decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.green, width: 2.0),
+                      borderRadius: BorderRadius.circular(20)),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20))),
+                      borderRadius: BorderRadius.circular(20)),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 8, horizontal: 10)),
             ),
           )
         ],

@@ -164,11 +164,15 @@ class _RegisterState extends State<Register> {
                   alamat = value;
                 }
               }),
+              cursorColor: Colors.green,
               decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.green, width: 2.0),
+                      borderRadius: BorderRadius.circular(20)),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20))),
+                      borderRadius: BorderRadius.circular(20)),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 8, horizontal: 10)),
             ),
           )
         ],
