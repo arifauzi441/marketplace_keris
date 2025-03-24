@@ -44,7 +44,7 @@ const storeProduct = async (req, res, next) => {
         let data = []
         if (req.files) {
             data = req.files.map(file => {
-                return { path: `images/product_images/${file.originalname}`, id_product: newProduct.dataValues.id_product }
+                return { path: `images/product_images/${file.filename}`, id_product: newProduct.dataValues.id_product }
             })
             await ProductPict.bulkCreate(data)
         }

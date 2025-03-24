@@ -13,7 +13,7 @@ class LoginApi {
   }
 
   static Future<LoginApi> login(String email, String password) async {
-    String apiURL = 'http://localhost:3000/auth/login';
+    String apiURL = 'http://192.168.113.10:3000/auth/login';
     var apiResult = await http
         .post(Uri.parse(apiURL), body: {"email": email, "password": password});
 

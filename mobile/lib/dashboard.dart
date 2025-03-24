@@ -1,15 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/add_item.dart';
+import 'package:mobile/user_api.dart';
 
 class Dashboard extends StatefulWidget {
+  final String? token;
+  const Dashboard({super.key, required this.token});
+
   @override
   _DashboardState createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
-  List<Product> product = [];
+  UserApi? user;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUser();
+  }
+
+  Future<void> fetchUser() async {
+    try {
+      UserApi? fetchedUser = await UserApi.getUser(widget.token ?? "");
+      if (!mounted) return;
+      setState(() {
+        user = fetchedUser;
+      });
+    } catch (e) {
+      print("Error fetching user: $e");
+    }
+  }
 
   Widget _buildProductList() {
-    if (product.isNotEmpty) {
+    if (user == null) {
+      return Center(
+        child: Text(""),
+      );
+    } else if (user?.product.isEmpty ?? true) {
       return Column(
         children: [
           Padding(
@@ -28,7 +55,7 @@ class _DashboardState extends State<Dashboard> {
                       ),
                     ),
                     Text(
-                      "Nama Empu",
+                      user?.email ?? '',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -69,7 +96,18 @@ class _DashboardState extends State<Dashboard> {
           Column(
             children: [
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              AddItem(token: widget.token))).then((value) => {
+                        if (value == true)
+                          setState(() {
+                            fetchUser();
+                          })
+                      });
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF53c737),
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -100,7 +138,7 @@ class _DashboardState extends State<Dashboard> {
           Spacer(),
         ],
       );
-    }else{
+    } else {
       return Column(
         children: [
           Padding(
@@ -109,17 +147,19 @@ class _DashboardState extends State<Dashboard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
-                  children:[
+                  children: [
                     Padding(
                       padding: EdgeInsets.only(right: 20.0, left: 5.0),
                       child: Image.asset(
-                        "images/account.png",
+                        (user?.sellerPhoto == null)
+                            ? "images/account.png"
+                            : user?.sellerPhoto ?? "",
                         width: 40.0,
                         height: 40.0,
                       ),
                     ),
                     Text(
-                      "Nama Empu",
+                      user?.email ?? "",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -127,7 +167,7 @@ class _DashboardState extends State<Dashboard> {
                   ],
                 ),
                 ElevatedButton(
-                  onPressed:() {},
+                  onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF53c737),
                   ),
@@ -153,10 +193,23 @@ class _DashboardState extends State<Dashboard> {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddItem(
+                                    token: widget.token,
+                                  ))).then((value) => {
+                            if (value == true)
+                              setState(() {
+                                fetchUser();
+                              })
+                          });
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF53c737),
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -197,7 +250,7 @@ class _DashboardState extends State<Dashboard> {
                 mainAxisSpacing: 10.0,
                 childAspectRatio: 0.7,
               ),
-              itemCount: 9,
+              itemCount: user?.product.length,
               itemBuilder: (context, index) {
                 return Container(
                   decoration: BoxDecoration(
@@ -210,10 +263,13 @@ class _DashboardState extends State<Dashboard> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Spacer(),
-                      Image.asset(
-                        'images/account.png',
-                        fit: BoxFit.contain,
-                      ),
+                      (user?.product[index].productPict.isEmpty ?? true)
+                          ? Image.asset(
+                              'images/account.png',
+                              fit: BoxFit.contain,
+                            )
+                          : Image.network(
+                              user?.product[index].productPict[0].path ?? ""),
                       Spacer(),
                       Align(
                         alignment: Alignment.centerLeft,
@@ -221,12 +277,12 @@ class _DashboardState extends State<Dashboard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Lorem Ipsum',
+                              user?.product[index].productName ?? "",
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             SizedBox(height: 4),
                             Text(
-                              'Rp 4.000.000',
+                              user?.product[index].productPrice ?? "",
                               style: TextStyle(color: Colors.black),
                             ),
                           ],
@@ -245,9 +301,7 @@ class _DashboardState extends State<Dashboard> {
                               ),
                               child: Text(
                                 "Ubah",
-                                style: TextStyle(
-                                  color: Colors.white
-                                ),
+                                style: TextStyle(color: Colors.white),
                               ),
                             ),
                           ),
@@ -261,9 +315,7 @@ class _DashboardState extends State<Dashboard> {
                               ),
                               child: Text(
                                 "Hapus",
-                                style: TextStyle(
-                                  color: Colors.white
-                                ),
+                                style: TextStyle(color: Colors.white),
                               ),
                             ),
                           ),
@@ -288,18 +340,4 @@ class _DashboardState extends State<Dashboard> {
       ),
     );
   }
-}
-
-class Product {
-  final String nama_produk;
-  final double harga_produk;
-  final String gambar_produk;
-
-  Product(
-    {
-      required this.nama_produk,
-      required this.harga_produk,
-      required this.gambar_produk
-    }
-  );
 }
