@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/add_item.dart';
 import 'package:mobile/dashboard.dart';
 import 'package:mobile/login_api.dart';
 import 'package:mobile/register.dart';
@@ -90,13 +89,13 @@ class _LoginState extends State<Login> {
                                         await LoginApi.login(email, password);
                                     if (!mounted) return;
 
-                                    if (result.token != "") {
+                                    if (result.token.isNotEmpty) {
                                       if (!mounted) return;
                                       Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Dashboard()));
+                                              builder: (context) => Dashboard(
+                                                  token: result.token)));
                                     }
 
                                     setState(() {
@@ -133,7 +132,7 @@ class _LoginState extends State<Login> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      AddItem()))
+                                                      Register()))
                                         },
                                     child: Text(
                                       "Daftar",
@@ -173,7 +172,7 @@ class _LoginState extends State<Login> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20)),
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 8, horizontal: 10)),
+                      EdgeInsets.symmetric(vertical: 5, horizontal: 10)),
             ),
           )
         ],
