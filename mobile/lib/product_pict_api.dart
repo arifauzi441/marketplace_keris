@@ -6,7 +6,7 @@ class ProductPictApi {
 
   factory ProductPictApi.createProductPictApi(Map<String, dynamic> object) {
     return ProductPictApi(
-        path: "http://192.168.113.10:3000/${object['path']}",
+        path: "http://localhost:3000/${object['path']}",
         idProductPict: object['id_product_pict']);
   }
 }

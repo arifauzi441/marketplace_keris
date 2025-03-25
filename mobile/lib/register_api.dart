@@ -13,7 +13,7 @@ class RegisterApi {
   }
 
   static Future<RegisterApi> register(email, password, alamat) async {
-    String apiURL = "http://192.168.113.10:3000/auth/register";
+    String apiURL = "http://localhost:3000/auth/register";
     var apiResult = await http.post(Uri.parse(apiURL),
         body: {"email": email, "password": password, "alamat": alamat});
 
