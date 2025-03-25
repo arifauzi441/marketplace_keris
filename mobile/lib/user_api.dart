@@ -40,7 +40,7 @@ class UserApi {
   }
 
   static Future<UserApi> getUser(String token) async {
-    String apiURL = 'http://192.168.113.10:3000/users/seller';
+    String apiURL = 'http://localhost:3000/users/seller';
     var apiResult = await http
         .get(Uri.parse(apiURL), headers: {"Authorization": "Bearer $token"});
 

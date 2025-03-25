@@ -38,15 +38,13 @@ class ProductApi {
 
   static Future<Map<String, dynamic>> storeProduct(String name,
       String description, int price, List<File> path, String token) async {
-    String apiUrl = 'http://192.168.113.10:3000/product/store';
-    print(path.toString());
-    var apiResult = await http.MultipartRequest('POST', Uri.parse(apiUrl));
+    String apiUrl = 'http://localhost:3000/product/store';
+    var apiResult = http.MultipartRequest('POST', Uri.parse(apiUrl));
     apiResult.headers['Authorization'] = "Bearer $token";
     apiResult.fields['product_name'] = name;
     apiResult.fields['product_price'] = price.toString();
     apiResult.fields['product_description'] = description.toString();
     for (var p in path) {
-      print(p.path);
       if (p.path.isNotEmpty) {
         String mimeType = lookupMimeType(p.path) ?? "";
         List<String> mimeParts = mimeType.split('/');
