@@ -1,0 +1,2 @@
+C:/Users/ibamq/OneDrive/Documents/Kuliah/Semester 4/Workshop Pengembangan Perangkat Lunak Berbasis Agile/marketplace_keris/mobile/android/app/.cxx/Debug/2kw1m1h4/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/ibamq/OneDrive/Documents/Kuliah/Semester 4/Workshop Pengembangan Perangkat Lunak Berbasis Agile/marketplace_keris/mobile/android/app/.cxx/Debug/2kw1m1h4/arm64-v8a/CMakeFiles/rebuild_cache.dir

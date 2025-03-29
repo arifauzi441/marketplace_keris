@@ -248,17 +248,20 @@ class _DashboardState extends State<Dashboard> {
                 crossAxisCount: 2,
                 crossAxisSpacing: 10.0,
                 mainAxisSpacing: 10.0,
-                childAspectRatio: 0.7,
+                childAspectRatio: 0.55,
               ),
               itemCount: user?.product.length,
               itemBuilder: (context, index) {
                 return Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.5,
                   decoration: BoxDecoration(
                     border: Border.all(color: Color(0xFF53c737), width: 2.0),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   padding: EdgeInsets.all(8.0),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -271,6 +274,13 @@ class _DashboardState extends State<Dashboard> {
                           : Image.network(
                               user?.product[index].productPict[0].path ?? ""),
                       Spacer(),
+                      Container(
+                        child: Column(
+                          children: [
+                            
+                          ],
+                        ),
+                      ),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Column(
@@ -288,7 +298,7 @@ class _DashboardState extends State<Dashboard> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 8),
+                      Spacer(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -321,6 +331,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ],
                       ),
+                      Spacer(),
                     ],
                   ),
                 );
