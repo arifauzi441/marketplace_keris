@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/add_item.dart';
+import 'package:mobile/product_api.dart';
 import 'package:mobile/user_api.dart';
 
 class Dashboard extends StatefulWidget {
@@ -276,9 +277,7 @@ class _DashboardState extends State<Dashboard> {
                       Spacer(),
                       Container(
                         child: Column(
-                          children: [
-                            
-                          ],
+                          children: [],
                         ),
                       ),
                       Align(
@@ -318,7 +317,18 @@ class _DashboardState extends State<Dashboard> {
                           SizedBox(width: 8),
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                try {
+                                  var response = await ProductApi.deleteProduct(
+                                      user?.product[index].idProduct ?? 0, widget.token ?? "");
+                                  if (response['status'] == 200) {
+                                    fetchUser();
+                                  }
+                                  print(response);
+                                } catch (e) {
+                                  print(e);
+                                }
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Color(0xFF53c737),
                                 padding: EdgeInsets.symmetric(vertical: 8),
