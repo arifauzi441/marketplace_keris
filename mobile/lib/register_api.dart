@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class RegisterApi {
+  static final api = dotenv.env['API_URL'];
   String msg = '';
   int statusCode = 0;
 
@@ -13,7 +15,7 @@ class RegisterApi {
   }
 
   static Future<RegisterApi> register(email, password, alamat) async {
-    String apiURL = "http://localhost:3000/auth/register";
+    String apiURL = "$api/auth/register";
     var apiResult = await http.post(Uri.parse(apiURL),
         body: {"email": email, "password": password, "alamat": alamat});
 

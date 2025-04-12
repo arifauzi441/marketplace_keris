@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/product_api.dart';
 
 class UserApi {
+  static final api = dotenv.env['API_URL'];
   int? idSeller;
   String? email;
   String? password;
@@ -40,7 +42,7 @@ class UserApi {
   }
 
   static Future<UserApi> getUser(String token) async {
-    String apiURL = 'http://localhost:3000/users/seller';
+    String apiURL = '$api/users/seller';
     var apiResult = await http
         .get(Uri.parse(apiURL), headers: {"Authorization": "Bearer $token"});
 
