@@ -28,7 +28,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 (async () => {
   await connectDB();
-  await db.sync({ alter: true })
   console.log('Database synced successfully.');
 })();
 
