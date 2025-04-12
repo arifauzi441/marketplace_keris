@@ -19,7 +19,7 @@ const Product = db.define(`Product`,{
             key: `id_seller`
         },
         onUpdate: `CASCADE`,
-        onDelete: `SET NULL`
+        onDelete: `CASCADE`
     }
 })
 

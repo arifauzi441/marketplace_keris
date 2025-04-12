@@ -21,9 +21,13 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({storage, fileFilter})
 
+router.use(verifyToken)
+
 router.get("/seller/:id", product.getProductByIdSeller)
 router.get("/:id", product.getProductById)
 router.get("/", product.getProduct)
-router.post("/store", verifyToken, upload.array("path"), product.storeProduct)
+router.post("/store", upload.array("path"), product.storeProduct)
+router.patch("/update/:id",upload.array('path'), product.updateProduct)
+router.delete("/delete/:id", product.deleteProduct)
 
 module.exports = router

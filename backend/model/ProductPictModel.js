@@ -16,7 +16,7 @@ const ProductPict = db.define(`ProductPict`,{
             key: `id_product`
         },
         onUpdate: `CASCADE`,
-        onDelete: `SET NULL`
+        onDelete: `CASCADE`
     }
 })
 
