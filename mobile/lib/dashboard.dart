@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/add_item.dart';
+import 'package:mobile/edit_item.dart';
 import 'package:mobile/product_api.dart';
 import 'package:mobile/user_api.dart';
 
@@ -303,7 +304,13 @@ class _DashboardState extends State<Dashboard> {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EditItem(
+                                            token: widget.token ?? "", product: user?.product[index])));
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Color(0xFF53c737),
                                 padding: EdgeInsets.symmetric(vertical: 8),
@@ -320,7 +327,8 @@ class _DashboardState extends State<Dashboard> {
                               onPressed: () async {
                                 try {
                                   var response = await ProductApi.deleteProduct(
-                                      user?.product[index].idProduct ?? 0, widget.token ?? "");
+                                      user?.product[index].idProduct ?? 0,
+                                      widget.token ?? "");
                                   if (response['status'] == 200) {
                                     fetchUser();
                                   }

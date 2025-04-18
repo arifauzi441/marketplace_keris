@@ -11,9 +11,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String email = '';
-  String password = '';
   String errorMsg = '';
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -85,8 +85,9 @@ class _LoginState extends State<Login> {
                               child: InkWell(
                                 onTap: () async {
                                   try {
-                                    var result =
-                                        await LoginApi.login(email, password);
+                                    var result = await LoginApi.login(
+                                        _emailController.text,
+                                        _passwordController.text);
                                     if (!mounted) return;
 
                                     if (result.token.isNotEmpty) {
@@ -161,9 +162,8 @@ class _LoginState extends State<Login> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.5 * 0.10,
             child: TextField(
-              onChanged: (value) => setState(() {
-                (label == "Email") ? email = value : password = value;
-              }),
+              controller:
+                  (label == 'Email') ? _emailController : _passwordController,
               cursorColor: Colors.green,
               decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(

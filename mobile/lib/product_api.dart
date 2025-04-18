@@ -60,6 +60,8 @@ class ProductApi {
     return {"msg": productResult['msg'], "status": response.statusCode};
   }
 
+  static Future<Map<String, dynamic>> updateProduct(String name, String description, int price, )
+
   static Future<Map<String, dynamic>> deleteProduct(int idProduct, String token) async {
     String apiURL = '$api/product/delete/$idProduct';
     var apiResult = await http.delete(Uri.parse(apiURL), headers: {"Authorization": token});
@@ -67,4 +69,5 @@ class ProductApi {
     var productResult = json.decode(apiResult.body);
     return {"msg": productResult['msg'], "status": apiResult.statusCode};
   }
+
 }
