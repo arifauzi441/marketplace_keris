@@ -11,6 +11,7 @@ const Product = db.define(`Product`,{
     },
     product_name: DataTypes.STRING,
     product_price: DataTypes.INTEGER,
+    product_stock: DataTypes.INTEGER,
     product_description: DataTypes.TEXT,
     id_seller: {
         type: DataTypes.INTEGER,
