@@ -19,6 +19,7 @@ class _AddItemState extends State<AddItem> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _stockController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +76,10 @@ class _AddItemState extends State<AddItem> {
                         height: 10,
                       ),
                       _getTextField(context, "Harga Produk"),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      _getTextField(context, "Stok Produk"),
                       SizedBox(
                         height: 15,
                       ),
@@ -141,6 +146,7 @@ class _AddItemState extends State<AddItem> {
                                               _nameController.text,
                                               _descriptionController.text,
                                               int.parse(_priceController.text),
+                                              int.parse(_stockController.text),
                                               _image,
                                               widget.token.toString());
                                       if (!mounted) return;
@@ -231,10 +237,14 @@ class _AddItemState extends State<AddItem> {
             keyboardType: (text == 'Nama Produk')
                 ? TextInputType.text
                 : TextInputType.number,
-            inputFormatters: (text == 'Harga Produk')
+            inputFormatters: (text == 'Harga Produk' || text == 'Stok Produk')
                 ? [FilteringTextInputFormatter.digitsOnly]
                 : [],
-            controller: (text == 'Nama Produk') ? _nameController : _priceController,
+            controller: (text == 'Nama Produk')
+                ? _nameController
+                : (text == 'Harga Produk')
+                    ? _priceController
+                    : _stockController,
             cursorColor: Colors.green,
             decoration: InputDecoration(
                 focusedBorder: OutlineInputBorder(
