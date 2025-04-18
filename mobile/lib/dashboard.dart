@@ -147,26 +147,37 @@ class _DashboardState extends State<Dashboard> {
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: 20.0, left: 5.0),
-                      child: Image.asset(
-                        (user?.sellerPhoto == null)
-                            ? "images/account.png"
-                            : user?.sellerPhoto ?? "",
-                        width: 40.0,
-                        height: 40.0,
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(right: 10.0, left: 5.0),
+                        child: ClipOval(
+                          child: Image.asset(
+                            (user?.sellerPhoto == null)
+                                ? "images/account.png"
+                                : user?.sellerPhoto ?? "",
+                            width: 40.0,
+                            height: 40.0,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
-                    ),
-                    Text(
-                      user?.email ?? "",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                      Expanded(
+                        child: Text(
+                          user?.email ?? '',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () {},
@@ -267,28 +278,30 @@ class _DashboardState extends State<Dashboard> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Spacer(),
-                      (user?.product[index].productPict.isEmpty ?? true)
+                      Align(
+                        alignment: Alignment.center,
+                        child: (user?.product[index].productPict.isEmpty ?? true)
                           ? Image.asset(
                               'images/account.png',
                               fit: BoxFit.contain,
                             )
                           : Image.network(
                               user?.product[index].productPict[0].path ?? ""),
-                      Spacer(),
-                      Container(
-                        child: Column(
-                          children: [],
-                        ),
                       ),
+                      Spacer(),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              user?.product[index].productName ?? "",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                            SizedBox(
+                              height: 40,
+                              child: Text(
+                                user?.product[index].productName ?? "",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                             SizedBox(height: 4),
                             Text(
@@ -349,7 +362,6 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ],
                       ),
-                      Spacer(),
                     ],
                   ),
                 );
