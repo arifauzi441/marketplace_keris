@@ -10,10 +10,9 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  String email = '';
-  String password = '';
-  String alamat = '';
-
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _alamatController = TextEditingController();
   RegisterApi register = RegisterApi(msg: '', statusCode: 0);
 
   @override
@@ -90,7 +89,9 @@ class _RegisterState extends State<Register> {
                                 onTap: () async {
                                   try {
                                     var result = await RegisterApi.register(
-                                        email, password, alamat);
+                                        _emailController.text,
+                                        _passwordController.text,
+                                        _alamatController.text);
 
                                     setState(() {
                                       register = result;
@@ -155,15 +156,11 @@ class _RegisterState extends State<Register> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.5 * 0.10,
             child: TextField(
-              onChanged: (value) => setState(() {
-                if (label == "Email") {
-                  email = value;
-                } else if (label == "Password") {
-                  password = value;
-                } else {
-                  alamat = value;
-                }
-              }),
+              controller: (label == 'Email')
+                  ? _emailController
+                  : (label == 'Password')
+                      ? _passwordController
+                      : _alamatController,
               cursorColor: Colors.green,
               decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(

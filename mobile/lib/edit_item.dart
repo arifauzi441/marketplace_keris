@@ -5,20 +5,33 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/product_api.dart';
 
-class AddItem extends StatefulWidget {
+class EditItem extends StatefulWidget {
   final String? token;
-  const AddItem({super.key, required this.token});
+  final ProductApi? product;
+  const EditItem({super.key, required this.token, required this.product});
 
   @override
-  State<AddItem> createState() => _AddItemState();
+  State<EditItem> createState() => _EditItemState();
 }
 
-class _AddItemState extends State<AddItem> {
+class _EditItemState extends State<EditItem> {
   String msg = '';
   final List<File> _image = List.filled(4, File(''));
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
+  late TextEditingController _nameController;
+  late TextEditingController _descriptionController;
+  late TextEditingController _priceController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController =
+        TextEditingController(text: widget.product?.productName ?? '');
+    _descriptionController =
+        TextEditingController(text: widget.product?.productDescription ?? '');
+    _priceController = TextEditingController(
+        text: widget.product?.productPrice?.replaceAll(RegExp(r'[^0-9]'), '') ??
+            "0");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -186,38 +199,55 @@ class _AddItemState extends State<AddItem> {
   }
 
   SizedBox _getImageInput(BuildContext context, int index) {
+    int index2 = widget.product?.productPict.length ?? 0;
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.15,
-      height: MediaQuery.of(context).size.width * 0.15,
-      child: (_image[index].path.isNotEmpty)
-          ? Image.file(
-              _image[index],
-              fit: BoxFit.cover,
-            )
-          : Stack(
-              children: [
-                Positioned.fill(
-                  child: Image(
-                    image: AssetImage("assets/images/bg.jpg"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    "+",
-                    style: TextStyle(fontSize: 35),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () => {_pickImageFromGallery(index)},
-                  ),
-                )
-              ],
-            ),
-    );
+        width: MediaQuery.of(context).size.width * 0.15,
+        height: MediaQuery.of(context).size.width * 0.15,
+        child: (_image[index].path.isNotEmpty)
+            ? Image.file(
+                _image[index],
+                fit: BoxFit.cover,
+              )
+            : (index >= index2)
+                ? Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Image(
+                          image: AssetImage("assets/images/bg.jpg"),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Center(
+                        child: Text(
+                          "+",
+                          style: TextStyle(fontSize: 35),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () => {_pickImageFromGallery(index)},
+                        ),
+                      )
+                    ],
+                  )
+                : Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Image.network(
+                          widget.product?.productPict[index].path ?? "",
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () => {_pickImageFromGallery(index)},
+                        ),
+                      )
+                    ],
+                  ));
   }
 
   Column _getTextField(BuildContext context, String text) {
@@ -234,7 +264,8 @@ class _AddItemState extends State<AddItem> {
             inputFormatters: (text == 'Harga Produk')
                 ? [FilteringTextInputFormatter.digitsOnly]
                 : [],
-            controller: (text == 'Nama Produk') ? _nameController : _priceController,
+            controller:
+                (text == 'Nama Produk') ? _nameController : _priceController,
             cursorColor: Colors.green,
             decoration: InputDecoration(
                 focusedBorder: OutlineInputBorder(
