@@ -20,6 +20,7 @@ class _EditItemState extends State<EditItem> {
   late TextEditingController _nameController;
   late TextEditingController _descriptionController;
   late TextEditingController _priceController;
+  late TextEditingController _stockController;
 
   @override
   void initState() {
@@ -91,6 +92,10 @@ class _EditItemState extends State<EditItem> {
                       SizedBox(
                         height: 15,
                       ),
+                      _getTextField(context, "Stok Produk"),
+                      SizedBox(
+                        height: 15,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -154,6 +159,7 @@ class _EditItemState extends State<EditItem> {
                                               _nameController.text,
                                               _descriptionController.text,
                                               int.parse(_priceController.text),
+                                              int.parse(_stockController.text),
                                               _image,
                                               widget.token.toString());
                                       if (!mounted) return;
@@ -261,11 +267,14 @@ class _EditItemState extends State<EditItem> {
             keyboardType: (text == 'Nama Produk')
                 ? TextInputType.text
                 : TextInputType.number,
-            inputFormatters: (text == 'Harga Produk')
+            inputFormatters: (text == 'Harga Produk' || text == 'Stok Produk')
                 ? [FilteringTextInputFormatter.digitsOnly]
                 : [],
-            controller:
-                (text == 'Nama Produk') ? _nameController : _priceController,
+            controller: (text == 'Nama Produk')
+                ? _nameController
+                : (text == 'Harga Produk')
+                    ? _priceController
+                    : _stockController,
             cursorColor: Colors.green,
             decoration: InputDecoration(
                 focusedBorder: OutlineInputBorder(

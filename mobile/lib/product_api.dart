@@ -39,12 +39,13 @@ class ProductApi {
   }
 
   static Future<Map<String, dynamic>> storeProduct(String name,
-      String description, int price, List<File> path, String token) async {
+      String description, int price, int stock, List<File> path, String token) async {
     String apiUrl = '$api/product/store';
     var apiResult = http.MultipartRequest('POST', Uri.parse(apiUrl));
     apiResult.headers['Authorization'] = "Bearer $token";
     apiResult.fields['product_name'] = name;
     apiResult.fields['product_price'] = price.toString();
+    apiResult.fields['product_stock'] = stock.toString();
     apiResult.fields['product_description'] = description.toString();
     for (var p in path) {
       if (p.path.isNotEmpty) {
@@ -60,7 +61,9 @@ class ProductApi {
     return {"msg": productResult['msg'], "status": response.statusCode};
   }
 
-  static Future<Map<String, dynamic>> updateProduct(String name, String description, int price, )
+  static Future<Map<String, dynamic>> updateProduct(String name, String description, int price, ) async{
+    return await {"nama": 89};
+  }
 
   static Future<Map<String, dynamic>> deleteProduct(int idProduct, String token) async {
     String apiURL = '$api/product/delete/$idProduct';
