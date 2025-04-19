@@ -127,4 +127,19 @@ const deleteProduct = async (req, res, next) => {
     }
 }
 
-module.exports = { getProduct, getProductByIdSeller, getProductById, storeProduct, deleteProduct, updateProduct }
+const changeStatus = async (req, res, next) => {
+    try {
+        let data = await Product.findOne({where: {id_product: req.params.id}})
+        let product_status = (data.product_status == "aktif") ? "nonaktif" : "aktif"
+        
+        await Product.update({product_status},{where: {id_product: req.params.id}})
+
+        return res.status(200).json({msg: "Berhasil mengubah status data"})
+    } catch (error) {
+        console.log(error)
+        return res.status(401).json({msg: "Gagal mengubah status data"})
+    }
+}
+
+module.exports = { getProduct, getProductByIdSeller, getProductById, storeProduct, 
+    deleteProduct, updateProduct, changeStatus }

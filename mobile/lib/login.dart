@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/dashboard.dart';
-import 'package:mobile/login_api.dart';
+import 'package:mobile/model/login_api.dart';
 import 'package:mobile/register.dart';
 
 class Login extends StatefulWidget {

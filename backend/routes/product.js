@@ -28,6 +28,7 @@ router.get("/:id", product.getProductById)
 router.get("/", product.getProduct)
 router.post("/store", upload.array("path"), product.storeProduct)
 router.patch("/update/:id",upload.array('path'), product.updateProduct)
+router.patch("/change-status/:id", product.changeStatus)
 router.delete("/delete/:id", product.deleteProduct)
 
 module.exports = router

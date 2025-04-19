@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile/add_item.dart';
 import 'package:mobile/edit_item.dart';
-import 'package:mobile/product_api.dart';
-import 'package:mobile/user_api.dart';
+import 'package:mobile/edit_profil.dart';
+import 'package:mobile/model/product_api.dart';
+import 'package:mobile/model/user_api.dart';
 
 class Dashboard extends StatefulWidget {
   final String? token;
+
   const Dashboard({super.key, required this.token});
 
   @override
@@ -13,6 +16,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  static final api = dotenv.env['API_URL'] ?? "";
   UserApi? user;
 
   @override
@@ -28,6 +32,7 @@ class _DashboardState extends State<Dashboard> {
       setState(() {
         user = fetchedUser;
       });
+      print("fetching ....");
     } catch (e) {
       print("Error fetching user: $e");
     }
@@ -50,10 +55,20 @@ class _DashboardState extends State<Dashboard> {
                   children: [
                     Padding(
                       padding: EdgeInsets.only(right: 20.0, left: 5.0),
-                      child: Image.asset(
-                        "images/account.png",
-                        width: 40.0,
-                        height: 40.0,
+                      child: ClipOval(
+                        child: (user?.sellerPhoto == null)
+                            ? Image.asset(
+                                "images/account.png",
+                                width: 40.0,
+                                height: 40.0,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.network(
+                                "$api/${user?.sellerPhoto}",
+                                width: 40.0,
+                                height: 40.0,
+                                fit: BoxFit.cover,
+                              ),
                       ),
                     ),
                     Text(
@@ -65,7 +80,15 @@ class _DashboardState extends State<Dashboard> {
                   ],
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    var response = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                EditProfil(token: widget.token, user: user)));
+                    print(response);
+                    if (mounted && response == true) fetchUser();
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF53c737),
                   ),
@@ -156,14 +179,19 @@ class _DashboardState extends State<Dashboard> {
                       Padding(
                         padding: EdgeInsets.only(right: 10.0, left: 5.0),
                         child: ClipOval(
-                          child: Image.asset(
-                            (user?.sellerPhoto == null)
-                                ? "images/account.png"
-                                : user?.sellerPhoto ?? "",
-                            width: 40.0,
-                            height: 40.0,
-                            fit: BoxFit.cover,
-                          ),
+                          child: (user?.sellerPhoto == null)
+                              ? Image.asset(
+                                  "images/account.png",
+                                  width: 40.0,
+                                  height: 40.0,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.network(
+                                  "$api/${user?.sellerPhoto}",
+                                  width: 40.0,
+                                  height: 40.0,
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       ),
                       Expanded(
@@ -180,7 +208,15 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    var response = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                EditProfil(token: widget.token, user: user)));
+
+                    if (mounted && response == true) fetchUser();
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF53c737),
                   ),
@@ -280,13 +316,14 @@ class _DashboardState extends State<Dashboard> {
                     children: [
                       Align(
                         alignment: Alignment.center,
-                        child: (user?.product[index].productPict.isEmpty ?? true)
-                          ? Image.asset(
-                              'images/account.png',
-                              fit: BoxFit.contain,
-                            )
-                          : Image.network(
-                              user?.product[index].productPict[0].path ?? ""),
+                        child: (user?.product[index].productPict.isEmpty ??
+                                true)
+                            ? Image.asset(
+                                'images/account.png',
+                                fit: BoxFit.contain,
+                              )
+                            : Image.network(
+                                user?.product[index].productPict[0].path ?? ""),
                       ),
                       Spacer(),
                       Align(
@@ -322,7 +359,8 @@ class _DashboardState extends State<Dashboard> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => EditItem(
-                                            token: widget.token ?? "", product: user?.product[index])));
+                                            token: widget.token ?? "",
+                                            product: user?.product[index])));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Color(0xFF53c737),

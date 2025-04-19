@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mime/mime.dart';
-import 'package:mobile/product_pict_api.dart';
+import 'package:mobile/model/product_pict_api.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';

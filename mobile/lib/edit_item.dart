@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:mobile/product_api.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:mobile/model/product_api.dart';
 
 class EditItem extends StatefulWidget {
   final String? token;
@@ -21,6 +23,24 @@ class _EditItemState extends State<EditItem> {
   late TextEditingController _descriptionController;
   late TextEditingController _priceController;
   late TextEditingController _stockController;
+
+  Future<File> urlToFile(String imageUrl) async {
+    final uri = Uri.parse(imageUrl);
+    final response = await http.get(uri);
+
+    if (response.statusCode != 200) {
+      throw Exception('Gagal download gambar: ${response.statusCode}');
+    }
+
+    // Dapatkan path ke temporary directory
+    final tempDir = await getTemporaryDirectory();
+    final fileName = uri.pathSegments.last; // nama file dari URL
+    final file = File('${tempDir.path}/$fileName');
+
+    // Tulis bytes ke file
+    await file.writeAsBytes(response.bodyBytes);
+    return file;
+  }
 
   @override
   void initState() {

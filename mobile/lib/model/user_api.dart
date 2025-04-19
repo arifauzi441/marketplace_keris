@@ -1,8 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:mobile/product_api.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart';
+import 'package:mobile/model/product_api.dart';
 
 class UserApi {
   static final api = dotenv.env['API_URL'];
@@ -48,5 +52,32 @@ class UserApi {
 
     var userResult = json.decode(apiResult.body);
     return UserApi.createUserApi(userResult);
+  }
+
+  static Future<Map<String, dynamic>> updateUser(String token, File path,
+      String name, String phone, String address) async {
+    String mime = '';
+    try {
+      String apiURL = '$api/users/update';
+      var apiResult = http.MultipartRequest("PATCH", Uri.parse(apiURL));
+      apiResult.headers["Authorization"] = 'Bearer $token';
+      apiResult.fields["seller_name"] = name;
+      apiResult.fields["seller_address"] = address;
+      apiResult.fields["seller_phone"] = phone;
+      if (path.path.isNotEmpty) {
+        String mimeType = lookupMimeType(path.path) ?? "";
+        String mime = mimeType;
+        List<String> mimeParts = mimeType.split('/');
+        apiResult.files.add(await http.MultipartFile.fromPath('path', path.path,
+            contentType: MediaType(mimeParts[0], mimeParts[1])));
+      }
+
+      var response = await apiResult.send();
+      var userResult = json.decode(await response.stream.bytesToString());
+
+      return {"msg": userResult['msg'], "status": response.statusCode};
+    } catch (e) {
+      return {"msg": lookupMimeType(path.path)};
+    }
   }
 }
