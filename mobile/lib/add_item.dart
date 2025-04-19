@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mobile/product_api.dart';
+import 'package:mobile/model/product_api.dart';
 
 class AddItem extends StatefulWidget {
   final String? token;

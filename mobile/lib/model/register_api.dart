@@ -17,7 +17,7 @@ class RegisterApi {
   static Future<RegisterApi> register(email, password, alamat) async {
     String apiURL = "$api/auth/register";
     var apiResult = await http.post(Uri.parse(apiURL),
-        body: {"email": email, "password": password, "alamat": alamat});
+        body: {"email": email, "password": password, "seller_address": alamat});
 
     var registerResult = json.decode(apiResult.body);
 
