@@ -354,13 +354,14 @@ class _DashboardState extends State<Dashboard> {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
+                              onPressed: () async {
+                                var response = await Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => EditItem(
                                             token: widget.token ?? "",
                                             product: user?.product[index])));
+                                if (mounted && response == true) fetchUser();
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Color(0xFF53c737),
@@ -378,7 +379,8 @@ class _DashboardState extends State<Dashboard> {
                               onPressed: () async {
                                 try {
                                   var response = await ProductApi.deleteProduct(
-                                      user?.product[index].idProduct ?? 0,
+                                      user?.product[index].idProduct ??
+                                          99999999,
                                       widget.token ?? "");
                                   if (response['status'] == 200) {
                                     fetchUser();

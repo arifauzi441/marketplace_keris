@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:mobile/model/product_api.dart';
@@ -17,6 +18,7 @@ class EditItem extends StatefulWidget {
 }
 
 class _EditItemState extends State<EditItem> {
+  final api = dotenv.env['API_URL'] ?? "";
   String msg = '';
   final List<File> _image = List.filled(4, File(''));
   late TextEditingController _nameController;
@@ -24,22 +26,41 @@ class _EditItemState extends State<EditItem> {
   late TextEditingController _priceController;
   late TextEditingController _stockController;
 
-  Future<File> urlToFile(String imageUrl) async {
-    final uri = Uri.parse(imageUrl);
-    final response = await http.get(uri);
+  Future<void> urlToFile(String imageUrl, int index) async {
+    try {
+      print(imageUrl);
+      final uri = Uri.parse(imageUrl);
+      final response = await http.get(uri);
 
-    if (response.statusCode != 200) {
-      throw Exception('Gagal download gambar: ${response.statusCode}');
+      if (response.statusCode != 200) {
+        throw Exception('Gagal download gambar: ${response.statusCode}');
+      }
+      print(response.bodyBytes.length);
+
+      final tempDir = await getApplicationDocumentsDirectory();
+      final fileName = "product${widget.product?.idProduct}Photo$index";
+      final file = File('${tempDir.path}/$fileName.png');
+
+      await file.writeAsBytes(response.bodyBytes);
+
+      setState(() {
+        _image[index] = file;
+        print(_image[index].path);
+      });
+    } catch (e) {
+      setState(() {
+        msg = e.toString();
+      });
     }
+  }
 
-    // Dapatkan path ke temporary directory
-    final tempDir = await getTemporaryDirectory();
-    final fileName = uri.pathSegments.last; // nama file dari URL
-    final file = File('${tempDir.path}/$fileName');
-
-    // Tulis bytes ke file
-    await file.writeAsBytes(response.bodyBytes);
-    return file;
+  void _initAsync() async {
+    for (var i = 0; i < widget.product!.productPict.length; i++) {
+      if (widget.product?.productPict[i] != null) {
+        await urlToFile("${widget.product?.productPict[i].path}", i);
+        ;
+      }
+    }
   }
 
   @override
@@ -52,6 +73,10 @@ class _EditItemState extends State<EditItem> {
     _priceController = TextEditingController(
         text: widget.product?.productPrice?.replaceAll(RegExp(r'[^0-9]'), '') ??
             "0");
+    _stockController =
+        TextEditingController(text: widget.product?.productStock ?? "");
+    print(widget.product?.productStock);
+    _initAsync();
   }
 
   @override
@@ -175,16 +200,17 @@ class _EditItemState extends State<EditItem> {
                                   onTap: () async {
                                     try {
                                       var result =
-                                          await ProductApi.storeProduct(
+                                          await ProductApi.updateProduct(
                                               _nameController.text,
                                               _descriptionController.text,
-                                              int.parse(_priceController.text),
-                                              int.parse(_stockController.text),
+                                              _priceController.text,
+                                              _stockController.text,
                                               _image,
-                                              widget.token.toString());
+                                              widget.token.toString(),
+                                              widget.product!.idProduct ?? 999999);
                                       if (!mounted) return;
 
-                                      if (result['status'] == 201) {
+                                      if (result['status'] == 200) {
                                         if (!mounted) return;
                                         Navigator.pop(context, true);
                                       }
@@ -225,55 +251,95 @@ class _EditItemState extends State<EditItem> {
   }
 
   SizedBox _getImageInput(BuildContext context, int index) {
-    int index2 = widget.product?.productPict.length ?? 0;
     return SizedBox(
-        width: MediaQuery.of(context).size.width * 0.15,
-        height: MediaQuery.of(context).size.width * 0.15,
-        child: (_image[index].path.isNotEmpty)
-            ? Image.file(
-                _image[index],
-                fit: BoxFit.cover,
-              )
-            : (index >= index2)
-                ? Stack(
-                    children: [
+      width: MediaQuery.of(context).size.width * 0.17,
+      height: MediaQuery.of(context).size.width * 0.17,
+      child: (_image[index].path.isNotEmpty)
+          ? Stack(
+              children: [
+                Center(
+                  child: Container(
+                    color: Colors.lightBlue,
+                    width: MediaQuery.of(context).size.width * 0.17 * 0.90,
+                    height: MediaQuery.of(context).size.width * 0.17 * 0.90,
+                    child: Stack(clipBehavior: Clip.none, children: [
                       Positioned.fill(
-                        child: Image(
-                          image: AssetImage("assets/images/bg.jpg"),
+                        child: Image.file(
+                          _image[index],
                           fit: BoxFit.cover,
                         ),
                       ),
-                      Center(
-                        child: Text(
-                          "+",
-                          style: TextStyle(fontSize: 35),
-                          textAlign: TextAlign.center,
+                    ]),
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: SizedBox(
+                      height:
+                          MediaQuery.of(context).size.width * 0.17 * 0.9 * 0.25,
+                      width:
+                          MediaQuery.of(context).size.width * 0.17 * 0.9 * 0.25,
+                      child: Material(
+                        color: Colors.red,
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              _image[index] = File('');
+                            });
+                          },
+                          child: Center(
+                            child: Text(
+                              "X",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: MediaQuery.of(context).size.width *
+                                      0.17 *
+                                      0.25 *
+                                      0.5),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
                         ),
                       ),
-                      Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () => {_pickImageFromGallery(index)},
-                        ),
-                      )
-                    ],
-                  )
-                : Stack(
-                    children: [
-                      Positioned.fill(
-                        child: Image.network(
-                          widget.product?.productPict[index].path ?? "",
-                          fit: BoxFit.cover,
-                        ),
+                    ),
+                  ),
+                )
+              ],
+            )
+          : Center(
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.17 * 0.90,
+                height: MediaQuery.of(context).size.width * 0.17 * 0.90,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Positioned.fill(
+                      child: Image(
+                        image: AssetImage("assets/images/bg.jpg"),
+                        fit: BoxFit.cover,
                       ),
-                      Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () => {_pickImageFromGallery(index)},
-                        ),
-                      )
-                    ],
-                  ));
+                    ),
+                    Center(
+                      child: Text(
+                        "+",
+                        style: TextStyle(fontSize: 15),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () => {_pickImageFromGallery(index)},
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ),
+    );
   }
 
   Column _getTextField(BuildContext context, String text) {

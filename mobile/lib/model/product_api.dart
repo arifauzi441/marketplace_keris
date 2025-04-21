@@ -13,6 +13,7 @@ class ProductApi {
   int? idProduct;
   String? productName;
   String? productPrice;
+  String? productStock;
   String? productDescription;
   List<ProductPictApi> productPict;
 
@@ -21,6 +22,7 @@ class ProductApi {
       required this.productName,
       required this.productDescription,
       required this.productPrice,
+      required this.productStock,
       required this.productPict});
 
   factory ProductApi.createProductApi(Map<String, dynamic> object) {
@@ -33,13 +35,19 @@ class ProductApi {
         productPrice: NumberFormat.currency(
                 locale: 'id_ID', symbol: 'Rp', decimalDigits: 0)
             .format(object['product_price']),
+        productStock: object['product_stock'].toString(),
         productPict: temp
             .map((prodpict) => ProductPictApi.createProductPictApi(prodpict))
             .toList());
   }
 
-  static Future<Map<String, dynamic>> storeProduct(String name,
-      String description, int price, int stock, List<File> path, String token) async {
+  static Future<Map<String, dynamic>> storeProduct(
+      String name,
+      String description,
+      int price,
+      int stock,
+      List<File> path,
+      String token) async {
     String apiUrl = '$api/product/store';
     var apiResult = http.MultipartRequest('POST', Uri.parse(apiUrl));
     apiResult.headers['Authorization'] = "Bearer $token";
@@ -61,16 +69,43 @@ class ProductApi {
     return {"msg": productResult['msg'], "status": response.statusCode};
   }
 
-  static Future<Map<String, dynamic>> updateProduct(String name, String description, int price, ) async{
-    return await {"nama": 89};
+  static Future<Map<String, dynamic>> updateProduct(
+      String name,
+      String description,
+      String price,
+      String stock,
+      List<File> path,
+      String token,
+      int idProduct) async {
+    String apiUrl = '$api/product/update/$idProduct';
+    var apiResult = http.MultipartRequest('PATCH', Uri.parse(apiUrl));
+    apiResult.headers['Authorization'] = 'Bearer $token';
+    apiResult.fields['product_name'] = name;
+    apiResult.fields['product_description'] = description;
+    apiResult.fields['product_price'] = price;
+    apiResult.fields['product_stock'] = stock;
+
+    for (var p in path) {
+      if (p.path.isNotEmpty) {
+        String mimeType = lookupMimeType(p.path) ?? "";
+        List<String> mimeParts = mimeType.split('/');
+        apiResult.files.add(await http.MultipartFile.fromPath('path', p.path,
+            contentType: MediaType(mimeParts[0], mimeParts[1])));
+      }
+    }
+
+    var productResult = await apiResult.send();
+    var response = json.decode(await productResult.stream.bytesToString());
+    return {"msg": response['msg'], "status": productResult.statusCode};
   }
 
-  static Future<Map<String, dynamic>> deleteProduct(int idProduct, String token) async {
+  static Future<Map<String, dynamic>> deleteProduct(
+      int idProduct, String token) async {
     String apiURL = '$api/product/delete/$idProduct';
-    var apiResult = await http.delete(Uri.parse(apiURL), headers: {"Authorization": token});
+    var apiResult =
+        await http.delete(Uri.parse(apiURL), headers: {"Authorization": token});
 
     var productResult = json.decode(apiResult.body);
     return {"msg": productResult['msg'], "status": apiResult.statusCode};
   }
-
 }
