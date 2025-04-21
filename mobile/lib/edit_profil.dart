@@ -51,6 +51,12 @@ class _EditProfilState extends State<EditProfil> {
     }
   }
 
+  void _initAsync() async {
+    if (widget.user?.sellerPhoto != null) {
+      await urlToFile("$api/${widget.user?.sellerPhoto}");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -60,12 +66,6 @@ class _EditProfilState extends State<EditProfil> {
     _addressController =
         TextEditingController(text: widget.user?.sellerAddress);
     _initAsync();
-  }
-
-  void _initAsync() async {
-    if (widget.user?.sellerPhoto != null) {
-      await urlToFile("$api/${widget.user?.sellerPhoto}");
-    }
   }
 
   @override
@@ -117,7 +117,6 @@ class _EditProfilState extends State<EditProfil> {
                           children: [
                             Text(
                               "Foto profil",
-                              style: TextStyle(fontSize: 35),
                             ),
                             _getImageInput(context)
                           ],
@@ -257,32 +256,34 @@ class _EditProfilState extends State<EditProfil> {
                 )
               ],
             )
-          : SizedBox(
-              width: MediaQuery.of(context).size.width * 0.35 * 0.85,
-              height: MediaQuery.of(context).size.width * 0.35 * 0.85,
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Positioned.fill(
-                    child: Image(
-                      image: AssetImage("assets/images/bg.jpg"),
-                      fit: BoxFit.cover,
+          : Center(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.35 * 0.85,
+                height: MediaQuery.of(context).size.width * 0.35 * 0.85,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Positioned.fill(
+                      child: Image(
+                        image: AssetImage("assets/images/bg.jpg"),
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
-                  Center(
-                    child: Text(
-                      msg,
-                      style: TextStyle(fontSize: 10),
-                      textAlign: TextAlign.center,
+                    Center(
+                      child: Text(
+                        "+",
+                        style: TextStyle(fontSize: 35),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                  ),
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () => {_pickImageFromGallery()},
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () => {_pickImageFromGallery()},
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
     );
