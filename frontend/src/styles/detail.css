@@ -73,12 +73,12 @@
     /* Thumbnail */
     .gambar-thumbnail {
     display: flex;
-    gap: 15px;
+    gap: 10px;
     margin-top: 15px;
     flex-wrap: wrap;
     }
     .gambar-thumbnail img {
-    width: 90px;
+    width: 120px;
     height: 90px;
     object-fit: cover;
     cursor: pointer;
