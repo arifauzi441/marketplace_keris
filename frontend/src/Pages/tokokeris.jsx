@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
+import axios from 'axios';
 import "../index.css";
 import "../styles/toko.css";
 
@@ -73,11 +74,32 @@ const ProductItem = ({ image, name, price }) => (
 );
 
 export default function Tokokeris() {
+  const [products, setProducts] = useState([])
+  const [sellers, setSellers] = useState([])
+  const scrollRef = useRef(null);
   useEffect(() => {
     document.title = "Toko Keris Sumenep";
-  }, []);
+    console.log("hai")
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/product/');
+        setProducts(response.data.product);
+      } catch (error) {
+        console.error("Gagal mengambil data product:", error);
+      }
+    };
+    const fetchSellers = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/users/all-seller');
+        setSellers(response.data.data);
+      } catch (error) {
+        console.error("Gagal mengambil data seller:", error);
+      }
+    };
 
-  const scrollRef = useRef(null);
+    fetchProducts();
+    fetchSellers();
+  }, []);
 
   const scroll = (direction) => {
     if (scrollRef.current) {
@@ -104,15 +126,6 @@ export default function Tokokeris() {
 
   const produkData = [
     { image: keris4, name: "Ratu Pameling", price: "Rp 4.000.000" },
-    { image: keris5, name: "Lindu Aji", price: "Rp 4.000.000" },
-    { image: keris6, name: "Panji Mataram", price: "Rp 4.000.000" },
-    { image: keris7, name: "Surya Kencana", price: "Rp 4.000.000" },
-    { image: keris8, name: "Kyai Carubuk", price: "Rp 4.000.000" },
-    { image: keris9, name: "Rakian Naga", price: "Rp 4.000.000" },
-    { image: keris10, name: "Nagasasra Sabuk", price: "Rp 4.000.000" },
-    { image: keris11, name: "Kalamisani Emas", price: "Rp 4.000.000" },
-    { image: keris12, name: "Pamungkas Seta", price: "Rp 4.000.000" },
-    { image: keris13, name: "Sanghyang Pamenang", price: "Rp 4.000.000" },
   ];
 
   return (
@@ -205,7 +218,7 @@ export default function Tokokeris() {
         transition={{ duration: 1 }}
         >
           <div className="empu-list">
-            {empuData.map((empu, index) => (
+            {sellers.map((empu, index) => (
               <motion.div
               key={index}
               initial={{ opacity: 0, y: 50 }}
@@ -213,9 +226,9 @@ export default function Tokokeris() {
               transition={{ delay: index * 0.1, duration: 0.5 }}
             >
               <EmpuCard
-                image={empu.image}
-                name={empu.name}
-                phone={empu.phone}
+                image={empu.seller_photo}
+                name={empu.seller_name}
+                phone={empu.seller_phone}
               />
             </motion.div>
             ))}
@@ -266,7 +279,7 @@ export default function Tokokeris() {
       animate={{ opacity: 1 }}
       transition={{ delay: 0.2, duration: 0.6 }}
       >
-        {produkData.map((produk, index) => (
+        {products.map((produk, index) => (
           <motion.div
           className="produk-card"
           key={index}
@@ -275,7 +288,7 @@ export default function Tokokeris() {
           transition={{ delay: index * 0.1, duration: 0.5 }}
         ><Link to="/detail-produk">
           <ProdukCard
-            image={produk.image}
+            image={produk.ProductPicts.length > 0 ? `http://localhost:3000/${produk.ProductPicts[0].path}` : `http://localhost:3000/${produk.ProductPicts.path}`}
             name={produk.name}
             price={produk.price}
           />

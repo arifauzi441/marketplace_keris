@@ -21,11 +21,11 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({storage, fileFilter})
 
+router.get("/", product.getProduct)
 router.use(verifyToken)
 
 router.get("/seller/:id", product.getProductByIdSeller)
 router.get("/:id", product.getProductById)
-router.get("/", product.getProduct)
 router.post("/store", upload.array("path"), product.storeProduct)
 router.patch("/update/:id",upload.array('path'), product.updateProduct)
 router.patch("/change-status/:id", product.changeStatus)

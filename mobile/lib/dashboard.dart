@@ -48,62 +48,62 @@ class _DashboardState extends State<Dashboard> {
       return Column(
         children: [
           Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.menu, size: 40.0, color: Colors.black),
-                      onPressed: () {
-                        Scaffold.of(context).openDrawer();
-                      },
-                    ),
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              user?.email ?? '',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.menu, size: 40.0, color: Colors.black),
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                ),
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          user?.email ?? '',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(right: 10.0, left: 5.0),
-                            child: ClipOval(
-                              child: (user?.sellerPhoto == null)
-                                  ? Image.asset(
-                                      "images/account.png",
-                                      width: 40.0,
-                                      height: 40.0,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image.network(
-                                      "$api/${user?.sellerPhoto}",
-                                      width: 40.0,
-                                      height: 40.0,
-                                      fit: BoxFit.cover,
-                                    ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: EdgeInsets.only(right: 10.0, left: 5.0),
+                        child: ClipOval(
+                          child: (user?.sellerPhoto == null)
+                              ? Image.asset(
+                                  "images/account.png",
+                                  width: 40.0,
+                                  height: 40.0,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.network(
+                                  "$api/${user?.sellerPhoto}",
+                                  width: 40.0,
+                                  height: 40.0,
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Divider(
-                  thickness: 1,
-                  color: Colors.black,
-                ),
-              ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Divider(
+              thickness: 1,
+              color: Colors.black,
+            ),
+          ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Align(
@@ -268,15 +268,19 @@ class _DashboardState extends State<Dashboard> {
                               borderRadius: BorderRadius.circular(8),
                               child: AspectRatio(
                                 aspectRatio: 1,
-                                child: (user?.product[index].productPict.isEmpty ?? true)
-                                    ? Image.asset(
-                                        'images/potrait.png',
-                                        fit: BoxFit.cover,
-                                      )
-                                    : Image.network(
-                                        user?.product[index].productPict[0].path ?? "",
-                                        fit: BoxFit.cover,
-                                      ),
+                                child:
+                                    (user?.product[index].productPict.isEmpty ??
+                                            true)
+                                        ? Image.asset(
+                                            'images/potrait.png',
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Image.network(
+                                            user?.product[index].productPict[0]
+                                                    .path ??
+                                                "",
+                                            fit: BoxFit.cover,
+                                          ),
                               ),
                             ),
                             Spacer(),
@@ -308,14 +312,17 @@ class _DashboardState extends State<Dashboard> {
                               children: [
                                 Expanded(
                                   child: ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.push(
+                                    onPressed: () async {
+                                      var response = await Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) => EditItem(
                                                   token: widget.token ?? "",
                                                   product:
                                                       user?.product[index])));
+                                      if (mounted && response == true){
+                                        fetchUser();
+                                      }
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Color(0xFF53c737),

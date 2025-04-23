@@ -80,6 +80,7 @@ class ProductApi {
     String apiUrl = '$api/product/update/$idProduct';
     var apiResult = http.MultipartRequest('PATCH', Uri.parse(apiUrl));
     apiResult.headers['Authorization'] = 'Bearer $token';
+    apiResult.fields['id_product_pict'] = idProduct.toString();
     apiResult.fields['product_name'] = name;
     apiResult.fields['product_description'] = description;
     apiResult.fields['product_price'] = price;
