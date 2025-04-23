@@ -30,6 +30,9 @@ class UserApi {
 
   factory UserApi.createUserApi(Map<String, dynamic> object) {
     var data = object['data'];
+    if (data == null) {
+      throw Exception("Response tidak memiliki key 'data'");
+    }
     List<dynamic> temp = data['Products'] ?? [];
 
     return UserApi(
@@ -48,7 +51,7 @@ class UserApi {
     String apiURL = '$api/users/seller';
     var apiResult = await http
         .get(Uri.parse(apiURL), headers: {"Authorization": "Bearer $token"});
-
+    print("Response body: ${apiResult.body}");
     var userResult = json.decode(apiResult.body);
     return UserApi.createUserApi(userResult);
   }
