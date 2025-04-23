@@ -38,7 +38,7 @@ class _EditItemState extends State<EditItem> {
       print(response.bodyBytes.length);
 
       final tempDir = await getApplicationDocumentsDirectory();
-      final fileName = "product${widget.product?.idProduct}Photo$index";
+      final fileName = "product${widget.product?.idProduct}Photo${DateTime.now().millisecondsSinceEpoch}";
       final file = File('${tempDir.path}/$fileName.png');
 
       await file.writeAsBytes(response.bodyBytes);
