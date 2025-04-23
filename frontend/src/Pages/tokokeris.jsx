@@ -248,7 +248,6 @@ export default function Tokokeris() {
             <div>
               <p className="product-description">
                 Miliki koleksi keris eksklusif dengan ukiran khas dan desain elegan.
-                Setiap bilah mencerminkan keindahan seni tradisional yang penuh makna.
               </p>
             </div>
           </div>

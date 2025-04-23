@@ -10,7 +10,6 @@
     import kerisImage2 from "../assets/Images/keris3.jpeg";
     import kerisImage3 from "../assets/Images/keris4.jpg";
     import kerisImage4 from "../assets/Images/keris5.jpeg";
-    import kerisImage5 from "../assets/Images/keris6.jpg";
 
     export default function Tokokeris() {
     useEffect(() => {
@@ -20,7 +19,7 @@
     const [mainImage, setMainImage] = useState(kerisImage1);
 
     const GambarThumbnail = () => {
-        const thumbnails = [kerisImage1, kerisImage2, kerisImage3, kerisImage4, kerisImage5];
+        const thumbnails = [kerisImage1, kerisImage2, kerisImage3, kerisImage4];
         return (
         <div className="gambar-thumbnail">
             {thumbnails.map((thumb, idx) => (
