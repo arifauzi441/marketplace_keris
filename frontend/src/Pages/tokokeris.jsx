@@ -43,7 +43,7 @@ const EmpuCard = ({ image, name, phone }) => (
   </div>
 );
 
-// Komponen ProdukCard
+// Komponen ProdukCard - produk terbaru
 const ProdukCard = ({ image, name, price }) => (
   <div className="kartu-produk">
     <div className="gambar-produk">
@@ -59,7 +59,7 @@ const ProdukCard = ({ image, name, price }) => (
   </div>
 );
 
-// komponen ProductItem
+// komponen ProductItem - produk terlaris
 const ProductItem = ({ image, name, price }) => (
   <div className="product-item">
     <img src={image} alt={`Keris ${name}`} />
@@ -265,9 +265,15 @@ export default function Tokokeris() {
             </div>
           </div>
 
+          <Link to="/detail-produk">
           <ProductItem image={keris1Image} name="Naga Nawasena" price="Rp 4.000.000" />
+          </Link>
+          <Link to="/detail-produk">
           <ProductItem image={keris3Image} name="Sabuk Inten" price="Rp 4.000.000" />
+          </Link>
+          <Link to="/detail-produk">
           <ProductItem image={keris2Image} name="Lintang Kemukus" price="Rp 4.000.000" />
+          </Link>
         </motion.div>
       </motion.section>
 

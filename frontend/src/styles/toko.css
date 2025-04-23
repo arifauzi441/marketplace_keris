@@ -253,6 +253,7 @@
 }
 
 .product-hero {
+  max-width: 525px;
     background-size: cover;
     background-position: center;
     border-radius: 8px;
@@ -301,6 +302,7 @@
 }
 
 .product-item {
+  max-width: 525px;
     background-color: white;
     border-radius: 8px;
     border: 1px solid #ccc;
@@ -394,14 +396,18 @@
     .judul-produk {
     font-size: 1.5rem;
     font-weight: 500;
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
     }
 
     .produk-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 50px;
+      gap: 2rem;
     }    
+
+    .produk-card {
+      max-width: 260px;
+    }
 
     .kartu-produk {
     border: 1px solid #ccc;
