@@ -37,6 +37,18 @@ const getProductById = async (req, res, next) => {
     }
 }
 
+const getPopularProductByCounts = async (req, res, next) => {
+    try {
+        console.log(req.params.id)
+        let product = await Product.findAll({ order: [['click_counts','DESC']], include: {model:ProductPict} })
+
+        res.status(200).json({ product })
+    } catch (error) {
+        console.log(error)
+        res.status(401).json({ msg: "Tidak bisa mengambil product" })
+    }
+}
+
 const storeProduct = async (req, res, next) => {
     let t = await db.transaction()
     
@@ -141,5 +153,15 @@ const changeStatus = async (req, res, next) => {
     }
 }
 
+const incrementCounts = async (req, res, next) => {
+    try {
+        await Product.increment('click_counts', {by: 1, where: {id_product: req.params.id}})
+        res.status(200).json({msg: "Berhasil menambahkan counts"})
+    } catch (error) {
+        console.log(error)
+        res.status(401).json({msg: "Error pada fungsi, " + error})
+    }
+} 
+
 module.exports = { getProduct, getProductByIdSeller, getProductById, storeProduct, 
-    deleteProduct, updateProduct, changeStatus }
+    deleteProduct, updateProduct, changeStatus, incrementCounts, getPopularProductByCounts }

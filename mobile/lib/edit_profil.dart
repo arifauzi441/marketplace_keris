@@ -73,124 +73,126 @@ class _EditProfilState extends State<EditProfil> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: SizedBox(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Edit Profil", style: TextStyle(fontSize: 20)),
-                Container(
-                  margin: EdgeInsets.only(top: 30),
-                  width: 100,
-                  height: 30,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Material(
-                      color: Colors.green,
-                      child: InkWell(
-                        child: Center(
-                          child: Text(
-                            "Kembali",
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(20),
+            child: SizedBox(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Edit Profil", style: TextStyle(fontSize: 20)),
+                  Container(
+                    margin: EdgeInsets.only(top: 30),
+                    width: 100,
+                    height: 30,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Material(
+                        color: Colors.green,
+                        child: InkWell(
+                          child: Center(
+                            child: Text(
+                              "Kembali",
+                              style: TextStyle(color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
+                          onTap: () => {Navigator.pop(context)},
                         ),
-                        onTap: () => {Navigator.pop(context)},
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(20),
-                  margin: EdgeInsets.only(top: 20),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.green, width: 3)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Column(
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    margin: EdgeInsets.only(top: 20),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.green, width: 3)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Foto profil",
+                              ),
+                              _getImageInput(context)
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        _getTextField(context, "Nama"),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _getTextField(context, "No. telepon"),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        _getTextField(context, "Alamat"),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              "Foto profil",
-                            ),
-                            _getImageInput(context)
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      _getTextField(context, "Nama"),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      _getTextField(context, "No. telepon"),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      _getTextField(context, "Alamat"),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.6,
-                            height: 35,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Material(
-                                color: Colors.green,
-                                child: InkWell(
-                                  onTap: () async {
-                                    try {
-                                      var result = await UserApi.updateUser(
-                                          widget.token.toString(),
-                                          _image,
-                                          _nameController.text,
-                                          _phoneController.text,
-                                          _addressController.text);
-                                      if (!mounted) return;
-
-                                      if (result['status'] == 200) {
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.6,
+                              height: 35,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Material(
+                                  color: Colors.green,
+                                  child: InkWell(
+                                    onTap: () async {
+                                      try {
+                                        var result = await UserApi.updateUser(
+                                            widget.token.toString(),
+                                            _image,
+                                            _nameController.text,
+                                            _phoneController.text,
+                                            _addressController.text);
                                         if (!mounted) return;
-                                        Navigator.pop(context, true);
+        
+                                        if (result['status'] == 200) {
+                                          if (!mounted) return;
+                                          Navigator.pop(context, true);
+                                        }
+        
+                                        setState(() {
+                                          msg = result['msg'];
+                                        });
+                                      } catch (e) {
+                                        setState(() {
+                                          msg = e.toString();
+                                        });
+                                        print(e);
                                       }
-
-                                      setState(() {
-                                        msg = result['msg'];
-                                      });
-                                    } catch (e) {
-                                      setState(() {
-                                        msg = e.toString();
-                                      });
-                                      print(e);
-                                    }
-                                  },
-                                  child: Center(
-                                    child: Text(
-                                      "Selesai",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 16),
+                                    },
+                                    child: Center(
+                                      child: Text(
+                                        "Selesai",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                )
-              ],
+                          ],
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

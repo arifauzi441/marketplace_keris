@@ -51,7 +51,6 @@ class UserApi {
     String apiURL = '$api/users/seller';
     var apiResult = await http
         .get(Uri.parse(apiURL), headers: {"Authorization": "Bearer $token"});
-    print("Response body: ${apiResult.body}");
     var userResult = json.decode(apiResult.body);
     return UserApi.createUserApi(userResult);
   }
