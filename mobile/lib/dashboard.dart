@@ -9,7 +9,7 @@ import 'package:mobile/model/product_api.dart';
 import 'package:mobile/model/user_api.dart';
 
 class Dashboard extends StatefulWidget {
-  String? token;
+  final String? token;
 
   Dashboard({super.key, required this.token});
 
@@ -21,16 +21,18 @@ class _DashboardState extends State<Dashboard> {
   static final api = dotenv.env['API_URL'] ?? "";
   UserApi? user;
   bool _burgerMenu = false;
+  late String? token;
 
   @override
   void initState() {
     super.initState();
+    token = widget.token;
     fetchUser();
   }
 
   Future<void> fetchUser() async {
     try {
-      UserApi? fetchedUser = await UserApi.getUser(widget.token ?? "");
+      UserApi? fetchedUser = await UserApi.getUser(token ?? "");
       if (!mounted) return;
       setState(() {
         user = fetchedUser;
@@ -128,8 +130,7 @@ class _DashboardState extends State<Dashboard> {
                       Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      AddItem(token: widget.token)))
+                                  builder: (context) => AddItem(token: token)))
                           .then((value) => {
                                 if (value == true)
                                   setState(() {
@@ -244,8 +245,7 @@ class _DashboardState extends State<Dashboard> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     EditProfil(
-                                                        token:
-                                                            widget.token ?? "",
+                                                        token: token ?? "",
                                                         user: user)));
                                         if (mounted && response == true) {
                                           fetchUser();
@@ -297,7 +297,7 @@ class _DashboardState extends State<Dashboard> {
                               child: InkWell(
                                   onTap: () {
                                     setState(() {
-                                      widget.token = '';
+                                      token = '';
                                     });
                                     Navigator.pushReplacement(
                                         context,
@@ -425,7 +425,7 @@ class _DashboardState extends State<Dashboard> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => DetailItem(
-                              token: widget.token,
+                              token: token,
                               product: user?.product[index],
                             ),
                           ),
@@ -460,7 +460,7 @@ class _DashboardState extends State<Dashboard> {
                                                 user?.product[index]
                                                         .idProduct ??
                                                     0,
-                                                widget.token ?? "");
+                                                token ?? "");
                                         if (response['status'] == 200) {
                                           fetchUser();
                                         }
@@ -570,7 +570,7 @@ class _DashboardState extends State<Dashboard> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) => EditItem(
-                                                  token: widget.token ?? "",
+                                                  token: token ?? "",
                                                   product:
                                                       user?.product[index])));
                                       if (mounted && response == true) {
@@ -615,7 +615,7 @@ class _DashboardState extends State<Dashboard> {
                                                 user?.product[index]
                                                         .idProduct ??
                                                     0,
-                                                widget.token ?? "");
+                                                token ?? "");
                                         if (response['status'] == 200) {
                                           fetchUser();
                                         }
@@ -699,7 +699,7 @@ class _DashboardState extends State<Dashboard> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          AddItem(token: widget.token),
+                                          AddItem(token: token),
                                     ),
                                   ).then((value) {
                                     if (value == true) {
@@ -804,8 +804,7 @@ class _DashboardState extends State<Dashboard> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     EditProfil(
-                                                        token:
-                                                            widget.token ?? "",
+                                                        token: token ?? "",
                                                         user: user)));
                                         if (mounted && response == true) {
                                           fetchUser();
@@ -857,7 +856,7 @@ class _DashboardState extends State<Dashboard> {
                               child: InkWell(
                                   onTap: () {
                                     setState(() {
-                                      widget.token = '';
+                                      token = '';
                                     });
                                     Navigator.pushReplacement(
                                         context,
