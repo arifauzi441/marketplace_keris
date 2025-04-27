@@ -22,6 +22,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({storage, fileFilter})
 
 router.get("/", product.getProduct)
+router.get("/active-product", product.getActiveProduct)
 router.get("/increment-count/:id", product.incrementCounts)
 router.get("/populer-product", product.getPopularProductByCounts)
 router.get("/:id", product.getProductById)
