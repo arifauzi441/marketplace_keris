@@ -10,9 +10,6 @@ import "../styles/toko.css";
 import heroImage from "../assets/Images/hero1.png";
 import productHeroImage from "../assets/Images/hero3.png";
 import logoImage from "../assets/Images/logo-keris.png";
-import keris1Image from "../assets/Images/keris1.jpg";
-import keris2Image from "../assets/Images/keris2.jpg";
-import keris3Image from "../assets/Images/keris3.jpeg";
 
 // Komponen EmpuCard
 const EmpuCard = ({ image, name, phone }) => (
@@ -24,7 +21,7 @@ const EmpuCard = ({ image, name, phone }) => (
 );
 
 // Komponen ProdukCard - produk terbaru
-const ProdukCard = ({ image, name, price}) => (
+const ProdukCard = ({ image, name, price, id_product}) => (
   <div className="kartu-produk">
     <div className="gambar-produk">
       <img src={image} alt={name} />
@@ -32,7 +29,7 @@ const ProdukCard = ({ image, name, price}) => (
     <span className="nama-produk">{name}</span>
     <div className="harga-dan-beli">
       <span className="harga-produk">{price}</span>
-      <Link to="/detail-produk">
+      <Link to={`/detail-produk/${id_product}`}>
       <button className="tombol-beli">Beli</button>
       </Link>
     </div>
@@ -55,7 +52,7 @@ const ProductItem = ({ image, name, price, id_product }) => (
     <div className="product-item-content">
       <span className="product-name">{name}</span>
       <span className="product-price">{price}</span>
-      <Link to="/detail-produk" onClick={() => incrementClick(id_product)}>
+      <Link to={`/detail-produk/${id_product}`} onClick={() => incrementClick(id_product)}>
       <button className="buy-button">Beli</button>
       </Link>
     </div>
@@ -209,7 +206,7 @@ export default function Tokokeris() {
               transition={{ delay: index * 0.1, duration: 0.5 }}
             >
               <EmpuCard
-                image={empu.seller_photo}
+                image={`http://localhost:3000/${empu.seller_photo}`}
                 name={empu.seller_name}
                 phone={empu.seller_phone}
               />
@@ -250,7 +247,7 @@ export default function Tokokeris() {
             
           {popularProducts.length >= 0 &&
             popularProducts.slice(0, 3).map(product => (
-                <Link to="/detail-produk">
+                <Link to={`/detail-produk/${product.id_product}`}>
                   <ProductItem image={`http://localhost:3000/${product?.ProductPicts[0]?.path}`} name={product?.product_name} price={product?.product_price} id_product={product?.id_product} />
                 </Link>)
             )
@@ -274,8 +271,9 @@ export default function Tokokeris() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1, duration: 0.5 }}
-        ><Link to="/detail-produk" onClick={() => incrementClick(produk.id_product)}>
+        ><Link to={`/detail-produk/${produk.id_product}`} onClick={() => incrementClick(produk.id_product)}>
           <ProdukCard
+            id_product = {produk.id_product}
             image={produk.ProductPicts.length > 0 ? `http://localhost:3000/${produk.ProductPicts[0].path}` : `http://localhost:3000/${produk.ProductPicts.path}`}
             name={produk.product_name}
             price={produk.product_price}
