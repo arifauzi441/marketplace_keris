@@ -15,6 +15,19 @@ const getProduct = async (req, res, next) => {
     }
 }
 
+const getActiveProduct = async (req, res, next) => {
+    try {
+        let product = await Product.findAll({
+            where: {product_status: 'aktif'},
+            include: {model: ProductPict}
+        })
+        res.status(200).json({ product })
+    } catch (error) {
+        console.log(error)
+        res.status(401).json({ msg: "Tidak bisa mengakses product" });
+    }
+}
+
 const getProductByIdSeller = async (req, res, next) => {
     try {
         let product = await Product.findAll({ where: { id_seller: req.params.id }, include: {model: ProductPict} })
@@ -43,7 +56,11 @@ const getProductById = async (req, res, next) => {
 const getPopularProductByCounts = async (req, res, next) => {
     try {
         console.log(req.params.id)
-        let product = await Product.findAll({ order: [['click_counts','DESC']], include: {model:ProductPict} })
+        let product = await Product.findAll({
+            where: {product_status: "aktif"} ,
+            order: [['click_counts','DESC']], 
+            include: {model:ProductPict} 
+        })
 
         res.status(200).json({ product })
     } catch (error) {
@@ -167,4 +184,4 @@ const incrementCounts = async (req, res, next) => {
 } 
 
 module.exports = { getProduct, getProductByIdSeller, getProductById, storeProduct, 
-    deleteProduct, updateProduct, changeStatus, incrementCounts, getPopularProductByCounts }
+    deleteProduct, updateProduct, changeStatus, incrementCounts, getPopularProductByCounts, getActiveProduct }

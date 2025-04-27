@@ -69,7 +69,7 @@ export default function Tokokeris() {
     console.log("hai")
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/product');
+        const response = await axios.get('http://localhost:3000/product/active-product');
         setProducts(response.data.product);
       } catch (error) {
         console.error("Gagal mengambil data product:", error);
