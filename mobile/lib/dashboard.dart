@@ -4,13 +4,14 @@ import 'package:mobile/add_item.dart';
 import 'package:mobile/detail_item.dart';
 import 'package:mobile/edit_item.dart';
 import 'package:mobile/edit_profil.dart';
+import 'package:mobile/login.dart';
 import 'package:mobile/model/product_api.dart';
 import 'package:mobile/model/user_api.dart';
 
 class Dashboard extends StatefulWidget {
-  final String? token;
+  String? token;
 
-  const Dashboard({super.key, required this.token});
+  Dashboard({super.key, required this.token});
 
   @override
   _DashboardState createState() => _DashboardState();
@@ -294,7 +295,15 @@ class _DashboardState extends State<Dashboard> {
                             child: Material(
                               color: Colors.transparent,
                               child: InkWell(
-                                  onTap: () => {},
+                                  onTap: () {
+                                    setState(() {
+                                      widget.token = '';
+                                    });
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Login()));
+                                  },
                                   child: Center(
                                     child: Text(
                                       "logout",
@@ -846,7 +855,15 @@ class _DashboardState extends State<Dashboard> {
                             child: Material(
                               color: Colors.transparent,
                               child: InkWell(
-                                  onTap: () => {},
+                                  onTap: () {
+                                    setState(() {
+                                      widget.token = '';
+                                    });
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Login()));
+                                  },
                                   child: Center(
                                     child: Text(
                                       "logout",
