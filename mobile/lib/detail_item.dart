@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile/model/product_api.dart';
-import 'package:mobile/model/user_api.dart';
 
 class DetailItem extends StatefulWidget {
   final String? token;
@@ -14,7 +12,6 @@ class DetailItem extends StatefulWidget {
 }
 
 class _DetailItemState extends State<DetailItem> {
-  static final api = dotenv.env['API_URL'] ?? "";
   late String _mainProductPict;
 
   @override
