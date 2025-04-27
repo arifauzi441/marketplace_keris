@@ -12,7 +12,10 @@ const Product = db.define(`Product`,{
     product_name: DataTypes.STRING,
     product_price: DataTypes.INTEGER,
     product_stock: DataTypes.INTEGER,
-    click_counts: DataTypes.INTEGER,
+    click_counts: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
     product_status: {
         type: DataTypes.ENUM("aktif", "nonaktif"),
         defaultValue: "aktif"

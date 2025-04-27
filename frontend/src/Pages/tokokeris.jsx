@@ -10,29 +10,9 @@ import "../styles/toko.css";
 import heroImage from "../assets/Images/hero1.png";
 import productHeroImage from "../assets/Images/hero3.png";
 import logoImage from "../assets/Images/logo-keris.png";
-import empu1 from "../assets/Images/empu1.jpg";
-import empu2 from "../assets/Images/empu2.jpeg";
-import empu3 from "../assets/Images/empu3.jpg";
-import empu4 from "../assets/Images/empu4.jpeg";
-import empu5 from "../assets/Images/empu5.jpg";
-import empu6 from "../assets/Images/empu6.jpeg";
-import empu7 from "../assets/Images/empu7.jpeg";
-import empu8 from "../assets/Images/empu8.jpeg";
-import empu9 from "../assets/Images/empu9.jpg";
-import empu10 from "../assets/Images/empu10.jpg";
 import keris1Image from "../assets/Images/keris1.jpg";
 import keris2Image from "../assets/Images/keris2.jpg";
 import keris3Image from "../assets/Images/keris3.jpeg";
-import keris4 from "../assets/Images/keris4.jpg";
-import keris5 from "../assets/Images/keris5.jpeg";
-import keris6 from "../assets/Images/keris6.jpg";
-import keris7 from "../assets/Images/keris7.jpg";
-import keris8 from "../assets/Images/keris8.jpg";
-import keris9 from "../assets/Images/keris9.jpg";
-import keris10 from "../assets/Images/keris10.jpeg";
-import keris11 from "../assets/Images/keris11.jpg";
-import keris12 from "../assets/Images/keris12.jpg";
-import keris13 from "../assets/Images/keris13.jpg";
 
 // Komponen EmpuCard
 const EmpuCard = ({ image, name, phone }) => (
@@ -44,7 +24,7 @@ const EmpuCard = ({ image, name, phone }) => (
 );
 
 // Komponen ProdukCard - produk terbaru
-const ProdukCard = ({ image, name, price }) => (
+const ProdukCard = ({ image, name, price}) => (
   <div className="kartu-produk">
     <div className="gambar-produk">
       <img src={image} alt={name} />
@@ -59,14 +39,23 @@ const ProdukCard = ({ image, name, price }) => (
   </div>
 );
 
+const incrementClick = async (id_product) => {
+  try {
+    let {msg} = await axios.get(`http://localhost:3000/product/increment-count/${id_product}`)
+    console.log(msg)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 // komponen ProductItem - produk terlaris
-const ProductItem = ({ image, name, price }) => (
+const ProductItem = ({ image, name, price, id_product }) => (
   <div className="product-item">
     <img src={image} alt={`Keris ${name}`} />
     <div className="product-item-content">
       <span className="product-name">{name}</span>
       <span className="product-price">{price}</span>
-      <Link to="/detail-produk">
+      <Link to="/detail-produk" onClick={() => incrementClick(id_product)}>
       <button className="buy-button">Beli</button>
       </Link>
     </div>
@@ -76,13 +65,14 @@ const ProductItem = ({ image, name, price }) => (
 export default function Tokokeris() {
   const [products, setProducts] = useState([])
   const [sellers, setSellers] = useState([])
+  const [popularProducts, setPopularProduct] = useState([])
   const scrollRef = useRef(null);
   useEffect(() => {
     document.title = "Toko Keris Sumenep";
     console.log("hai")
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/product/');
+        const response = await axios.get('http://localhost:3000/product');
         setProducts(response.data.product);
       } catch (error) {
         console.error("Gagal mengambil data product:", error);
@@ -96,6 +86,16 @@ export default function Tokokeris() {
         console.error("Gagal mengambil data seller:", error);
       }
     };
+    const fetchPopularProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/product/populer-product')
+        console.log(response.data.product)
+        setPopularProduct(response.data.product)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchPopularProducts();
 
     fetchProducts();
     fetchSellers();
@@ -110,23 +110,6 @@ export default function Tokokeris() {
       });
     }
   };
-
-  const empuData = [
-    { image: empu1, name: "Empu Sepuh 1", phone: "085236829300" },
-    { image: empu2, name: "Empu Sepuh 2", phone: "085236829301" },
-    { image: empu3, name: "Empu Sepuh 3", phone: "085236829302" },
-    { image: empu4, name: "Empu Sepuh 4", phone: "085236829303" },
-    { image: empu5, name: "Empu Sepuh 5", phone: "085236829304" },
-    { image: empu6, name: "Empu Sepuh 6", phone: "085236829305" },
-    { image: empu7, name: "Empu Sepuh 7", phone: "085236829306" },
-    { image: empu8, name: "Empu Sepuh 8", phone: "085236829307" },
-    { image: empu9, name: "Empu Sepuh 9", phone: "085236829308" },
-    { image: empu10, name: "Empu Sepuh 10", phone: "085236829309" },
-  ];  
-
-  const produkData = [
-    { image: keris4, name: "Ratu Pameling", price: "Rp 4.000.000" },
-  ];
 
   return (
     <div className="min-h-screen w-full flex flex-col">
@@ -264,16 +247,15 @@ export default function Tokokeris() {
               </p>
             </div>
           </div>
+            
+          {popularProducts.length >= 0 &&
+            popularProducts.slice(0, 3).map(product => (
+                <Link to="/detail-produk">
+                  <ProductItem image={`http://localhost:3000/${product?.ProductPicts[0]?.path}`} name={product?.product_name} price={product?.product_price} id_product={product?.id_product} />
+                </Link>)
+            )
+          }
 
-          <Link to="/detail-produk">
-          <ProductItem image={keris1Image} name="Naga Nawasena" price="Rp 4.000.000" />
-          </Link>
-          <Link to="/detail-produk">
-          <ProductItem image={keris3Image} name="Sabuk Inten" price="Rp 4.000.000" />
-          </Link>
-          <Link to="/detail-produk">
-          <ProductItem image={keris2Image} name="Lintang Kemukus" price="Rp 4.000.000" />
-          </Link>
         </motion.div>
       </motion.section>
 
@@ -292,11 +274,11 @@ export default function Tokokeris() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1, duration: 0.5 }}
-        ><Link to="/detail-produk">
+        ><Link to="/detail-produk" onClick={() => incrementClick(produk.id_product)}>
           <ProdukCard
             image={produk.ProductPicts.length > 0 ? `http://localhost:3000/${produk.ProductPicts[0].path}` : `http://localhost:3000/${produk.ProductPicts.path}`}
-            name={produk.name}
-            price={produk.price}
+            name={produk.product_name}
+            price={produk.product_price}
           />
           </Link>
         </motion.div>
