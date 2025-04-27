@@ -28,7 +28,10 @@ const getProductByIdSeller = async (req, res, next) => {
 const getProductById = async (req, res, next) => {
     try {
         console.log(req.params.id)
-        let product = await Product.findOne({ where: { id_product: req.params.id } })
+        let product = await Product.findOne({ 
+            where: { id_product: req.params.id }, 
+            include: {model: ProductPict} 
+        })
 
         res.status(200).json({ product })
     } catch (error) {
