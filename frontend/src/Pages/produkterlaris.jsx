@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import "../index.css";
@@ -9,6 +9,7 @@ import HeroTerlaris from "../Components/heroterlaris";
 import ScTerlaris from "../Components/prd-terlaris";
 
 export default function ProdukTerlaris() {
+  
   useEffect(() => {
     document.title = "Toko Keris Sumenep";
   }, []);

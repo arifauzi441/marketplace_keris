@@ -223,8 +223,10 @@ export default function Tokokeris() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
         >
-          <h1 className="product-title">Produk Terlaris</h1>
-          <button className="see-more-btn">Selengkapnya</button>
+          <h1 className="product-title">Paling Banyak Dilihat</h1>
+          <Link to={"/produk-terlaris"}>
+            <button className="see-more-btn">Selengkapnya</button>
+          </Link>
         </motion.div>
 
         <motion.div className="product-grid"
