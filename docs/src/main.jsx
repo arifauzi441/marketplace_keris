@@ -6,7 +6,7 @@ import App from './App.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <HashRouter basename="/marketplace_keris">  {/* Membungkus App */}
+    <HashRouter>  {/* Membungkus App */}
       <App />
     </HashRouter>
   </StrictMode>
