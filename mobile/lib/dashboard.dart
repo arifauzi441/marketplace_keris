@@ -4,13 +4,14 @@ import 'package:mobile/add_item.dart';
 import 'package:mobile/detail_item.dart';
 import 'package:mobile/edit_item.dart';
 import 'package:mobile/edit_profil.dart';
+import 'package:mobile/login.dart';
 import 'package:mobile/model/product_api.dart';
 import 'package:mobile/model/user_api.dart';
 
 class Dashboard extends StatefulWidget {
   final String? token;
 
-  const Dashboard({super.key, required this.token});
+  Dashboard({super.key, required this.token});
 
   @override
   _DashboardState createState() => _DashboardState();
@@ -19,16 +20,19 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   static final api = dotenv.env['API_URL'] ?? "";
   UserApi? user;
+  bool _burgerMenu = false;
+  late String? token;
 
   @override
   void initState() {
     super.initState();
+    token = widget.token;
     fetchUser();
   }
 
   Future<void> fetchUser() async {
     try {
-      UserApi? fetchedUser = await UserApi.getUser(widget.token ?? "");
+      UserApi? fetchedUser = await UserApi.getUser(token ?? "");
       if (!mounted) return;
       setState(() {
         user = fetchedUser;
@@ -45,9 +49,11 @@ class _DashboardState extends State<Dashboard> {
         child: Text(""),
       );
     } else if (user?.product.isEmpty ?? true) {
-      return Column(
+      return Stack(
         children: [
-          Padding(
+          Column(
+            children: [
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,7 +62,9 @@ class _DashboardState extends State<Dashboard> {
                     IconButton(
                       icon: Icon(Icons.menu, size: 40.0, color: Colors.black),
                       onPressed: () {
-                        Scaffold.of(context).openDrawer();
+                        setState(() {
+                          _burgerMenu = true;
+                        });
                       },
                     ),
                     Expanded(
@@ -104,60 +112,226 @@ class _DashboardState extends State<Dashboard> {
                   color: Colors.black,
                 ),
               ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Daftar Produk",
-                style: TextStyle(color: Colors.black, fontSize: 20.0),
-              ),
-            ),
-          ),
-          Spacer(),
-          Column(
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              AddItem(token: widget.token))).then((value) => {
-                        if (value == true)
-                          setState(() {
-                            fetchUser();
-                          })
-                      });
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF53c737),
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Daftar Produk",
+                    style: TextStyle(color: Colors.black, fontSize: 20.0),
                   ),
-                  shadowColor: Colors.black,
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.add, color: Colors.white),
-                    SizedBox(width: 5),
-                    Text(
-                      "Tambah Produk",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+              Spacer(),
+              Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AddItem(token: token)))
+                          .then((value) => {
+                                if (value == true)
+                                  setState(() {
+                                    fetchUser();
+                                  })
+                              });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF53c737),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      shadowColor: Colors.black,
                     ),
-                  ],
-                ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.add, color: Colors.white),
+                        SizedBox(width: 5),
+                        Text(
+                          "Tambah Produk",
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Anda belum menambahkan produk!",
+                    style: TextStyle(fontSize: 14, color: Colors.black),
+                  ),
+                ],
               ),
-              SizedBox(height: 10),
-              Text(
-                "Anda belum menambahkan produk!",
-                style: TextStyle(fontSize: 14, color: Colors.black),
-              ),
+              Spacer(),
             ],
           ),
-          Spacer(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              AnimatedContainer(
+                duration: Duration(milliseconds: 150),
+                height: MediaQuery.of(context).size.height,
+                width:
+                    (_burgerMenu) ? MediaQuery.of(context).size.width * 0.5 : 0,
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius:
+                          BorderRadius.horizontal(right: Radius.circular(15)),
+                      color: Color(0xFFE9F5EC)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(bottom: 25),
+                                width: MediaQuery.of(context).size.width *
+                                    0.5 *
+                                    0.2,
+                                height: MediaQuery.of(context).size.width *
+                                    0.5 *
+                                    0.2,
+                                decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    shape: BoxShape.circle),
+                                child: Material(
+                                  shape: CircleBorder(),
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    customBorder: CircleBorder(),
+                                    onTap: () => {
+                                      setState(() {
+                                        _burgerMenu = false;
+                                      })
+                                    },
+                                    child: Center(
+                                      child: Center(
+                                          child: Icon(
+                                        Icons.arrow_back,
+                                        color: Colors.white,
+                                      )),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 15),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width *
+                                    0.5 *
+                                    0.8,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.05,
+                                color: Color(0xFF3B8D28),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                      onTap: () async {
+                                        var response = await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditProfil(
+                                                        token: token ?? "",
+                                                        user: user)));
+                                        if (mounted && response == true) {
+                                          fetchUser();
+                                        }
+                                      },
+                                      child: Center(
+                                        child: Text(
+                                          "Ubah Profil",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      )),
+                                ),
+                              ),
+                            ),
+                          ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Container(
+                              width:
+                                  MediaQuery.of(context).size.width * 0.5 * 0.8,
+                              height: MediaQuery.of(context).size.height * 0.05,
+                              color: Color(0xFF3B8D28),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                    onTap: () => {},
+                                    child: Center(
+                                      child: Text(
+                                        "Tambah Produk",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    )),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 20),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            width:
+                                MediaQuery.of(context).size.width * 0.5 * 0.8,
+                            height: MediaQuery.of(context).size.height * 0.05,
+                            color: Color(0xFF3B8D28),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      token = '';
+                                    });
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Login()));
+                                  },
+                                  child: Center(
+                                    child: Text(
+                                      "logout",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  )),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () => setState(() {
+                  _burgerMenu = false;
+                }),
+                child: Container(
+                  color: Colors.transparent,
+                  width: (_burgerMenu)
+                      ? MediaQuery.of(context).size.width * 0.5
+                      : 0,
+                  height: MediaQuery.of(context).size.height,
+                ),
+              )
+            ],
+          )
         ],
       );
     } else {
@@ -174,7 +348,9 @@ class _DashboardState extends State<Dashboard> {
                     IconButton(
                       icon: Icon(Icons.menu, size: 40.0, color: Colors.black),
                       onPressed: () {
-                        Scaffold.of(context).openDrawer();
+                        setState(() {
+                          _burgerMenu = true;
+                        });
                       },
                     ),
                     Expanded(
@@ -239,7 +415,7 @@ class _DashboardState extends State<Dashboard> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 10.0,
                     mainAxisSpacing: 10.0,
-                    childAspectRatio: 0.55,
+                    childAspectRatio: 0.45,
                   ),
                   itemCount: user?.product.length,
                   itemBuilder: (context, index) {
@@ -249,13 +425,14 @@ class _DashboardState extends State<Dashboard> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => DetailItem(
-                              token: widget.token,
+                              token: token,
                               product: user?.product[index],
                             ),
                           ),
                         );
                       },
                       child: Container(
+                        height: MediaQuery.of(context).size.height,
                         decoration: BoxDecoration(
                           border:
                               Border.all(color: Color(0xFF53c737), width: 2.0),
@@ -264,79 +441,26 @@ class _DashboardState extends State<Dashboard> {
                         padding: EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: AspectRatio(
-                                aspectRatio: 1,
-                                child: (user?.product[index].productPict.isEmpty ?? true)
-                                    ? Image.asset(
-                                        'images/potrait.png',
-                                        fit: BoxFit.cover,
-                                      )
-                                    : Image.network(
-                                        user?.product[index].productPict[0].path ?? "",
-                                        fit: BoxFit.cover,
-                                      ),
-                              ),
-                            ),
-                            Spacer(),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 40,
-                                    child: Text(
-                                      user?.product[index].productName ?? "",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    user?.product[index].productPrice ?? "",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Spacer(),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Expanded(
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => EditItem(
-                                                  token: widget.token ?? "",
-                                                  product:
-                                                      user?.product[index])));
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Color(0xFF53c737),
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 8),
-                                    ),
-                                    child: Text("Ubah",
-                                        style: TextStyle(color: Colors.white)),
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                Expanded(
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.5 *
+                                      0.5,
+                                  height: MediaQuery.of(context).size.width *
+                                      0.5 *
+                                      0.5 *
+                                      0.3,
                                   child: ElevatedButton(
                                     onPressed: () async {
                                       try {
-                                        var response =
-                                            await ProductApi.deleteProduct(
+                                        var response = await ProductApi
+                                            .changeProductStatus(
                                                 user?.product[index]
                                                         .idProduct ??
                                                     0,
-                                                widget.token ?? "");
+                                                token ?? "");
                                         if (response['status'] == 200) {
                                           fetchUser();
                                         }
@@ -346,12 +470,179 @@ class _DashboardState extends State<Dashboard> {
                                       }
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Color(0xFF53c737),
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 8),
+                                        backgroundColor: (user?.product[index]
+                                                    .productStatus ==
+                                                'aktif')
+                                            ? Color(0xFFFF3636)
+                                            : Color(0xFF53c737),
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 0.1)),
+                                    child: Center(
+                                      child: Text(
+                                        (user?.product[index].productStatus ==
+                                                'aktif')
+                                            ? "nonaktifkan"
+                                            : "aktifkan",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.5 *
+                                                0.5 *
+                                                0.3 *
+                                                0.45),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
-                                    child: Text("Hapus",
-                                        style: TextStyle(color: Colors.white)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: AspectRatio(
+                                aspectRatio: 1,
+                                child:
+                                    (user?.product[index].productPict.isEmpty ??
+                                            true)
+                                        ? Image.asset(
+                                            'images/potrait.png',
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Image.network(
+                                            user?.product[index].productPict[0]
+                                                    .path ??
+                                                "",
+                                            fit: BoxFit.cover,
+                                          ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 2,
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 50,
+                                    child: Text(
+                                      user?.product[index].productName ?? "",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    user?.product[index].productPrice ?? "",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  SizedBox(height: 2),
+                                  Text(
+                                    'Stock: ${user?.product[index].productStock ?? ""}',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Spacer(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.4 *
+                                      0.4,
+                                  height: MediaQuery.of(context).size.width *
+                                      0.5 *
+                                      0.5 *
+                                      0.3,
+                                  child: ElevatedButton(
+                                    onPressed: () async {
+                                      var response = await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => EditItem(
+                                                  token: token ?? "",
+                                                  product:
+                                                      user?.product[index])));
+                                      if (mounted && response == true) {
+                                        fetchUser();
+                                      }
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Color(0xFF53c737),
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 0.1)),
+                                    child: Center(
+                                      child: Text(
+                                        "ubah",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.5 *
+                                                0.5 *
+                                                0.3 *
+                                                0.45),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.4 *
+                                      0.4,
+                                  height: MediaQuery.of(context).size.width *
+                                      0.5 *
+                                      0.5 *
+                                      0.3,
+                                  child: ElevatedButton(
+                                    onPressed: () async {
+                                      try {
+                                        var response =
+                                            await ProductApi.deleteProduct(
+                                                user?.product[index]
+                                                        .idProduct ??
+                                                    0,
+                                                token ?? "");
+                                        if (response['status'] == 200) {
+                                          fetchUser();
+                                        }
+                                        print(response);
+                                      } catch (e) {
+                                        print(e);
+                                      }
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Color(0xFFFF3636),
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 0.1)),
+                                    child: Center(
+                                      child: Text(
+                                        "hapus",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.5 *
+                                                0.5 *
+                                                0.3 *
+                                                0.45),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -408,7 +699,7 @@ class _DashboardState extends State<Dashboard> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          AddItem(token: widget.token),
+                                          AddItem(token: token),
                                     ),
                                   ).then((value) {
                                     if (value == true) {
@@ -437,6 +728,169 @@ class _DashboardState extends State<Dashboard> {
               ),
             ],
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              AnimatedContainer(
+                duration: Duration(milliseconds: 150),
+                height: MediaQuery.of(context).size.height,
+                width:
+                    (_burgerMenu) ? MediaQuery.of(context).size.width * 0.5 : 0,
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius:
+                          BorderRadius.horizontal(right: Radius.circular(15)),
+                      color: Color(0xFFE9F5EC)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(bottom: 25),
+                                width: MediaQuery.of(context).size.width *
+                                    0.5 *
+                                    0.2,
+                                height: MediaQuery.of(context).size.width *
+                                    0.5 *
+                                    0.2,
+                                decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    shape: BoxShape.circle),
+                                child: Material(
+                                  shape: CircleBorder(),
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    customBorder: CircleBorder(),
+                                    onTap: () => {
+                                      setState(() {
+                                        _burgerMenu = false;
+                                      })
+                                    },
+                                    child: Center(
+                                      child: Center(
+                                          child: Icon(
+                                        Icons.arrow_back,
+                                        color: Colors.white,
+                                      )),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 15),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width *
+                                    0.5 *
+                                    0.8,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.05,
+                                color: Color(0xFF3B8D28),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                      onTap: () async {
+                                        var response = await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditProfil(
+                                                        token: token ?? "",
+                                                        user: user)));
+                                        if (mounted && response == true) {
+                                          fetchUser();
+                                        }
+                                      },
+                                      child: Center(
+                                        child: Text(
+                                          "Ubah Profil",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      )),
+                                ),
+                              ),
+                            ),
+                          ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Container(
+                              width:
+                                  MediaQuery.of(context).size.width * 0.5 * 0.8,
+                              height: MediaQuery.of(context).size.height * 0.05,
+                              color: Color(0xFF3B8D28),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                    onTap: () => {},
+                                    child: Center(
+                                      child: Text(
+                                        "Tambah Produk",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    )),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 20),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            width:
+                                MediaQuery.of(context).size.width * 0.5 * 0.8,
+                            height: MediaQuery.of(context).size.height * 0.05,
+                            color: Color(0xFF3B8D28),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      token = '';
+                                    });
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Login()));
+                                  },
+                                  child: Center(
+                                    child: Text(
+                                      "logout",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  )),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () => setState(() {
+                  _burgerMenu = false;
+                }),
+                child: Container(
+                  color: Colors.transparent,
+                  width: (_burgerMenu)
+                      ? MediaQuery.of(context).size.width * 0.5
+                      : 0,
+                  height: MediaQuery.of(context).size.height,
+                ),
+              )
+            ],
+          )
         ],
       );
     }

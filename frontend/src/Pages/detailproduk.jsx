@@ -1,6 +1,7 @@
     import React, { useState, useEffect } from "react";
-    import { Link } from "react-router-dom";
+    import { Link, useParams } from "react-router-dom";
     import { motion } from "framer-motion";
+    import axios from "axios";
     import "../index.css";
     import "../styles/toko.css";
     import "../styles/detail.css";
@@ -12,43 +13,60 @@
     import kerisImage4 from "../assets/Images/keris5.jpeg";
 
     export default function Tokokeris() {
+    const {id} = useParams()
+    const [detailProduct, setDetailProduct] = useState({})
+    const [mainImage, setMainImage] = useState(``);
+    
     useEffect(() => {
+        const fetchDetailProducts = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3000/product/${id}`)
+                setDetailProduct(response.data.product)
+                setMainImage(`http://localhost:3000/${response.data.product.ProductPicts[0].path}`)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        fetchDetailProducts()
         document.title = "Toko Keris Sumenep";
     }, []);
 
-    const [mainImage, setMainImage] = useState(kerisImage1);
+    const formatRupiah = (amount) => {
+        return new Intl.NumberFormat("id-ID",{
+            style: "currency",
+            currency: "IDR"
+        }).format(amount)
+    }
+    console.log(detailProduct.ProductPicts)
 
     const GambarThumbnail = () => {
         const thumbnails = [kerisImage1, kerisImage2, kerisImage3, kerisImage4];
-        return (
-        <div className="gambar-thumbnail">
-            {thumbnails.map((thumb, idx) => (
-            <img
-                key={idx}
-                src={thumb}
-                alt={`Thumbnail ${idx + 1}`}
-                onClick={() => setMainImage(thumb)}
-            />
-            ))}
-        </div>
-        );
+        if(detailProduct.ProductPicts && detailProduct.ProductPicts.length > 0){
+            return (
+            <div className="gambar-thumbnail">
+                {detailProduct.ProductPicts.map((thumb, idx) => {
+                    return (
+                        <img
+                            key={idx}
+                            src={`http://localhost:3000/${thumb.path}`}
+                            alt={`Thumbnail ${idx + 1}`}
+                            onClick={() => setMainImage(`http://localhost:3000/${thumb.path}`)}
+                        />
+                        )
+                } )}
+            </div>
+            );
+        }
     };
 
     const ProdukInfo = () => {
         return (
         <div className="deskripsi-produk">
-            <span className="nama-produk-detail">Lintang Kemukus</span>
-            <span className="harga-produk-detail">Rp 4.000.000</span>
+            <span className="nama-produk-detail">{detailProduct.product_name}</span>
+            <span className="harga-produk-detail">{formatRupiah(detailProduct.product_price)}</span>
             <div className="dividers"></div>
-            <span className="teks-deskripsi">
-            Persembahan istimewa dari Desa Aengtongtong, Sumenep – pusat pengrajin
-            keris tradisional yang telah diakui secara nasional. Keris ini dibuat
-            secara handmade oleh empu lokal dengan teknik tempa warisan leluhur.
-            Bilah keris menampilkan pamor khas yang menyimpan filosofi mendalam,
-            sementara warangka dan gagangnya dipahat dari kayu pilihan yang
-            memperkuat kesan elegan dan sakral. Cocok untuk koleksi, hadiah budaya,
-            maupun pelengkap upacara adat.
-            </span>
+            <span className="teks-deskripsi">{detailProduct.product_description}</span>
             <div className="dividers"></div>
             <button className="btn-hubungi">Hubungi Sekarang</button>
         </div>

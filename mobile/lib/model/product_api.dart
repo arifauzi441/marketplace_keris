@@ -15,6 +15,7 @@ class ProductApi {
   String? productPrice;
   String? productStock;
   String? productDescription;
+  String? productStatus;
   List<ProductPictApi> productPict;
 
   ProductApi(
@@ -23,6 +24,7 @@ class ProductApi {
       required this.productDescription,
       required this.productPrice,
       required this.productStock,
+      required this.productStatus,
       required this.productPict});
 
   factory ProductApi.createProductApi(Map<String, dynamic> object) {
@@ -32,6 +34,7 @@ class ProductApi {
         idProduct: object['id_product'],
         productName: object['product_name'],
         productDescription: object['product_description'],
+        productStatus: object['product_status'],
         productPrice: NumberFormat.currency(
                 locale: 'id_ID', symbol: 'Rp', decimalDigits: 0)
             .format(object['product_price']),
@@ -80,6 +83,7 @@ class ProductApi {
     String apiUrl = '$api/product/update/$idProduct';
     var apiResult = http.MultipartRequest('PATCH', Uri.parse(apiUrl));
     apiResult.headers['Authorization'] = 'Bearer $token';
+    apiResult.fields['id_product_pict'] = idProduct.toString();
     apiResult.fields['product_name'] = name;
     apiResult.fields['product_description'] = description;
     apiResult.fields['product_price'] = price;
@@ -104,6 +108,16 @@ class ProductApi {
     String apiURL = '$api/product/delete/$idProduct';
     var apiResult =
         await http.delete(Uri.parse(apiURL), headers: {"Authorization": token});
+
+    var productResult = json.decode(apiResult.body);
+    return {"msg": productResult['msg'], "status": apiResult.statusCode};
+  }
+
+  static Future<Map<String, dynamic>> changeProductStatus(
+      int idProduct, String token) async {
+    String apiURL = '$api/product/change-status/$idProduct';
+    var apiResult =
+        await http.patch(Uri.parse(apiURL), headers: {"Authorization": token});
 
     var productResult = json.decode(apiResult.body);
     return {"msg": productResult['msg'], "status": apiResult.statusCode};
