@@ -51,7 +51,7 @@ class _RegisterState extends State<Register> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold),
                         ),
                       ),
