@@ -8,5 +8,5 @@ export default defineConfig({
     tailwindcss(),
     react()
   ],
-  base: "/marketplace_keris/docs/"
+  base: "/marketplace_keris/"
 })
