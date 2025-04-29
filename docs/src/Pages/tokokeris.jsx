@@ -38,7 +38,7 @@ const ProdukCard = ({ image, name, price, id_product}) => (
 
 const incrementClick = async (id_product) => {
   try {
-    let {msg} = await axios.get(`http://localhost:3000/product/increment-count/${id_product}`)
+    let {msg} = await axios.get(`http://192.168.184.10:3000/product/increment-count/${id_product}`)
     console.log(msg)
   } catch (error) {
     console.log(error)
@@ -69,7 +69,7 @@ export default function Tokokeris() {
     console.log("hai")
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/product/active-product');
+        const response = await axios.get('http://192.168.184.10:3000/product/active-product');
         setProducts(response.data.product);
       } catch (error) {
         console.error("Gagal mengambil data product:", error);
@@ -77,7 +77,7 @@ export default function Tokokeris() {
     };
     const fetchSellers = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/users/all-seller');
+        const response = await axios.get('http://192.168.184.10:3000/users/all-seller');
         setSellers(response.data.data);
       } catch (error) {
         console.error("Gagal mengambil data seller:", error);
@@ -85,7 +85,7 @@ export default function Tokokeris() {
     };
     const fetchPopularProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/product/populer-product')
+        const response = await axios.get('http://192.168.184.10:3000/product/populer-product')
         console.log(response.data.product)
         setPopularProduct(response.data.product)
       } catch (error) {
@@ -206,7 +206,7 @@ export default function Tokokeris() {
               transition={{ delay: index * 0.1, duration: 0.5 }}
             >
               <EmpuCard
-                image={`http://localhost:3000/${empu.seller_photo}`}
+                image={`http://192.168.184.10:3000/${empu.seller_photo}`}
                 name={empu.seller_name}
                 phone={empu.seller_phone}
               />
@@ -250,7 +250,7 @@ export default function Tokokeris() {
           {popularProducts.length >= 0 &&
             popularProducts.slice(0, 3).map(product => (
                 <Link to={`/detail-produk/${product.id_product}`}>
-                  <ProductItem image={`http://localhost:3000/${product?.ProductPicts[0]?.path}`} name={product?.product_name} price={product?.product_price} id_product={product?.id_product} />
+                  <ProductItem image={`http://192.168.184.10:3000/${product?.ProductPicts[0]?.path}`} name={product?.product_name} price={product?.product_price} id_product={product?.id_product} />
                 </Link>)
             )
           }
@@ -276,7 +276,7 @@ export default function Tokokeris() {
         ><Link to={`/detail-produk/${produk.id_product}`} onClick={() => incrementClick(produk.id_product)}>
           <ProdukCard
             id_product = {produk.id_product}
-            image={produk.ProductPicts.length > 0 ? `http://localhost:3000/${produk.ProductPicts[0].path}` : `http://localhost:3000/${produk.ProductPicts.path}`}
+            image={produk.ProductPicts.length > 0 ? `http://192.168.184.10:3000/${produk.ProductPicts[0].path}` : `http://192.168.184.10:3000/${produk.ProductPicts.path}`}
             name={produk.product_name}
             price={produk.product_price}
           />
