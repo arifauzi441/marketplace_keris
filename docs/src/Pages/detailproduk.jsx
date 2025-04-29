@@ -13,16 +13,37 @@
     import kerisImage4 from "../assets/Images/keris5.jpeg";
 
     export default function Tokokeris() {
+    const API_URL = import.meta.env.VITE_API_URL
+
     const {id} = useParams()
     const [detailProduct, setDetailProduct] = useState({})
+    const [image, setImage] = useState([])
     const [mainImage, setMainImage] = useState(``);
     
     useEffect(() => {
         const fetchDetailProducts = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/product/${id}`)
+                const response = await axios.get(`${API_URL}/product/${id}`, {
+                    headers: {
+                      'ngrok-skip-browser-warning': 'true'
+                    }
+                  })
                 setDetailProduct(response.data.product)
-                setMainImage(`http://localhost:3000/${response.data.product.ProductPicts[0].path}`)
+
+                const blobUrls = await Promise.all(
+                    response.data.product.ProductPicts.map(async (imageEndpoint) => {
+                      const res = await axios.get(`${API_URL}/${imageEndpoint.path}`, {
+                        headers: {
+                          'ngrok-skip-browser-warning': 'true'
+                        },
+                        responseType: 'blob'
+                      });
+                      return URL.createObjectURL(res.data);
+                    })
+                );
+                setImage(blobUrls)
+
+                setMainImage(blobUrls[0])
             } catch (error) {
                 console.log(error)
             }
@@ -45,13 +66,13 @@
         if(detailProduct.ProductPicts && detailProduct.ProductPicts.length > 0){
             return (
             <div className="gambar-thumbnail">
-                {detailProduct.ProductPicts.map((thumb, idx) => {
+                {image.map((thumb, idx) => {
                     return (
                         <img
                             key={idx}
-                            src={`http://localhost:3000/${thumb.path}`}
+                            src={thumb}
                             alt={`Thumbnail ${idx + 1}`}
-                            onClick={() => setMainImage(`http://localhost:3000/${thumb.path}`)}
+                            onClick={() => setMainImage(thumb)}
                         />
                         )
                 } )}
