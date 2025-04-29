@@ -38,7 +38,10 @@ const ProdukCard = ({ image, name, price, id_product }) => (
 
 const incrementClick = async (id_product) => {
   try {
-    let { msg } = await axios.get(`${API_URL}/product/increment-count/${id_product}`)
+    let { msg } = await axios.get(`${API_URL}/product/increment-count/${id_product}`,{
+      headers:
+        {'ngrok-skip-browser-warning': 'true'}
+    })
     console.log(msg)
   } catch (error) {
     console.log(error)
