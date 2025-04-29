@@ -21,7 +21,7 @@ const EmpuCard = ({ image, name, phone }) => (
 );
 
 // Komponen ProdukCard - produk terbaru
-const ProdukCard = ({ image, name, price, id_product}) => (
+const ProdukCard = ({ image, name, price, id_product }) => (
   <div className="kartu-produk">
     <div className="gambar-produk">
       <img src={image} alt={name} />
@@ -30,7 +30,7 @@ const ProdukCard = ({ image, name, price, id_product}) => (
     <div className="harga-dan-beli">
       <span className="harga-produk">{price}</span>
       <Link to={`/detail-produk/${id_product}`}>
-      <button className="tombol-beli">Beli</button>
+        <button className="tombol-beli">Beli</button>
       </Link>
     </div>
   </div>
@@ -38,7 +38,7 @@ const ProdukCard = ({ image, name, price, id_product}) => (
 
 const incrementClick = async (id_product) => {
   try {
-    let {msg} = await axios.get(`${API_URL}/product/increment-count/${id_product}`)
+    let { msg } = await axios.get(`${API_URL}/product/increment-count/${id_product}`)
     console.log(msg)
   } catch (error) {
     console.log(error)
@@ -53,7 +53,7 @@ const ProductItem = ({ image, name, price, id_product }) => (
       <span className="product-name">{name}</span>
       <span className="product-price">{price}</span>
       <Link to={`/detail-produk/${id_product}`} onClick={() => incrementClick(id_product)}>
-      <button className="buy-button">Beli</button>
+        <button className="buy-button">Beli</button>
       </Link>
     </div>
   </div>
@@ -63,9 +63,16 @@ export default function Tokokeris() {
   const API_URL = import.meta.env.VITE_API_URL
 
   const [products, setProducts] = useState([])
+  const [imageProduct, setImageProduct] = useState([])
+
   const [sellers, setSellers] = useState([])
+  const [imageSellers, setImageSellers] = useState([])
+
   const [popularProducts, setPopularProduct] = useState([])
+  const [imagePopularProduct, setImagePopularProduct] = useState([])
   const scrollRef = useRef(null);
+
+
   useEffect(() => {
     document.title = "Toko Keris Sumenep";
     console.log("hai")
@@ -76,12 +83,29 @@ export default function Tokokeris() {
             'ngrok-skip-browser-warning': 'true'
           }
         });
-        console.log(response.data)
+        const blobUrls = await Promise.all(
+          response.data.product.map(async (imageEndpoint) => {
+            console.log(imageEndpoint)
+            if (imageEndpoint.ProductPicts.length > 0) {
+              const res = await axios.get(`${API_URL}/${imageEndpoint.ProductPicts[0].path}`, {
+                headers: {
+                  'ngrok-skip-browser-warning': 'true'
+                },
+                responseType: 'blob'
+              });
+              return URL.createObjectURL(res.data);
+            }else{
+              return " "
+            }
+          })
+        );
+        setImageProduct(blobUrls)
         setProducts(response.data.product);
       } catch (error) {
         console.error("Gagal mengambil data product:", error);
       }
     };
+
     const fetchSellers = async () => {
       try {
         const response = await axios.get(`${API_URL}/users/all-seller`, {
@@ -89,6 +113,23 @@ export default function Tokokeris() {
             'ngrok-skip-browser-warning': 'true'
           }
         });
+        const blobUrls = await Promise.all(
+          response.data.data.map(async (imageEndpoint) => {
+            console.log(imageEndpoint)
+            if (imageEndpoint.seller_photo == null) {
+              return " "
+            }
+            const res = await axios.get(`${API_URL}/${imageEndpoint.seller_photo}`, {
+              headers: {
+                'ngrok-skip-browser-warning': 'true'
+              },
+              responseType: 'blob'
+            });
+            console.log(res.data)
+            return URL.createObjectURL(res.data);
+          })
+        );
+        setImageSellers(blobUrls)
         setSellers(response.data.data);
       } catch (error) {
         console.error("Gagal mengambil data seller:", error);
@@ -101,7 +142,22 @@ export default function Tokokeris() {
             'ngrok-skip-browser-warning': 'true'
           }
         })
-        console.log(response.data.product)
+        const blobUrls = await Promise.all(
+          response.data.product.map(async (imageEndpoint) => {
+            if (imageEndpoint.ProductPicts.length > 0) {
+              const res = await axios.get(`${API_URL}/${imageEndpoint.ProductPicts[0].path}`, {
+                headers: {
+                  'ngrok-skip-browser-warning': 'true'
+                },
+                responseType: 'blob'
+              });
+              return URL.createObjectURL(res.data);
+            }else{
+              return " "
+            };
+          })
+        );
+        setImagePopularProduct(blobUrls)
         setPopularProduct(response.data.product)
       } catch (error) {
         console.log(error)
@@ -126,7 +182,7 @@ export default function Tokokeris() {
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* Header */}
-      <motion.header 
+      <motion.header
         className="header"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -208,24 +264,24 @@ export default function Tokokeris() {
         </div>
 
         <motion.div className="empu-scroll-container" ref={scrollRef}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
         >
           <div className="empu-list">
             {sellers && sellers.length > 0 && sellers.map((empu, index) => (
               <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
-            >
-              <EmpuCard
-                image={`${API_URL}/${empu.seller_photo}`}
-                name={empu.seller_name}
-                phone={empu.seller_phone}
-              />
-            </motion.div>
+                key={index}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+              >
+                <EmpuCard
+                  image={imageSellers[index]}
+                  name={empu.seller_name}
+                  phone={empu.seller_phone}
+                />
+              </motion.div>
             ))}
           </div>
         </motion.div>
@@ -234,9 +290,9 @@ export default function Tokokeris() {
       {/* Produk Terlaris */}
       <motion.section className="product-container">
         <motion.div className="product-header"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
         >
           <h1 className="product-title">Paling Banyak Dilihat</h1>
           <Link to={"/produk-terlaris"}>
@@ -245,9 +301,9 @@ export default function Tokokeris() {
         </motion.div>
 
         <motion.div className="product-grid"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2, duration: 0.8 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.8 }}
         >
           <div className="product-hero"
             style={{ backgroundImage: `url(${productHeroImage})` }}
@@ -261,12 +317,12 @@ export default function Tokokeris() {
               </p>
             </div>
           </div>
-            
+
           {popularProducts && popularProducts.length >= 0 &&
-            popularProducts.slice(0, 3).map(product => (
-                <Link to={`/detail-produk/${product.id_product}`}>
-                  <ProductItem image={`${API_URL}/${product?.ProductPicts[0]?.path}`} name={product?.product_name} price={product?.product_price} id_product={product?.id_product} />
-                </Link>)
+            popularProducts.slice(0, 3).map((product, index) => (
+              <Link to={`/detail-produk/${product.id_product}`}>
+                <ProductItem image={imagePopularProduct[index]} name={product?.product_name} price={product?.product_price} id_product={product?.id_product} />
+              </Link>)
             )
           }
 
@@ -275,32 +331,32 @@ export default function Tokokeris() {
 
       {/* Produk Terbaru */}
       <motion.section className="produk-section">
-      <div className="judul-produk">Produk Terbaru</div>
-      <motion.div className="produk-grid"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.2, duration: 0.6 }}
-      >
-        {products && products.length > 0 && products.map((produk, index) => (
-          <motion.div
-          className="produk-card"
-          key={index}
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.1, duration: 0.5 }}
-        ><Link to={`/detail-produk/${produk.id_product}`} onClick={() => incrementClick(produk.id_product)}>
-          <ProdukCard
-            id_product = {produk.id_product}
-            image={produk.ProductPicts.length > 0 ? `${API_URL}/${produk.ProductPicts[0].path}` : `${API_URL}/${produk.ProductPicts.path}`}
-            name={produk.product_name}
-            price={produk.product_price}
-          />
-          </Link>
-        </motion.div>
-        ))}
+        <div className="judul-produk">Produk Terbaru</div>
+        <motion.div className="produk-grid"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+        >
+          {products && products.length > 0 && products.map((produk, index) => (
+            <motion.div
+              className="produk-card"
+              key={index}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+            ><Link to={`/detail-produk/${produk.id_product}`} onClick={() => incrementClick(produk.id_product)}>
+                <ProdukCard
+                  id_product={produk.id_product}
+                  image={produk.ProductPicts.length > 0 ? imageProduct[index] : imageProduct[index]}
+                  name={produk.product_name}
+                  price={produk.product_price}
+                />
+              </Link>
+            </motion.div>
+          ))}
 
-      </motion.div>
-    </motion.section>
+        </motion.div>
+      </motion.section>
 
     </div>
   );
