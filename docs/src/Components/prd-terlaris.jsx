@@ -45,6 +45,7 @@ const ScTerlaris = () => {
   const API_URL = import.meta.env.VITE_API_URL
 
   const [popularProduct, setPopularProduct] = useState([])
+  const [imagePopularProduct, setImagePopularProduct] = useState([])
 
   useEffect(() => {
     const fetchPopularProduct = async () => {
@@ -54,6 +55,22 @@ const ScTerlaris = () => {
         }
       })
       console.log(response.data.product)
+      const blobUrls = await Promise.all(
+                response.data.product.map(async (imageEndpoint) => {
+                  if (imageEndpoint.ProductPicts.length > 0) {
+                    const res = await axios.get(`${API_URL}/${imageEndpoint.ProductPicts[0].path}`, {
+                      headers: {
+                        'ngrok-skip-browser-warning': 'true'
+                      },
+                      responseType: 'blob'
+                    });
+                    return URL.createObjectURL(res.data);
+                  }else{
+                    return " "
+                  };
+                })
+              );
+              setImagePopularProduct(blobUrls)
       setPopularProduct(response.data.product)
     }
     fetchPopularProduct()
@@ -83,7 +100,7 @@ const ScTerlaris = () => {
                         >
                           <Link to={`/detail-produk/${produk.id_product}`}>
                           <ProdukCard
-                              image={`${API_URL}/${produk.ProductPicts[0]?.path}`}
+                              image={imagePopularProduct[index]}
                               name={produk.product_name}
                               price={produk.product_price}
                           />
