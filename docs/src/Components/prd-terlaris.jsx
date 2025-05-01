@@ -4,17 +4,6 @@ import { motion } from 'framer-motion';
 import axios from "axios";
 import "./style/terlaris.css"
 
-import keris4 from "../assets/Images/keris4.jpg";
-import keris5 from "../assets/Images/keris5.jpeg";
-import keris6 from "../assets/Images/keris6.jpg";
-import keris7 from "../assets/Images/keris7.jpg";
-import keris8 from "../assets/Images/keris8.jpg";
-import keris9 from "../assets/Images/keris9.jpg";
-import keris10 from "../assets/Images/keris10.jpeg";
-import keris11 from "../assets/Images/keris11.jpg";
-import keris12 from "../assets/Images/keris12.jpg";
-import keris13 from "../assets/Images/keris13.jpg";
-
 const ProdukCard = ({ image, name, price }) => (
     <div className="kartu-produk-terlaris">
       <div className="gambar-produk-terlaris">
@@ -27,19 +16,6 @@ const ProdukCard = ({ image, name, price }) => (
       </div>
     </div>
   );
-  
-  const produkData = [
-    { image: keris4, name: "Ratu Pameling", price: "Rp 4.000.000" },
-    { image: keris5, name: "Lindu Aji", price: "Rp 4.000.000" },
-    { image: keris6, name: "Panji Mataram", price: "Rp 4.000.000" },
-    { image: keris7, name: "Surya Kencana", price: "Rp 4.000.000" },
-    { image: keris8, name: "Kyai Carubuk", price: "Rp 4.000.000" },
-    { image: keris9, name: "Rakian Naga", price: "Rp 4.000.000" },
-    { image: keris10, name: "Nagasasra Sabuk", price: "Rp 4.000.000" },
-    { image: keris11, name: "Kalamisani Emas", price: "Rp 4.000.000" },
-    { image: keris12, name: "Pamungkas Seta", price: "Rp 4.000.000" },
-    { image: keris13, name: "Sanghyang Pamenang", price: "Rp 4.000.000" },
-  ];
 
 const ScTerlaris = () => {
   const API_URL = import.meta.env.VITE_API_URL
@@ -54,7 +30,6 @@ const ScTerlaris = () => {
           'ngrok-skip-browser-warning': 'true'
         }
       })
-      console.log(response.data.product)
       const blobUrls = await Promise.all(
                 response.data.product.map(async (imageEndpoint) => {
                   if (imageEndpoint.ProductPicts.length > 0) {
@@ -89,7 +64,6 @@ const ScTerlaris = () => {
                 popularProduct.length > 0 && 
                 popularProduct.map((produk, index) => {
                   if(produk.ProductPicts.length > 0 && produk.ProductPicts[0])
-                    console.log(produk)
                       return (
                         <motion.div
                             className="produk-card-terlaris"
