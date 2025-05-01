@@ -14,11 +14,13 @@ import logoImage from "../assets/Images/logo-keris.png";
 const API_URL = import.meta.env.VITE_API_URL
 // Komponen EmpuCard
 const EmpuCard = ({ image, name, phone }) => (
+  <Link to ="/produk-empu">
   <div className="empu-card">
     <img src={image} alt={name} className="empu-photo" />
     <div className="empu-name">{name}</div>
     <div className="empu-phone">{phone}</div>
   </div>
+</Link>
 );
 
 // Komponen ProdukCard - produk terbaru
@@ -167,15 +169,15 @@ export default function Tokokeris() {
     fetchSellers();
   }, []);
 
-  const scroll = (direction) => {
-    if (scrollRef.current) {
-      const amount = 220;
-      scrollRef.current.scrollBy({
-        left: direction === "left" ? -amount : amount,
-        behavior: "smooth",
-      });
-    }
-  };
+  // const scroll = (direction) => {
+  //   if (scrollRef.current) {
+  //     const amount = 220;
+  //     scrollRef.current.scrollBy({
+  //       left: direction === "left" ? -amount : amount,
+  //       behavior: "smooth",
+  //     });
+  //   }
+  // };
 
   return (
     <div className="min-h-screen w-full flex flex-col">
@@ -252,12 +254,17 @@ export default function Tokokeris() {
         <div className="empu-header">
           <p className="empu-title">Daftar Nama Empu</p>
           <div className="nav-arrows">
-            <button className="arrow-btn" onClick={() => scroll("left")}>
+
+          <Link to={"/"}>
+            <button className="see-more-btn">Selengkapnya</button>
+          </Link>
+
+            {/* <button className="arrow-btn" onClick={() => scroll("left")}>
               <BsArrowLeftCircle size={30} />
             </button>
             <button className="arrow-btn" onClick={() => scroll("right")}>
               <BsArrowRightCircle size={30} />
-            </button>
+            </button> */}
           </div>
         </div>
 
@@ -286,8 +293,8 @@ export default function Tokokeris() {
       </motion.section>
 
       {/* Produk Terlaris */}
-      <motion.section className="product-container">
-        <motion.div className="product-header"
+
+      <motion.div className="product-header"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
@@ -297,7 +304,7 @@ export default function Tokokeris() {
             <button className="see-more-btn">Selengkapnya</button>
           </Link>
         </motion.div>
-
+      <motion.section className="product-container">
         <motion.div className="product-grid"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -328,8 +335,9 @@ export default function Tokokeris() {
       </motion.section>
 
       {/* Produk Terbaru */}
+      <div className="judul-produk">Produk Terbaru</div>
       <motion.section className="produk-section">
-        <div className="judul-produk">Produk Terbaru</div>
+        
         <motion.div className="produk-grid"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
