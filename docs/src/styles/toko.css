@@ -141,26 +141,26 @@
         }
 
         /* Nav Arrow Button Styles */
-        .arrow-btn {
+        /* .arrow-btn {
             background: #53C737;
             color: white;
             border: none;
-            width: 35px;  /* Diperbesar dari 35px */
-            height: 35px; /* Diperbesar dari 35px */
+            width: 35px;  
+            height: 35px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s;
-            font-weight: bold; /* Membuat tebal arrow */
-            font-size: 25px; /* Memperbesar ukuran arrow */
+            font-weight: bold; 
+            font-size: 25px; 
         }
 
         .arrow-btn:hover {
             background: #3da125;
-            transform: scale(1.1); /* Efek membesar saat hover */
-        }
+            transform: scale(1.1); 
+        } */
 
         .empu-scroll-container {
             overflow-x: hidden; /* Ubah dari auto ke hidden */
@@ -202,10 +202,15 @@
         }
 
         .empu-name {
-            font-weight: 500;
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
+          font-weight: 500;
+          font-size: 1.2rem;
+          margin-bottom: 0.5rem;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 100%;
+      }
+      
 
         .empu-phone {
             color: #666;
@@ -219,10 +224,11 @@
 }
 
 .product-header {
+    padding: 0 5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 2rem;
 }
 
 .product-title {
@@ -395,6 +401,8 @@
     }
 
     .judul-produk {
+      padding-left: 5rem; 
+      margin-bottom: 2rem;
     font-size: 1.5rem;
     font-weight: 500;
     margin-bottom: 2rem;

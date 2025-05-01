@@ -7,10 +7,6 @@
     import "../styles/detail.css";
 
     import logoImage from "../assets/Images/logo-keris.png";
-    import kerisImage1 from "../assets/Images/keris2.jpg";
-    import kerisImage2 from "../assets/Images/keris3.jpeg";
-    import kerisImage3 from "../assets/Images/keris4.jpg";
-    import kerisImage4 from "../assets/Images/keris5.jpeg";
 
     export default function Tokokeris() {
     const API_URL = import.meta.env.VITE_API_URL
@@ -161,15 +157,8 @@
             <ProdukInfo />
             </div>
 
-            {/* Format Pembelian */}
-            <span className="judul-format">Format Pembelian</span>
-            <div className="dividers"></div>
-            <div className="format-pembelian">
-            <span className="label-wa">WhatsApp</span>
-            <p>Nama:</p>
-            <p>Alamat:</p>
-            <p>Nama Keris:</p>
-            </div>
+            
+            
         </motion.section>
         </div>
     );
