@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const verifyToken = require(`../config/middleware/jwt`)
-const {getUserWithProductById, updateUserById, getUsers} = require(`../controller/userController`) 
+const {getUserWithProductById, updateUserById, getUsers, changePassword} = require(`../controller/userController`) 
 const multer = require("multer") 
 
 const storage = multer.diskStorage({
@@ -28,6 +28,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/all-seller', getUsers);
 router.get('/seller', verifyToken, getUserWithProductById);
+router.patch('/change-password', verifyToken, changePassword);
 router.patch('/update', verifyToken, upload.single('path'), updateUserById);
 
 module.exports = router;

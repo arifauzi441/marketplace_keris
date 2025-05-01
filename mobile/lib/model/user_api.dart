@@ -55,6 +55,24 @@ class UserApi {
     return UserApi.createUserApi(userResult);
   }
 
+  static Future<Map<String, dynamic>> changePassword(
+      String token, String currPass, newPass, newPass2) async {
+    try {
+      String apiURL = '$api/users/change-password';
+      var apiResult = await http.patch(Uri.parse(apiURL), body: {
+        "oldPasswordInput": currPass,
+        "newPasswordInput": newPass,
+        "newPasswordInput2": newPass2
+      }, headers: {"Authorization": token});
+
+      var passResult = json.decode(apiResult.body);
+      return {"msg": passResult['msg'], "status": apiResult.statusCode};
+    } catch (e) {
+      print(e);
+      return {"msg": e};
+    }
+  }
+
   static Future<Map<String, dynamic>> updateUser(String token, File path,
       String name, String phone, String address) async {
     try {

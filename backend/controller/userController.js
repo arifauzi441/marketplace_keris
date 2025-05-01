@@ -67,4 +67,28 @@ const updateUserById = async (req, res, next) => {
     }
 }
 
-module.exports = { getUserById, getUserWithProductById, getUsers, updateUserById }
+const changePassword = async (req, res, next) => {
+    try {
+        let{oldPasswordInput, newPasswordInput, newPasswordInput2} = req.body
+        let oldData = await Seller.findOne(
+            {attributes: ['password']},
+            {
+                where: {id_seller: req.user.id}
+            })
+        if(oldData.password != oldPasswordInput) return res.status(401).json({msg: "Password tidak sesuai"})
+        if(newPasswordInput != newPasswordInput2) return res.status(401).json({msg: "Password tidak sama"})
+
+        await Seller.update(
+            { password:newPasswordInput },
+            {
+                where:
+                    { id_seller: req.user.id }
+            });
+        res.json({ msg: "Berhasil mengubah password" })
+    } catch (error) {
+        console.log(error)
+        res.json({ msg: error })
+    }
+}
+
+module.exports = { getUserById, getUserWithProductById, getUsers, updateUserById, changePassword }
