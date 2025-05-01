@@ -94,6 +94,7 @@
     .deskripsi-produk {
     flex: 1;
     min-width: 280px;
+    margin-bottom: 5rem;
     }
     .nama-produk-detail {
     font-size: 24px;
