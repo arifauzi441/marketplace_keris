@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile/add_item.dart';
 import 'package:mobile/detail_item.dart';
 import 'package:mobile/edit_item.dart';
+import 'package:mobile/edit_password.dart';
 import 'package:mobile/edit_profil.dart';
 import 'package:mobile/login.dart';
 import 'package:mobile/model/product_api.dart';
@@ -654,79 +655,43 @@ class _DashboardState extends State<Dashboard> {
                   },
                 ),
               ),
-              Container(
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(179, 237, 237, 237),
-                  border: Border.all(color: Colors.black, width: 1.0),
-                  borderRadius: BorderRadius.only(
-                      topLeft: (Radius.circular(8.0)),
-                      topRight: (Radius.circular(8.0))),
-                ),
-                child: Positioned(
-                  bottom: 10,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Container(
-                              width: 64,
-                              height: 64,
-                              decoration: BoxDecoration(
-                                color: Color(0xFF53c737),
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                    color: Color(0xFF53c737), width: 2),
-                              ),
-                            ),
-                            Container(
-                              width: 44,
-                              height: 44,
-                              padding: EdgeInsets.all(4.0),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                    color: Color.fromARGB(255, 255, 255, 255),
-                                    width: 2),
-                              ),
-                              child: FloatingActionButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          AddItem(token: token),
-                                    ),
-                                  ).then((value) {
-                                    if (value == true) {
-                                      setState(() {
-                                        fetchUser();
-                                      });
-                                    }
-                                  });
-                                },
-                                backgroundColor: Color(0xFF53c737),
-                                child: Icon(Icons.add,
-                                    size: 32, color: Colors.white),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          "Tambah Produk",
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
             ],
+          ),
+          Align(
+            alignment: Alignment(0, 0.9),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddItem(token: token)))
+                    .then((value) => {
+                          if (value == true)
+                            setState(() {
+                              fetchUser();
+                            })
+                        });
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF53c737),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                shadowColor: Colors.black,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.add, color: Colors.white),
+                  SizedBox(width: 5),
+                  Text(
+                    "Tambah Produk",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -830,10 +795,17 @@ class _DashboardState extends State<Dashboard> {
                               child: Material(
                                 color: Colors.transparent,
                                 child: InkWell(
-                                    onTap: () => {},
+                                    onTap: () => {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EditPassword(
+                                                          token: token)))
+                                        },
                                     child: Center(
                                       child: Text(
-                                        "Tambah Produk",
+                                        "Ubah password",
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     )),
