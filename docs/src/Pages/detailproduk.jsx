@@ -59,10 +59,8 @@
             currency: "IDR"
         }).format(amount)
     }
-    console.log(detailProduct.ProductPicts)
 
     const GambarThumbnail = () => {
-        const thumbnails = [kerisImage1, kerisImage2, kerisImage3, kerisImage4];
         if(detailProduct.ProductPicts && detailProduct.ProductPicts.length > 0){
             return (
             <div className="gambar-thumbnail">

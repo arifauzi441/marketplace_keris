@@ -11,6 +11,7 @@ import heroImage from "../assets/Images/hero1.png";
 import productHeroImage from "../assets/Images/hero3.png";
 import logoImage from "../assets/Images/logo-keris.png";
 
+const API_URL = import.meta.env.VITE_API_URL
 // Komponen EmpuCard
 const EmpuCard = ({ image, name, phone }) => (
   <div className="empu-card">
@@ -42,7 +43,6 @@ const incrementClick = async (id_product) => {
       headers:
         {'ngrok-skip-browser-warning': 'true'}
     })
-    console.log(msg)
   } catch (error) {
     console.log(error)
   }
@@ -63,7 +63,6 @@ const ProductItem = ({ image, name, price, id_product }) => (
 );
 
 export default function Tokokeris() {
-  const API_URL = import.meta.env.VITE_API_URL
 
   const [products, setProducts] = useState([])
   const [imageProduct, setImageProduct] = useState([])
@@ -78,7 +77,6 @@ export default function Tokokeris() {
 
   useEffect(() => {
     document.title = "Toko Keris Sumenep";
-    console.log("hai")
     const fetchProducts = async () => {
       try {
         const response = await axios.get(`${API_URL}/product/active-product`, {
@@ -88,7 +86,6 @@ export default function Tokokeris() {
         });
         const blobUrls = await Promise.all(
           response.data.product.map(async (imageEndpoint) => {
-            console.log(imageEndpoint)
             if (imageEndpoint.ProductPicts.length > 0) {
               const res = await axios.get(`${API_URL}/${imageEndpoint.ProductPicts[0].path}`, {
                 headers: {
@@ -118,7 +115,6 @@ export default function Tokokeris() {
         });
         const blobUrls = await Promise.all(
           response.data.data.map(async (imageEndpoint) => {
-            console.log(imageEndpoint)
             if (imageEndpoint.seller_photo == null) {
               return " "
             }
@@ -128,7 +124,6 @@ export default function Tokokeris() {
               },
               responseType: 'blob'
             });
-            console.log(res.data)
             return URL.createObjectURL(res.data);
           })
         );
