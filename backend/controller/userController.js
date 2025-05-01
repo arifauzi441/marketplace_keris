@@ -1,11 +1,21 @@
 const db = require(`../config/db`)
+const {Op} = require('sequelize')
 const { Seller, Product, ProductPict } = require(`../model/Associations`)
 const fs = require(`fs`)
 const path = require(`path`)
 
 const getUsers = async (req, res, next) => {
     try {
-        let data = await Seller.findAll();
+        let search = req.query.search || ""
+        let data = await Seller.findAll({
+            where: {
+                "status": "diterima",
+                [Op.or]: {
+                    seller_name: {[Op.like]: `%${search}%`},
+                    seller_phone: {[Op.like]: `%${search}%`},
+                }
+            }
+        });
         res.json({ msg: "Berhasil mengambil data", data })
     } catch (error) {
         console.log(error)

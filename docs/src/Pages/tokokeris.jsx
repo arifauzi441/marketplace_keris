@@ -65,6 +65,7 @@ const ProductItem = ({ image, name, price, id_product }) => (
 );
 
 export default function Tokokeris() {
+  const [search, setSearch] = useState('')
 
   const [products, setProducts] = useState([])
   const [imageProduct, setImageProduct] = useState([])
@@ -81,7 +82,7 @@ export default function Tokokeris() {
     document.title = "Toko Keris Sumenep";
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`${API_URL}/product/active-product`, {
+        const response = await axios.get(`${API_URL}/product/active-product?search=${search}`, {
           headers: {
             'ngrok-skip-browser-warning': 'true'
           }
@@ -110,7 +111,7 @@ export default function Tokokeris() {
 
     const fetchSellers = async () => {
       try {
-        const response = await axios.get(`${API_URL}/users/all-seller`, {
+        const response = await axios.get(`${API_URL}/users/all-seller?search=${search}`, {
           headers: {
             'ngrok-skip-browser-warning': 'true'
           }
@@ -137,7 +138,7 @@ export default function Tokokeris() {
     };
     const fetchPopularProducts = async () => {
       try {
-        const response = await axios.get(`${API_URL}/product/populer-product`, {
+        const response = await axios.get(`${API_URL}/product/populer-product?search=${search}`, {
           headers: {
             'ngrok-skip-browser-warning': 'true'
           }
@@ -167,7 +168,7 @@ export default function Tokokeris() {
 
     fetchProducts();
     fetchSellers();
-  }, []);
+  }, [search]);
 
   // const scroll = (direction) => {
   //   if (scrollRef.current) {
@@ -179,6 +180,12 @@ export default function Tokokeris() {
   //   }
   // };
 
+  const submit = (s) => {
+    setTimeout(() => {
+      setSearch(s)
+    }, 1000);
+  }
+ 
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* Header */}
@@ -194,7 +201,7 @@ export default function Tokokeris() {
             <span className="logo">KerisSumenep</span>
           </div>
           <div className="search-container">
-            <input
+            <input onChange={(event) => submit(event.target.value)}
               type="text"
               placeholder="Cari keris..."
               className="search-input"

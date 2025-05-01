@@ -9,7 +9,7 @@ import HeroTerlaris from "../Components/heroterlaris";
 import ScTerlaris from "../Components/prd-terlaris";
 
 export default function ProdukTerlaris() {
-  
+  const [search, setSearch] = useState('')
   useEffect(() => {
     document.title = "Toko Keris Sumenep";
   }, []);
@@ -26,6 +26,12 @@ export default function ProdukTerlaris() {
     }
   };
 
+  const submit = (s) => {
+    setTimeout(() => {
+      setSearch(s)
+    }, 1000);
+  }
+
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* Header */}
@@ -41,7 +47,7 @@ export default function ProdukTerlaris() {
             <span className="logo">KerisSumenep</span>
           </div>
           <div className="search-container">
-            <input
+            <input onChange={(event) => submit(event.target.value)}
               type="text"
               placeholder="Cari keris..."
               className="search-input"
@@ -74,7 +80,7 @@ export default function ProdukTerlaris() {
         <HeroTerlaris />
 
       {/* Produk Terlaris */}
-      <ScTerlaris/>
+      <ScTerlaris search={search}/>
 
     </div>
   );

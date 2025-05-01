@@ -17,7 +17,7 @@ const ProdukCard = ({ image, name, price }) => (
     </div>
   );
 
-const ScTerlaris = () => {
+const ScTerlaris = ({search}) => {
   const API_URL = import.meta.env.VITE_API_URL
 
   const [popularProduct, setPopularProduct] = useState([])
@@ -25,7 +25,7 @@ const ScTerlaris = () => {
 
   useEffect(() => {
     const fetchPopularProduct = async () => {
-      const response = await axios.get(`${API_URL}/product/populer-product`, {
+      const response = await axios.get(`${API_URL}/product/populer-product?search=${search}`, {
         headers: {
           'ngrok-skip-browser-warning': 'true'
         }
@@ -49,7 +49,7 @@ const ScTerlaris = () => {
       setPopularProduct(response.data.product)
     }
     fetchPopularProduct()
-  },[])
+  },[search])
   return (
         <motion.section className="produk-section-terlaris">
             <div className="judul-produk-terlaris">Paling Banyak Dilihat</div>
