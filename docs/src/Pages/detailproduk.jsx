@@ -75,6 +75,17 @@
         }
     };
 
+    const redirectWa = () => {
+        const phoneNumber = detailProduct.Seller.seller_phone || ""
+        const waNumber = (phoneNumber.charAt(0) == '0') ? '62' + phoneNumber.substring(1) : phoneNumber
+        console.log(waNumber)
+        const message = 'Nama: \nNo hp: \nJenis dan jumlah keris: \nAlamat Lengkap'
+        const encodedMessage = encodeURIComponent(message)
+        const url = `https://wa.me/${waNumber}?text=${encodedMessage}`
+
+        window.location.href = url
+    }
+
     const ProdukInfo = () => {
         return (
         <div className="deskripsi-produk">
@@ -83,7 +94,7 @@
             <div className="dividers"></div>
             <span className="teks-deskripsi">{detailProduct.product_description}</span>
             <div className="dividers"></div>
-            <button className="btn-hubungi">Hubungi Sekarang</button>
+            <button className="btn-hubungi" onClick={redirectWa}>Hubungi Sekarang</button>
         </div>
         );
     };
