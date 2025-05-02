@@ -4,6 +4,7 @@ const ProductPict = require("../model/ProductPictModel")
 const fs = require(`fs`)
 const path = require(`path`)
 const { db } = require("../config/db")
+const Seller = require("../model/SellerModel")
 
 const getProduct = async (req, res, next) => {
     try {
@@ -14,8 +15,12 @@ const getProduct = async (req, res, next) => {
                     product_name: { [Op.like]: `%${search}%` },
                     product_price: { [Op.like]: `%${search}%` }
                 }
-            }
-        }, { include: { model: ProductPict } })
+            },
+            include: [
+                { model: ProductPict },
+                { model: Seller, attributes: ['seller_name', 'seller_phone'] }
+            ]
+        })
 
         res.status(200).json({ product })
     } catch (error) {
@@ -35,7 +40,10 @@ const getActiveProduct = async (req, res, next) => {
                     product_price: { [Op.like]: `%${search}%` }
                 }
             },
-            include: { model: ProductPict }
+            include: [
+                { model: ProductPict },
+                { model: Seller, attributes: ['seller_name','seller_phone'] }
+            ]
         })
         res.status(200).json({ product })
     } catch (error) {
@@ -46,9 +54,9 @@ const getActiveProduct = async (req, res, next) => {
 
 const getProductByIdSeller = async (req, res, next) => {
     try {
-        let product = await Product.findAll({ 
-            where: { id_seller: req.params.id }, 
-            include: { model: ProductPict } 
+        let product = await Product.findAll({
+            where: { id_seller: req.params.id },
+            include: { model: ProductPict }
         })
         res.status(200).json({ product });
     } catch (error) {
@@ -62,7 +70,10 @@ const getProductById = async (req, res, next) => {
         console.log(req.params.id)
         let product = await Product.findOne({
             where: { id_product: req.params.id },
-            include: { model: ProductPict }
+            include: [
+                { model: ProductPict },
+                { model: Seller, attributes: ['seller_name','seller_phone'] }
+            ]
         })
 
         res.status(200).json({ product })
@@ -76,15 +87,18 @@ const getPopularProductByCounts = async (req, res, next) => {
     try {
         let search = req.query.search || ""
         let product = await Product.findAll({
-            where: { 
+            where: {
                 product_status: 'aktif',
                 [Op.or]: {
                     product_name: { [Op.like]: `%${search}%` },
                     product_price: { [Op.like]: `%${search}%` }
-                } 
+                }
             },
             order: [['click_counts', 'DESC']],
-            include: { model: ProductPict }
+            include: [
+                { model: ProductPict },
+                { model: Seller, attributes: ['seller_name','seller_phone'] }
+            ]
         })
 
         res.status(200).json({ product })
