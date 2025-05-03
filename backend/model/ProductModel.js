@@ -2,7 +2,6 @@ const {db} =require(`../config/db`)
 const {DataTypes} = require(`sequelize`)
 const Seller = require("./SellerModel")
 
-
 const Product = db.define(`Product`,{
     id_product: {
         type: DataTypes.INTEGER,
