@@ -333,12 +333,20 @@
     position: relative;
 }
 
-.product-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
+.product-image-container {
+  width: 100%;
+  height: 300px; /* Tinggi tetap untuk semua gambar */
+  overflow: hidden;
+  position: relative;
 }
+
+.product-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Memastikan gambar selalu terisi penuh tanpa merusak proporsi */
+  transition: transform 0.5s ease;
+}
+
 
 .product-item:hover img {
     transform: scale(1.05);
@@ -359,6 +367,10 @@
     font-weight: bold;
     margin-bottom: 10px;
     display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 .product-price {
@@ -455,6 +467,10 @@
     font-weight: 500;
     margin-top: 10px;
     padding: 0 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
     }
 
     .harga-dan-beli {
