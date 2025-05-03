@@ -1,21 +1,64 @@
 const db = require(`../config/db`)
-const {Op} = require('sequelize')
+const { Op, where } = require('sequelize')
 const { Seller, Product, ProductPict } = require(`../model/Associations`)
 const fs = require(`fs`)
 const path = require(`path`)
+const Admin = require('../model/Admin')
 
 const getUsers = async (req, res, next) => {
     try {
         let search = req.query.search || ""
-        let data = await Seller.findAll({
+        let data
+        if (search == '') {
+            data = await Seller.findAll({
+                attributes: { exclude: ['password'] },
+                where: {
+                    "status": "diterima",
+                },
+            });
+        } else {
+            data = await Seller.findAll({
+                attributes: { exclude: ['password'] },
+                where: {
+                    "status": "diterima",
+                    [Op.or]: {
+                        seller_name: { [Op.like]: `%${search}%` },
+                        seller_phone: { [Op.like]: `%${search}%` },
+                    }
+                },
+            });
+        }
+        res.json({ msg: "Berhasil mengambil data", data })
+    } catch (error) {
+        console.log(error)
+        res.json({ msg: error })
+    }
+}
+
+const getAllUsers = async (req, res, next) => {
+    try {
+        let search = req.query.search || ""
+        let sellerData = await Seller.findAll({
+            attributes: { exclude: ['password'] },
             where: {
-                "status": "diterima",
                 [Op.or]: {
-                    seller_name: {[Op.like]: `%${search}%`},
-                    seller_phone: {[Op.like]: `%${search}%`},
+                    status: { [Op.like]: `%${search}%` },
+                    email: { [Op.like]: `%${search}%` },
+                    seller_phone: { [Op.like]: `%${search}%` },
                 }
             }
         });
+        let adminData = await Admin.findAll({
+            where: {
+                [Op.or]: {
+                    status: { [Op.like]: `%${search}%` },
+                    email: { [Op.like]: `%${search}%` },
+                    admin_phone: { [Op.like]: `%${search}%` },
+                }
+            }
+        });
+        let data = sellerData.concat(adminData)
+        console.log
         res.json({ msg: "Berhasil mengambil data", data })
     } catch (error) {
         console.log(error)
@@ -60,10 +103,10 @@ const updateUserById = async (req, res, next) => {
             fs.unlinkSync(oldPath)
             seller_photo = null
         }
-        if(req.file) {
+        if (req.file) {
             seller_photo = `images/user_images/${req.file.filename}`
         }
-        
+
         await Seller.update(
             { ...req.body, seller_photo },
             {
@@ -79,17 +122,17 @@ const updateUserById = async (req, res, next) => {
 
 const changePassword = async (req, res, next) => {
     try {
-        let{oldPasswordInput, newPasswordInput, newPasswordInput2} = req.body
+        let { oldPasswordInput, newPasswordInput, newPasswordInput2 } = req.body
         let oldData = await Seller.findOne(
-            {attributes: ['password']},
+            { attributes: ['password'] },
             {
-                where: {id_seller: req.user.id}
+                where: { id_seller: req.user.id }
             })
-        if(oldData.password != oldPasswordInput) return res.status(401).json({msg: "Password tidak sesuai"})
-        if(newPasswordInput != newPasswordInput2) return res.status(401).json({msg: "Password tidak sama"})
+        if (oldData.password != oldPasswordInput) return res.status(401).json({ msg: "Password tidak sesuai" })
+        if (newPasswordInput != newPasswordInput2) return res.status(401).json({ msg: "Password tidak sama" })
 
         await Seller.update(
-            { password:newPasswordInput },
+            { password: newPasswordInput },
             {
                 where:
                     { id_seller: req.user.id }
@@ -101,4 +144,23 @@ const changePassword = async (req, res, next) => {
     }
 }
 
-module.exports = { getUserById, getUserWithProductById, getUsers, updateUserById, changePassword }
+const changeStatus = async (req, res) => {
+    try {
+        let { role, id } = req.params
+        if (role == 'admin') {
+            let dataAdmin = await Admin.findOne({ where: { id_admin: id } })
+            let status = (dataAdmin.status == "diterima") ? "belum diterima" : "diterima"
+            await Admin.update({ status }, { where: { id_admin: id } })
+        } else {
+            let dataSeller = await Seller.findOne({ where: { id_seller: id } })
+            let status = (dataSeller.status == "diterima") ? "belum diterima" : "diterima"
+            await Seller.update({ status }, { where: { id_seller: id } })
+        }
+        return res.status(200).json({ msg: "Berhasil mengubah status users" })
+    } catch (error) {
+        console.log(error)
+        return res.status(401).json({ msg: "Gagal mengubah status users" })
+    }
+}
+
+module.exports = { getUserById, getUserWithProductById, getUsers, getAllUsers, updateUserById, changePassword, changeStatus }

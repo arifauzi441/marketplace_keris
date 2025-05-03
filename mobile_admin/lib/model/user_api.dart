@@ -1,0 +1,139 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart';
+
+class UserApi {
+  static final api = dotenv.env['API_URL'];
+  int? idSeller;
+  int? idAdmin;
+  String? email;
+  String? password;
+  String? name;
+  String? address;
+  String? photo;
+  String? phone;
+  String? status;
+
+  UserApi({
+    required this.idSeller,
+    required this.idAdmin,
+    required this.email,
+    required this.password,
+    required this.name,
+    required this.address,
+    required this.phone,
+    required this.photo,
+    required this.status,
+  });
+
+  factory UserApi.createUserApi(Map<String, dynamic> object) {
+    var data = object;
+    if (data.containsKey('id_admin')) {
+      return UserApi(
+        idAdmin: data['id_admin'],
+        idSeller: null,
+        email: data['email'],
+        password: data['password'],
+        name: data['name'],
+        address: data['address'],
+        phone: data['phone'],
+        photo: data['photo'],
+        status: data['status'],
+      );
+    }
+
+    return UserApi(
+      idSeller: data['id_seller'],
+      idAdmin: null,
+      email: data['email'],
+      password: data['password'],
+      name: data['name'],
+      address: data['address'],
+      phone: data['phone'],
+      photo: data['photo'],
+      status: data['status'],
+    );
+  }
+
+  static Future<UserApi> getUser(String token) async {
+    String apiURL = '$api/users/admin';
+    var apiResult = await http
+        .get(Uri.parse(apiURL), headers: {"Authorization": "Bearer $token"});
+    var userResult = json.decode(apiResult.body);
+    return UserApi.createUserApi(userResult);
+  }
+
+  static Future<List<UserApi>> getAllUser(String token, String search) async {
+    String apiURL = '$api/users/all-users?search=$search';
+    var apiResult = await http.get(
+      Uri.parse(apiURL),
+      headers: {"Authorization": "Bearer $token"},
+    );
+    var userResult = json.decode(apiResult.body);
+
+    List<UserApi> datas = (userResult['data'] as List)
+        .map((data) => UserApi.createUserApi(data as Map<String, dynamic>))
+        .toList();
+
+    return datas;
+  }
+
+  static Future<Map<String, dynamic>> changeStatus(
+      String token, String role, int id) async {
+    String apiUrl = '$api/users/change-status/$role/$id';
+    var apiResult =
+        await http.get(Uri.parse(apiUrl), headers: {"Authorization": token});
+
+    var statusResult = json.decode(apiResult.body);
+    return {"msg": statusResult['msg'], 'status': apiResult.statusCode};
+  }
+
+  static Future<Map<String, dynamic>> changePassword(
+      String token, String currPass, newPass, newPass2) async {
+    try {
+      String apiURL = '$api/users/change-password';
+      var apiResult = await http.patch(Uri.parse(apiURL), body: {
+        "oldPasswordInput": currPass,
+        "newPasswordInput": newPass,
+        "newPasswordInput2": newPass2
+      }, headers: {
+        "Authorization": token
+      });
+
+      var passResult = json.decode(apiResult.body);
+      return {"msg": passResult['msg'], "status": apiResult.statusCode};
+    } catch (e) {
+      print(e);
+      return {"msg": e};
+    }
+  }
+
+  static Future<Map<String, dynamic>> updateUser(String token, File path,
+      String name, String phone, String address) async {
+    try {
+      String apiURL = '$api/users/update';
+      var apiResult = http.MultipartRequest("PATCH", Uri.parse(apiURL));
+      apiResult.headers["Authorization"] = 'Bearer $token';
+      apiResult.fields["seller_name"] = name;
+      apiResult.fields["seller_address"] = address;
+      apiResult.fields["seller_phone"] = phone;
+      if (path.path.isNotEmpty) {
+        String mimeType = lookupMimeType(path.path) ?? "";
+        List<String> mimeParts = mimeType.split('/');
+        apiResult.files.add(await http.MultipartFile.fromPath('path', path.path,
+            contentType: MediaType(mimeParts[0], mimeParts[1])));
+      }
+
+      var response = await apiResult.send();
+      var userResult = json.decode(await response.stream.bytesToString());
+
+      return {"msg": userResult['msg'], "status": response.statusCode};
+    } catch (e) {
+      return {"msg": e};
+    }
+  }
+}

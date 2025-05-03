@@ -1,0 +1,39 @@
+{
+    "folders": [
+      {
+        "name": "Backend API",
+        "path": "backend"
+      },
+      {
+        "name": "Web Frontend",
+        "path": "web_frontend"
+      },
+      {
+        "name": "Mobile",
+        "path": "mobile"
+      },
+      {
+        "name": "Mobile Pengguna",
+        "path": "mobile_pengguna"
+      },
+      {
+        "name": "Mobile Admin",
+        "path": "mobile_admin"
+      }
+    ],
+    "settings": {
+      "files.exclude": {
+        "**/node_modules": true,
+        "**/.git": true,
+        "**/.dart_tool": true,
+        "**/build": true
+      },
+      "search.exclude": {
+        "**/node_modules": true,
+        "**/build": true
+      },
+      "dart.flutterSdkPath": "C:/flutter",  // ganti sesuai lokasi Flutter SDK-mu
+      "editor.formatOnSave": true
+    }
+  }
+  

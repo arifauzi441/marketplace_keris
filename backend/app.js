@@ -7,6 +7,7 @@ var cors = require(`cors`)
 require(`dotenv`).config()
 var {db, connectDB} = require(`./config/db`)
 var {Seller, Product, ProductPict} = require(`./model/Associations`)
+var Admin = require(`./model/Admin`)
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
