@@ -270,7 +270,7 @@ class _DashboardState extends State<Dashboard> {
                                             flex: 3,
                                             child: Center(
                                               child: Text(
-                                                user.address ?? "",
+                                                user.phone ?? "",
                                                 style: TextStyle(
                                                     color: Colors.black),
                                               ),

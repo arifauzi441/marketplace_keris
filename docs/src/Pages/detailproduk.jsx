@@ -58,7 +58,7 @@
     }
 
     const GambarThumbnail = () => {
-        if(detailProduct.ProductPicts && detailProduct.ProductPicts.length > 0){
+        if(detailProduct?.ProductPicts && detailProduct.ProductPicts.length > 0){
             return (
             <div className="gambar-thumbnail">
                 {image.map((thumb, idx) => {
@@ -90,8 +90,8 @@
     const ProdukInfo = () => {
         return (
         <div className="deskripsi-produk">
-            <span className="nama-produk-detail">{detailProduct.product_name}</span>
-            <span className="harga-produk-detail">{formatRupiah(detailProduct.product_price)}</span>
+            <span className="nama-produk-detail">{detailProduct?.product_name}</span>
+            <span className="harga-produk-detail">{formatRupiah(detailProduct?.product_price)}</span>
             <div className="dividers"></div>
             <div className="profil-empu">
                 <img src={empu1} alt="Empu Sepuh" />
@@ -175,7 +175,7 @@
             <span className="judul-format">Deskripsi</span>
             <div className="dividers"></div>
             <div className="format-pembelian">
-            <span className="teks-deskripsi">{detailProduct.product_description}</span>
+            <span className="teks-deskripsi">{detailProduct?.product_description}</span>
             </div>
             
         </motion.section>

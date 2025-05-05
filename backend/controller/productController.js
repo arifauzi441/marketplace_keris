@@ -1,4 +1,4 @@
-const { Sequelize, Op } = require("sequelize")
+const { Sequelize, Op, Model } = require("sequelize")
 const Product = require(`../model/ProductModel`)
 const ProductPict = require("../model/ProductPictModel")
 const fs = require(`fs`)
@@ -54,9 +54,10 @@ const getActiveProduct = async (req, res, next) => {
 
 const getProductByIdSeller = async (req, res, next) => {
     try {
-        let product = await Product.findAll({
+        let product = await Seller.findOne({
+            attributes: {exclude:['password']},
             where: { id_seller: req.params.id },
-            include: { model: ProductPict }
+            include: { model: Product, include:{ model: ProductPict } }
         })
         res.status(200).json({ product });
     } catch (error) {
