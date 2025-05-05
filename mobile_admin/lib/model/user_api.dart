@@ -38,10 +38,10 @@ class UserApi {
         idSeller: null,
         email: data['email'],
         password: data['password'],
-        name: data['name'],
-        address: data['address'],
-        phone: data['phone'],
-        photo: data['photo'],
+        name: data['admin_name'],
+        address: data['admin_address'],
+        phone: data['admin_phone'],
+        photo: data['admin_photo'],
         status: data['status'],
       );
     }
@@ -51,10 +51,10 @@ class UserApi {
       idAdmin: null,
       email: data['email'],
       password: data['password'],
-      name: data['name'],
-      address: data['address'],
-      phone: data['phone'],
-      photo: data['photo'],
+      name: data['seller_name'],
+      address: data['seller_address'],
+      phone: data['seller_phone'],
+      photo: data['seller_photo'],
       status: data['status'],
     );
   }

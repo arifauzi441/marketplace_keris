@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
 import axios from 'axios';
 import "../index.css";
 import "../styles/toko.css";
@@ -13,8 +12,8 @@ import logoImage from "../assets/Images/logo-keris.png";
 
 const API_URL = import.meta.env.VITE_API_URL
 // Komponen EmpuCard
-const EmpuCard = ({ image, name, phone }) => (
-  <Link to ="/produk-empu">
+const EmpuCard = ({ image, name, phone, id_seller }) => (
+  <Link to ={`/produk-empu/${id_seller}`}>
   <div className="empu-card">
     <img src={image} alt={name} className="empu-photo" />
     <div className="empu-name">{name}</div>
@@ -278,6 +277,7 @@ export default function Tokokeris() {
                   image={imageSellers[index]}
                   name={empu.seller_name}
                   phone={empu.seller_phone}
+                  id_seller={empu.id_seller}
                 />
               </motion.div>
             ))}

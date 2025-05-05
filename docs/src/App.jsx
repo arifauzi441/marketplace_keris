@@ -14,7 +14,7 @@ function App() {
         <Route path="/toko-keris" element={<Tokokeris />} />
         <Route path="/detail-produk" element={<Detailproduk />} />
         <Route path="/produk-terlaris" element={<ProdukTerlaris />} />
-        <Route path="/produk-empu" element={<Produkempu />} />
+        <Route path="/produk-empu/:id" element={<Produkempu />} />
         <Route path="/detail-produk/:id" element={<Detailproduk />} />
         <Route path="/daftar-empu" element={<Daftarempu />} />
       </Routes>
