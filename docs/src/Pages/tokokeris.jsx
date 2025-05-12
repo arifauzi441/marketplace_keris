@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
 import axios from 'axios';
 import "../index.css";
 import "../styles/toko.css";
@@ -13,8 +12,8 @@ import logoImage from "../assets/Images/logo-keris.png";
 
 const API_URL = import.meta.env.VITE_API_URL
 // Komponen EmpuCard
-const EmpuCard = ({ image, name, phone }) => (
-  <Link to ="/produk-empu">
+const EmpuCard = ({ image, name, phone, id_seller }) => (
+  <Link to ={`/produk-empu/${id_seller}`}>
   <div className="empu-card">
     <img src={image} alt={name} className="empu-photo" />
     <div className="empu-name">{name}</div>
@@ -53,7 +52,9 @@ const incrementClick = async (id_product) => {
 // komponen ProductItem - produk terlaris
 const ProductItem = ({ image, name, price, id_product }) => (
   <div className="product-item">
-    <img src={image} alt={`Keris ${name}`} />
+    <div className="product-image-container">
+      <img src={image} alt={`Keris ${name}`} />
+    </div>
     <div className="product-item-content">
       <span className="product-name">{name}</span>
       <span className="product-price">{price}</span>
@@ -170,22 +171,12 @@ export default function Tokokeris() {
     fetchSellers();
   }, [search]);
 
-  // const scroll = (direction) => {
-  //   if (scrollRef.current) {
-  //     const amount = 220;
-  //     scrollRef.current.scrollBy({
-  //       left: direction === "left" ? -amount : amount,
-  //       behavior: "smooth",
-  //     });
-  //   }
-  // };
-
   const submit = (s) => {
     setTimeout(() => {
       setSearch(s)
     }, 1000);
   }
- 
+
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* Header */}
@@ -262,16 +253,10 @@ export default function Tokokeris() {
           <p className="empu-title">Daftar Nama Empu</p>
           <div className="nav-arrows">
 
-          <Link to={"/"}>
+          <Link to={"/daftar-empu"}>
             <button className="see-more-btn">Selengkapnya</button>
           </Link>
 
-            {/* <button className="arrow-btn" onClick={() => scroll("left")}>
-              <BsArrowLeftCircle size={30} />
-            </button>
-            <button className="arrow-btn" onClick={() => scroll("right")}>
-              <BsArrowRightCircle size={30} />
-            </button> */}
           </div>
         </div>
 
@@ -292,6 +277,7 @@ export default function Tokokeris() {
                   image={imageSellers[index]}
                   name={empu.seller_name}
                   phone={empu.seller_phone}
+                  id_seller={empu.id_seller}
                 />
               </motion.div>
             ))}
