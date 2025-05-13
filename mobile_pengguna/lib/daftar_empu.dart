@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_pengguna/dashboard.dart';
+import 'package:mobile_pengguna/model/user_api.dart';
 
 class DaftarEmpu extends StatefulWidget {
   const DaftarEmpu({super.key});
@@ -10,6 +12,27 @@ class DaftarEmpu extends StatefulWidget {
 }
 
 class _DaftarEmpuState extends State<DaftarEmpu> {
+  final String api = dotenv.env['API_URL'] ?? "";
+  List<UserApi>? users;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAllUsers('');
+  }
+
+  Future<void> fetchAllUsers(String search) async {
+    try {
+      var response = await UserApi.getAllSeller(search);
+      setState(() {
+        users = response;
+      });
+    } catch (e) {
+      print("hai");
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,8 +117,7 @@ class _DaftarEmpuState extends State<DaftarEmpu> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -116,7 +138,8 @@ class _DaftarEmpuState extends State<DaftarEmpu> {
                                 ),
                                 child: Text(
                                   "Kembali",
-                                  style: TextStyle(color: Colors.white,fontSize: 15.0),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 15.0),
                                 ),
                               ),
                             ),
@@ -124,8 +147,10 @@ class _DaftarEmpuState extends State<DaftarEmpu> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 45.0),
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 10.0),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 45.0),
                         decoration: BoxDecoration(
                           color: Color(0xFF2E7D32),
                           borderRadius: BorderRadius.circular(12),
@@ -161,7 +186,7 @@ class _DaftarEmpuState extends State<DaftarEmpu> {
                           crossAxisSpacing: 10,
                           childAspectRatio: 0.58,
                         ),
-                        itemCount: 10,
+                        itemCount: users?.length ?? 1,
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
@@ -182,30 +207,40 @@ class _DaftarEmpuState extends State<DaftarEmpu> {
                                   ),
                                   padding: EdgeInsets.all(8.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Center(
                                         child: ClipOval(
-                                          child: Image.asset(
-                                            "images/potrait.png",
-                                            height: imageSize,
-                                            width: imageSize,
-                                            fit: BoxFit.cover,
-                                          ),
+                                          child: (users?[index].sellerPhoto ==
+                                                  null)
+                                              ? Image.asset(
+                                                  "images/potrait.png",
+                                                  height: imageSize,
+                                                  width: imageSize,
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : Image.network(
+                                                  "$api/${users?[index].sellerPhoto}",
+                                                  height: imageSize,
+                                                  width: imageSize,
+                                                  fit: BoxFit.cover,
+                                                ),
                                         ),
                                       ),
                                       Spacer(),
                                       Align(
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              "Empu",
+                                              "${users?[index].sellerName}",
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                             Text(
-                                              "123456789",
+                                              "${users?[index].sellerPhone}",
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ],
@@ -220,13 +255,16 @@ class _DaftarEmpuState extends State<DaftarEmpu> {
                                             elevation: 0,
                                             backgroundColor: Colors.transparent,
                                             shadowColor: Colors.transparent,
-                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.zero),
                                             padding: EdgeInsets.zero,
                                           ),
                                           child: Text(
                                             "Lihat Produk",
-                                            style:
-                                                TextStyle(color: Colors.grey, fontWeight: FontWeight.normal),
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontWeight: FontWeight.normal),
                                           ),
                                         ),
                                       ),

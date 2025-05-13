@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile_pengguna/model/product_api.dart';
 
 class DetailProduct extends StatefulWidget {
@@ -11,6 +12,7 @@ class DetailProduct extends StatefulWidget {
 }
 
 class _DetailProductState extends State<DetailProduct> {
+  final String api = dotenv.env['API_URL'] ?? "";
   late String _mainProductPict;
 
   @override
@@ -34,8 +36,8 @@ class _DetailProductState extends State<DetailProduct> {
                 child: Container(
                   height: 70,
                   decoration: BoxDecoration(
-                    border:
-                        Border(bottom: BorderSide(color: Colors.black, width: 1)),
+                    border: Border(
+                        bottom: BorderSide(color: Colors.black, width: 1)),
                   ),
                   child: Center(
                     child: Row(
@@ -77,7 +79,7 @@ class _DetailProductState extends State<DetailProduct> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(16.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Container(
@@ -178,19 +180,67 @@ class _DetailProductState extends State<DetailProduct> {
                       )
                     : SizedBox.shrink(),
               ),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    (widget.product?.seller?.sellerPhoto != null)
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(999),
+                            child: Container(
+                              width: 50,
+                              height: 50,
+                              child: Image.network(
+                                "$api/${widget.product?.seller?.sellerPhoto}",
+                              ),
+                            ),
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(999),
+                            child: Container(
+                              width: 50,
+                              height: 50,
+                              child: Image(
+                                image: AssetImage('images/potrait.png'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text("${widget.product?.seller?.sellerName}", style: TextStyle(fontSize: 15),)
+                  ],
+                ),
+              ),
+              const SizedBox(height: 25),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Container(
+                  height: 30,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      border: Border(bottom: BorderSide(color: Colors.black))),
+                  child: Text(
+                                      "Deskripsi",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                ),
+              ),
               const SizedBox(height: 10),
               Align(
                 alignment: Alignment.topLeft,
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
-                  child:
-                      (widget.product?.productDescription?.isNotEmpty ?? false)
-                          ? Text(
-                              widget.product?.productDescription ?? "",
-                              textAlign: TextAlign.justify,
-                              style: TextStyle(fontSize: 14),
-                            )
-                          : SizedBox.shrink(),
+                  child: (widget.product?.productDescription != null)
+                      ? Text(
+                          widget.product?.productDescription ?? "",
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(fontSize: 14),
+                        )
+                      : SizedBox.shrink(),
                 ),
               ),
               const SizedBox(height: 30),
