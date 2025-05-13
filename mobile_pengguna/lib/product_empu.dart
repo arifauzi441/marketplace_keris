@@ -199,7 +199,6 @@ class _ProductEmpuState extends State<ProductEmpu> {
                                 Expanded(
                                     flex: 5,
                                     child: Container(
-                                      color: Colors.lightGreen,
                                       child: (sellerProduct?[index]
                                                   .productPict
                                                   .isEmpty ??

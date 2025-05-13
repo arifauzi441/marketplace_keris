@@ -85,39 +85,27 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           SizedBox(width: 10),
                           ConstrainedBox(
-                            constraints: BoxConstraints(
-                              maxWidth:
-                                  MediaQuery.of(context).size.width * 0.55,
-                              minWidth: 100,
+                            constraints: BoxConstraints(maxWidth: 200),
+                            child: Container(
+                              height: 30,
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              child: TextField(
+                                decoration: InputDecoration(
+                                    hintText: "Search",
+                                    border: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.black),
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 10)),
+                                onChanged: (value) => Future.delayed(Duration(milliseconds: 500), () => setState(() {
+                                  fetchAllUsers(value);
+                                  fetchPopularProduct(value);
+                                })),
+                              ),
                             ),
-                            child: SearchAnchor(
-                              builder: (BuildContext context,
-                                  SearchController controller) {
-                                return SearchBar(
-                                  controller: controller,
-                                  hintText: "Cari...",
-                                  padding: WidgetStateProperty.all(
-                                    EdgeInsets.symmetric(horizontal: 10.0),
-                                  ),
-                                  onTap: () => controller.openView(),
-                                  onChanged: (_) => controller.openView(),
-                                  leading: const Icon(Icons.search, size: 20),
-                                );
-                              },
-                              suggestionsBuilder: (BuildContext context,
-                                  SearchController controller) {
-                                return List<ListTile>.generate(10, (int index) {
-                                  final String item = 'item $index';
-                                  return ListTile(
-                                    title: Text(item),
-                                    onTap: () {
-                                      controller.closeView(item);
-                                    },
-                                  );
-                                });
-                              },
-                            ),
-                          ),
+                          )
                         ],
                       ),
                     ),
@@ -186,7 +174,8 @@ class _DashboardState extends State<Dashboard> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => ProductEmpu(users: users?[index]),
+                                    builder: (context) =>
+                                        ProductEmpu(users: users?[index]),
                                   ),
                                 );
                               },
@@ -282,7 +271,9 @@ class _DashboardState extends State<Dashboard> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => DetailProduct(product: popularProduct?[index],),
+                                  builder: (context) => DetailProduct(
+                                    product: popularProduct?[index],
+                                  ),
                                 ),
                               );
                             },
