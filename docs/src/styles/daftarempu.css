@@ -1,7 +1,7 @@
 
 
 .banner-section {
-    background-color: #2e6b27;
+    background: linear-gradient(135deg, #59D248 5%, #2E6C25 50%); /*ini new */
     padding: 4rem 0;
     margin: 0 5rem;
     border-radius: 30px;
@@ -46,7 +46,7 @@
     padding: 1.5rem;
     box-shadow: 0 4px 8px rgba(0,0,0,0.08);
     transition: transform 0.3s ease;
-    max-width: 500px;
+    width: 300px;      /*ini new */
     margin: 0 auto;
     text-align: center;
   }
@@ -73,7 +73,11 @@
     font-weight: 700;
     margin: 0;
     border-bottom: 1px solid #000;
-    width: fit-content;
+    white-space: nowrap;/*ini new */
+    overflow: hidden;/*ini new */
+    text-overflow: ellipsis;/*ini new */
+    display: block; /*ini new */
+    max-width: 100%;/*ini new */
   }
   
   .daftar-kontak-empu {
