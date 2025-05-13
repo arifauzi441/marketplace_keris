@@ -5,9 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require(`cors`)
 require(`dotenv`).config()
-var {db, connectDB} = require(`./config/db`)
-var {Seller, Product, ProductPict} = require(`./model/Associations`)
-var Admin = require(`./model/Admin`)
+var {connectDB} = require(`./config/db`)
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -28,9 +26,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 (async () => {
-  await connectDB();
-  console.log('Database synced successfully.');
-})();
+  await connectDB()
+})()
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

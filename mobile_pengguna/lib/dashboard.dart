@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_pengguna/populer_product.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -27,8 +28,8 @@ class _DashboardState extends State<Dashboard> {
                         ClipOval(
                           child: Image.asset(
                             "images/potrait.png",
-                            width: 40, 
-                            height: 40, 
+                            width: 40,
+                            height: 40,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -111,9 +112,7 @@ class _DashboardState extends State<Dashboard> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => Dashboard(
-
-                                    ),
+                                    builder: (context) => Dashboard(),
                                   ),
                                 );
                               },
@@ -124,13 +123,14 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                                 padding: EdgeInsets.all(10.0),
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     ClipOval(
                                       child: Image.asset(
-                                        "images/potrait.png", 
-                                        width: 80.0, 
+                                        "images/potrait.png",
+                                        width: 80.0,
                                         height: 80.0,
                                         fit: BoxFit.cover,
                                       ),
@@ -145,7 +145,9 @@ class _DashboardState extends State<Dashboard> {
                           },
                         ),
                       ),
-                      SizedBox(height: 15.0,),
+                      SizedBox(
+                        height: 15.0,
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 10),
@@ -154,7 +156,12 @@ class _DashboardState extends State<Dashboard> {
                           children: [
                             Text("Produk Terlaris"),
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () => {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => PopulerProduct()))
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.green,
                               ),
@@ -183,9 +190,7 @@ class _DashboardState extends State<Dashboard> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => Dashboard(
-
-                                  ),
+                                  builder: (context) => Dashboard(),
                                 ),
                               );
                             },
@@ -209,9 +214,12 @@ class _DashboardState extends State<Dashboard> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 5.0,),
+                                  SizedBox(
+                                    height: 5.0,
+                                  ),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
@@ -230,10 +238,10 @@ class _DashboardState extends State<Dashboard> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       ElevatedButton(
-                                        onPressed: (){},
+                                        onPressed: () {},
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.green,
-                                        ), 
+                                        ),
                                         child: Text(
                                           "Beli",
                                           style: TextStyle(color: Colors.white),

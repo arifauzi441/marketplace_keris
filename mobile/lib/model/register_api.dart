@@ -14,10 +14,10 @@ class RegisterApi {
     return RegisterApi(msg: object['msg'], statusCode: object['statusCode']);
   }
 
-  static Future<RegisterApi> register(email, password, alamat) async {
+  static Future<RegisterApi> register(username, password, phone) async {
     String apiURL = "$api/auth/register";
     var apiResult = await http.post(Uri.parse(apiURL),
-        body: {"email": email, "password": password, "seller_address": alamat});
+        body: {"username": username, "password": password, "seller_phone": phone});
 
     var registerResult = json.decode(apiResult.body);
 
