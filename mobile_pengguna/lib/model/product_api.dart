@@ -7,6 +7,7 @@ import 'package:mobile_pengguna/model/product_pict_api.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile_pengguna/model/user_api.dart';
 
 class ProductApi {
   static final api = dotenv.env['API_URL'] ?? "";
@@ -17,6 +18,7 @@ class ProductApi {
   String? productDescription;
   String? productStatus;
   List<ProductPictApi> productPict;
+  UserApi? seller;
 
   ProductApi(
       {required this.idProduct,
@@ -25,7 +27,8 @@ class ProductApi {
       required this.productPrice,
       required this.productStock,
       required this.productStatus,
-      required this.productPict});
+      required this.productPict,
+      this.seller});
 
   factory ProductApi.createProductApi(Map<String, dynamic> object) {
     List<dynamic> temp = object['ProductPicts'] ?? [];
@@ -41,85 +44,41 @@ class ProductApi {
         productStock: object['product_stock'].toString(),
         productPict: temp
             .map((prodpict) => ProductPictApi.createProductPictApi(prodpict))
-            .toList());
+            .toList(),
+        seller: UserApi.createUserApi({"data": object['Seller']}));
   }
 
-  static Future<Map<String, dynamic>> storeProduct(
-      String name,
-      String description,
-      int price,
-      int stock,
-      List<File> path,
-      String token) async {
-    String apiUrl = '$api/product/store';
-    var apiResult = http.MultipartRequest('POST', Uri.parse(apiUrl));
-    apiResult.headers['Authorization'] = "Bearer $token";
-    apiResult.fields['product_name'] = name;
-    apiResult.fields['product_price'] = price.toString();
-    apiResult.fields['product_stock'] = stock.toString();
-    apiResult.fields['product_description'] = description.toString();
-    for (var p in path) {
-      if (p.path.isNotEmpty) {
-        String mimeType = lookupMimeType(p.path) ?? "";
-        List<String> mimeParts = mimeType.split('/');
-        apiResult.files.add(await http.MultipartFile.fromPath('path', p.path,
-            contentType: MediaType(mimeParts[0], mimeParts[1])));
-      }
-    }
+  static Future<List<ProductApi>> getPopularProduct(String search) async {
+    String apiURL = '$api/product/populer-product?search=$search';
+    var apiResult = await http.get(
+      Uri.parse(apiURL),
+    );
+    var userResult = json.decode(apiResult.body);
 
-    var response = await apiResult.send();
-    var productResult = json.decode(await response.stream.bytesToString());
-    return {"msg": productResult['msg'], "status": response.statusCode};
+    List<ProductApi> datas = (userResult['product'] as List)
+        .map(
+            (data) => ProductApi.createProductApi(data as Map<String, dynamic>))
+        .toList();
+
+    return datas;
   }
 
-  static Future<Map<String, dynamic>> updateProduct(
-      String name,
-      String description,
-      String price,
-      String stock,
-      List<File> path,
-      String token,
-      int idProduct) async {
-    String apiUrl = '$api/product/update/$idProduct';
-    var apiResult = http.MultipartRequest('PATCH', Uri.parse(apiUrl));
-    apiResult.headers['Authorization'] = 'Bearer $token';
-    apiResult.fields['id_product_pict'] = idProduct.toString();
-    apiResult.fields['product_name'] = name;
-    apiResult.fields['product_description'] = description;
-    apiResult.fields['product_price'] = price;
-    apiResult.fields['product_stock'] = stock;
+  static Future<List<ProductApi>> getProductbySeller(int sellerId) async {
+    String apiURL = '$api/product/seller/$sellerId';
+    var apiResult = await http.get(
+      Uri.parse(apiURL),
+    );
+    var userResult = json.decode(apiResult.body);
 
-    for (var p in path) {
-      if (p.path.isNotEmpty) {
-        String mimeType = lookupMimeType(p.path) ?? "";
-        List<String> mimeParts = mimeType.split('/');
-        apiResult.files.add(await http.MultipartFile.fromPath('path', p.path,
-            contentType: MediaType(mimeParts[0], mimeParts[1])));
-      }
-    }
+    List<ProductApi> datas = (userResult['product']['Products'] as List)
+        .map((data) => ProductApi.createProductApi({"Seller":
+              {"seller_name": userResult['product']['seller_name'],
+              "seller_phone": userResult['product']['seller_phone'],
+              "seller_photo": userResult['product']['seller_photo'],},
+              ...data as Map<String, dynamic>
+            }))
+        .toList();
 
-    var productResult = await apiResult.send();
-    var response = json.decode(await productResult.stream.bytesToString());
-    return {"msg": response['msg'], "status": productResult.statusCode};
-  }
-
-  static Future<Map<String, dynamic>> deleteProduct(
-      int idProduct, String token) async {
-    String apiURL = '$api/product/delete/$idProduct';
-    var apiResult =
-        await http.delete(Uri.parse(apiURL), headers: {"Authorization": token});
-
-    var productResult = json.decode(apiResult.body);
-    return {"msg": productResult['msg'], "status": apiResult.statusCode};
-  }
-
-  static Future<Map<String, dynamic>> changeProductStatus(
-      int idProduct, String token) async {
-    String apiURL = '$api/product/change-status/$idProduct';
-    var apiResult =
-        await http.patch(Uri.parse(apiURL), headers: {"Authorization": token});
-
-    var productResult = json.decode(apiResult.body);
-    return {"msg": productResult['msg'], "status": apiResult.statusCode};
+    return datas;
   }
 }

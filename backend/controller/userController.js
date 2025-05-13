@@ -28,10 +28,10 @@ const getUsers = async (req, res, next) => {
                 },
             });
         }
-        res.json({ msg: "Berhasil mengambil data", data })
+        return res.json({ msg: "Berhasil mengambil data", data })
     } catch (error) {
         console.log(error)
-        res.json({ msg: error })
+        return res.json({ msg: error })
     }
 }
 

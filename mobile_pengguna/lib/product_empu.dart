@@ -1,13 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:mobile_pengguna/detail_product.dart';
+import 'package:mobile_pengguna/model/product_api.dart';
+import 'package:mobile_pengguna/model/user_api.dart';
 
 class ProductEmpu extends StatefulWidget {
-  const ProductEmpu({super.key});
+  final UserApi? users;
+  const ProductEmpu({super.key, required this.users});
 
   @override
   State<ProductEmpu> createState() => _ProductEmpuState();
 }
 
 class _ProductEmpuState extends State<ProductEmpu> {
+  final String api = dotenv.env['API_URL'] ?? "";
+  List<ProductApi>? sellerProduct;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchSellerProduct('');
+  }
+
+  Future<void> fetchSellerProduct(String search) async {
+    try {
+      var response =
+          await ProductApi.getProductbySeller(widget.users?.idSeller ?? 1);
+      setState(() {
+        sellerProduct = response;
+      });
+    } catch (e) {
+      print("hai");
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,7 +118,7 @@ class _ProductEmpuState extends State<ProductEmpu> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "EMPU SEPUH",
+                              "${widget.users?.sellerName}",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
@@ -107,7 +134,7 @@ class _ProductEmpuState extends State<ProductEmpu> {
                               ),
                             ),
                             Text(
-                              "082335838167",
+                              "${widget.users?.sellerPhone}",
                               style: TextStyle(color: Colors.white),
                             )
                           ],
@@ -120,10 +147,16 @@ class _ProductEmpuState extends State<ProductEmpu> {
                           child: Container(
                               height: MediaQuery.of(context).size.width * 0.25,
                               width: MediaQuery.of(context).size.width * 0.25,
-                              child: Image(
-                                image: AssetImage('images/potrait.png'),
-                                fit: BoxFit.cover,
-                              )),
+                              child: (widget.users?.sellerPhoto == null)
+                                  ? Image(
+                                      image: AssetImage('images/potrait.png'),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image(
+                                      image: NetworkImage(
+                                          '$api/${widget.users?.sellerPhoto}'),
+                                      fit: BoxFit.cover,
+                                    )),
                         ),
                       ],
                     ),
@@ -152,13 +185,13 @@ class _ProductEmpuState extends State<ProductEmpu> {
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10,
                             childAspectRatio: 0.6),
-                        itemCount: 10,
+                        itemCount: sellerProduct?.length ?? 1,
                         itemBuilder: (context, index) {
                           return Container(
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Color(0xFF2E6C25), width: 2)
-                            ),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: Color(0xFF2E6C25), width: 2)),
                             padding: EdgeInsets.all(5),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,15 +200,29 @@ class _ProductEmpuState extends State<ProductEmpu> {
                                     flex: 5,
                                     child: Container(
                                       color: Colors.lightGreen,
-                                      child: Image(image: AssetImage('images/2.png'), fit: BoxFit.cover,),
+                                      child: (sellerProduct?[index]
+                                                  .productPict
+                                                  .isEmpty ??
+                                              true)
+                                          ? Image(
+                                              image: AssetImage('images/2.png'),
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image(
+                                              image: NetworkImage(
+                                                  '${sellerProduct?[index].productPict[0].path}'),
+                                              fit: BoxFit.cover,
+                                              width: double.infinity,
+                                            ),
                                     )),
                                 SizedBox(
                                   height: 5,
                                 ),
                                 Expanded(
                                     flex: 2,
-                                    child: Text("Keris nagabonar ")),
-                                Text("Rp. 3.000.000"),
+                                    child: Text(
+                                        "${sellerProduct?[index].productName}")),
+                                Text("${sellerProduct?[index].productPrice}"),
                                 SizedBox(
                                   height: 10,
                                 ),
@@ -189,12 +236,21 @@ class _ProductEmpuState extends State<ProductEmpu> {
                                           0.5,
                                       height:
                                           MediaQuery.of(context).size.height *
-                                          0.04,
+                                              0.04,
                                       color: Color(0xFF53C737),
                                       child: Material(
                                         color: Colors.transparent,
                                         child: InkWell(
-                                            onTap: () async {},
+                                            onTap: () async {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          DetailProduct(
+                                                              product:
+                                                                  sellerProduct?[
+                                                                      index])));
+                                            },
                                             child: Center(
                                               child: Text(
                                                 "Beli",

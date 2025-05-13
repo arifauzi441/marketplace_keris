@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_pengguna/daftar_empu.dart';
+import 'package:mobile_pengguna/detail_product.dart';
+import 'package:mobile_pengguna/model/product_api.dart';
+import 'package:mobile_pengguna/model/user_api.dart';
 import 'package:mobile_pengguna/populer_product.dart';
+import 'package:mobile_pengguna/product_empu.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -11,6 +16,40 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  final String api = dotenv.env['API_URL'] ?? "";
+  List<UserApi>? users;
+  List<ProductApi>? popularProduct;
+  @override
+  void initState() {
+    super.initState();
+    fetchAllUsers('');
+    fetchPopularProduct('');
+  }
+
+  Future<void> fetchAllUsers(String search) async {
+    try {
+      var response = await UserApi.getAllSeller(search);
+      setState(() {
+        users = response;
+      });
+    } catch (e) {
+      print("hai");
+      print(e);
+    }
+  }
+
+  Future<void> fetchPopularProduct(String search) async {
+    try {
+      var response = await ProductApi.getPopularProduct(search);
+      setState(() {
+        popularProduct = response;
+      });
+    } catch (e) {
+      print("hai");
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,8 +152,7 @@ class _DashboardState extends State<Dashboard> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => DaftarEmpu())
-                                );
+                                        builder: (context) => DaftarEmpu()));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.green,
@@ -141,14 +179,14 @@ class _DashboardState extends State<Dashboard> {
                             crossAxisSpacing: 10,
                             childAspectRatio: 1.0,
                           ),
-                          itemCount: 10,
+                          itemCount: users?.length,
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => DaftarEmpu(),
+                                    builder: (context) => ProductEmpu(users: users?[index]),
                                   ),
                                 );
                               },
@@ -163,17 +201,26 @@ class _DashboardState extends State<Dashboard> {
                                       MainAxisAlignment.spaceEvenly,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    ClipOval(
-                                      child: Image.asset(
-                                        "images/potrait.png",
-                                        width: 80.0,
-                                        height: 80.0,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
+                                    (users?[index].sellerPhoto == null)
+                                        ? ClipOval(
+                                            child: Image.asset(
+                                              "images/potrait.png",
+                                              width: 80.0,
+                                              height: 80.0,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          )
+                                        : ClipOval(
+                                            child: Image.network(
+                                              "$api/${users?[index].sellerPhoto}",
+                                              width: 80.0,
+                                              height: 80.0,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
                                     SizedBox(height: 6),
-                                    Text("Empu"),
-                                    Text("123456789"),
+                                    Text("${users?[index].sellerName}"),
+                                    Text("${users?[index].sellerPhone}"),
                                   ],
                                 ),
                               ),
@@ -228,14 +275,14 @@ class _DashboardState extends State<Dashboard> {
                           crossAxisSpacing: 10,
                           childAspectRatio: 0.58,
                         ),
-                        itemCount: 10,
+                        itemCount: popularProduct?.length ?? 1,
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => Dashboard(),
+                                  builder: (context) => DetailProduct(product: popularProduct?[index],),
                                 ),
                               );
                             },
@@ -253,21 +300,33 @@ class _DashboardState extends State<Dashboard> {
                                         CrossAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Center(
-                                        child: Image.asset(
-                                          "images/potrait.png",
-                                          height: imageSize,
-                                          width: imageSize,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
+                                      (popularProduct?[index]
+                                                  .productPict
+                                                  .isEmpty ??
+                                              true)
+                                          ? Center(
+                                              child: Image.asset(
+                                                "images/potrait.png",
+                                                height: imageSize,
+                                                width: imageSize,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            )
+                                          : Center(
+                                              child: Image.network(
+                                                "${popularProduct?[index].productPict[0].path}",
+                                                height: imageSize,
+                                                width: imageSize,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
                                       Spacer(),
                                       Text(
-                                        "Nama: Keris",
+                                        "${popularProduct?[index].productName}",
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       Text(
-                                        "Harga: 123456789",
+                                        "${popularProduct?[index].productPrice}",
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       Spacer(),
@@ -331,7 +390,8 @@ class _DashboardState extends State<Dashboard> {
                           elevation: 0,
                           backgroundColor: Colors.transparent,
                           shadowColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero),
                           padding: EdgeInsets.zero,
                         ),
                         child: Column(
