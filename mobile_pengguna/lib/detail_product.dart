@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile_pengguna/model/product_api.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailProduct extends StatefulWidget {
   final ProductApi? product;
@@ -21,6 +22,22 @@ class _DetailProductState extends State<DetailProduct> {
     _mainProductPict = (widget.product!.productPict.isNotEmpty)
         ? widget.product?.productPict[0].path ?? ""
         : "";
+  }
+
+  void openWhatsApp(String phoneNumber) async {
+    String intePhoneNumber =
+        (phoneNumber[0] == '0') ? '62${phoneNumber.substring(1)}' : phoneNumber;
+    String message =
+        'Nama: \nNo hp: \nJenis dan jumlah keris: \nAlamat Lengkap: ';
+
+    Uri whatsAppUrl = Uri.parse(
+        'https://wa.me/$intePhoneNumber?text=${Uri.encodeComponent(message)}');
+
+    if (await canLaunchUrl(whatsAppUrl)) {
+      await launchUrl(whatsAppUrl, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'tidak dapat membuka whatsApp';
+    }
   }
 
   @override
@@ -211,7 +228,10 @@ class _DetailProductState extends State<DetailProduct> {
                     SizedBox(
                       width: 10,
                     ),
-                    Text("${widget.product?.seller?.sellerName}", style: TextStyle(fontSize: 15),)
+                    Text(
+                      "${widget.product?.seller?.sellerName}",
+                      style: TextStyle(fontSize: 15),
+                    )
                   ],
                 ),
               ),
@@ -224,9 +244,9 @@ class _DetailProductState extends State<DetailProduct> {
                   decoration: BoxDecoration(
                       border: Border(bottom: BorderSide(color: Colors.black))),
                   child: Text(
-                                      "Deskripsi",
-                                      style: TextStyle(fontSize: 16),
-                                    ),
+                    "Deskripsi",
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
               ),
               const SizedBox(height: 10),
@@ -243,7 +263,31 @@ class _DetailProductState extends State<DetailProduct> {
                       : SizedBox.shrink(),
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.5 * 0.8,
+                    height: MediaQuery.of(context).size.height * 0.05,
+                    color: Color(0xFF53C737),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                          onTap: () => openWhatsApp(
+                              widget.product?.seller?.sellerPhone ?? ""),
+                          child: Center(
+                            child: Text(
+                              "Hubungi WhatsApp",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          )),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
             ],
           ),
         ),
