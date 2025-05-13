@@ -14,12 +14,12 @@ class LoginApi {
     return LoginApi(token: object['token'], msg: object['msg']);
   }
 
-  static Future<LoginApi> login(String email, String password) async {
+  static Future<LoginApi> login(String username, String password) async {
     print(api.toString());
     String apiURL = '$api/auth/login-admin';
 
     var apiResult = await http
-        .post(Uri.parse(apiURL), body: {"email": email, "password": password});
+        .post(Uri.parse(apiURL), body: {"username": username, "password": password});
 
     var loginResult = json.decode(apiResult.body);
     return LoginApi.createLoginApi(loginResult);

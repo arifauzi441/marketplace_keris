@@ -7,7 +7,7 @@ const Seller = db.define(`Seller`,{
         primaryKey: true,
         autoIncrement: true
     },
-    email: DataTypes.STRING,
+    username: DataTypes.STRING,
     password: DataTypes.STRING,
     seller_name: DataTypes.STRING,
     seller_address: DataTypes.STRING,

@@ -10,9 +10,9 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _alamatController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   RegisterApi register = RegisterApi(msg: '', statusCode: 0);
 
   @override
@@ -69,9 +69,9 @@ class _RegisterState extends State<Register> {
                             : SizedBox(
                                 height: 0,
                               ),
-                        getTextField(context, "Email"),
+                        getTextField(context, "Username"),
                         getTextField(context, "Password"),
-                        getTextField(context, "Alamat"),
+                        getTextField(context, "Phone"),
                       ],
                     ),
                     Column(
@@ -89,9 +89,9 @@ class _RegisterState extends State<Register> {
                                 onTap: () async {
                                   try {
                                     var result = await RegisterApi.register(
-                                        _emailController.text,
+                                        _usernameController.text,
                                         _passwordController.text,
-                                        _alamatController.text);
+                                        _phoneController.text);
 
                                     setState(() {
                                       register = result;
@@ -156,11 +156,11 @@ class _RegisterState extends State<Register> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.5 * 0.10,
             child: TextField(
-              controller: (label == 'Email')
-                  ? _emailController
+              controller: (label == 'Username')
+                  ? _usernameController
                   : (label == 'Password')
                       ? _passwordController
-                      : _alamatController,
+                      : _phoneController,
               cursorColor: Colors.green,
               decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(

@@ -43,7 +43,7 @@ const getAllUsers = async (req, res, next) => {
             where: {
                 [Op.or]: {
                     status: { [Op.like]: `%${search}%` },
-                    email: { [Op.like]: `%${search}%` },
+                    username: { [Op.like]: `%${search}%` },
                     seller_phone: { [Op.like]: `%${search}%` },
                 }
             }
@@ -52,7 +52,7 @@ const getAllUsers = async (req, res, next) => {
             where: {
                 [Op.or]: {
                     status: { [Op.like]: `%${search}%` },
-                    email: { [Op.like]: `%${search}%` },
+                    username: { [Op.like]: `%${search}%` },
                     admin_phone: { [Op.like]: `%${search}%` },
                 }
             }
@@ -123,11 +123,9 @@ const updateUserById = async (req, res, next) => {
 const changePassword = async (req, res, next) => {
     try {
         let { oldPasswordInput, newPasswordInput, newPasswordInput2 } = req.body
+        
         let oldData = await Seller.findOne(
-            { attributes: ['password'] },
-            {
-                where: { id_seller: req.user.id }
-            })
+            { attributes: ['password'] , where: {id_seller: req.user.id}})
         if (oldData.password != oldPasswordInput) return res.status(401).json({ msg: "Password tidak sesuai" })
         if (newPasswordInput != newPasswordInput2) return res.status(401).json({ msg: "Password tidak sama" })
 

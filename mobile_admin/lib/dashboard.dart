@@ -30,6 +30,7 @@ class _DashboardState extends State<Dashboard> {
         users = response;
       });
     } catch (e) {
+        print("haiii");
       print(e);
     }
   }
@@ -88,7 +89,7 @@ class _DashboardState extends State<Dashboard> {
                     Row(
                       children: [
                         Text(
-                          user?.email ?? 'Ari',
+                          user?.username ?? 'Ari',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: TextStyle(
@@ -197,7 +198,7 @@ class _DashboardState extends State<Dashboard> {
                               Expanded(
                                 flex: 3,
                                 child: Center(
-                                  child: Text("Email",
+                                  child: Text("Username",
                                       style: TextStyle(color: Colors.white)),
                                 ),
                               ),
@@ -260,7 +261,7 @@ class _DashboardState extends State<Dashboard> {
                                             flex: 3,
                                             child: Center(
                                               child: Text(
-                                                user.email ?? "",
+                                                user.username ?? "",
                                                 style: TextStyle(
                                                     color: Colors.black),
                                               ),

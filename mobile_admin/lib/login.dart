@@ -12,7 +12,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   String errorMsg = '';
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
@@ -68,7 +68,7 @@ class _LoginState extends State<Login> {
                             : SizedBox(
                                 height: 0,
                               ),
-                        getTextField(context, "Email"),
+                        getTextField(context, "Username"),
                         getTextField(context, "Password"),
                       ],
                     ),
@@ -86,7 +86,7 @@ class _LoginState extends State<Login> {
                                 onTap: () async {
                                   try {
                                     var result = await LoginApi.login(
-                                        _emailController.text,
+                                        _usernameController.text,
                                         _passwordController.text);
                                     print("hai");
                                     if (!mounted) return;
@@ -164,7 +164,7 @@ class _LoginState extends State<Login> {
             height: MediaQuery.of(context).size.height * 0.5 * 0.10,
             child: TextField(
               controller:
-                  (label == 'Email') ? _emailController : _passwordController,
+                  (label == 'Username') ? _usernameController : _passwordController,
               cursorColor: Colors.green,
               decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(

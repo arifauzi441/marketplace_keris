@@ -10,7 +10,7 @@ import 'package:mobile/model/product_api.dart';
 class UserApi {
   static final api = dotenv.env['API_URL'];
   int? idSeller;
-  String? email;
+  String? username;
   String? password;
   String? sellerName;
   String? sellerAddress;
@@ -20,7 +20,7 @@ class UserApi {
 
   UserApi(
       {required this.idSeller,
-      required this.email,
+      required this.username,
       required this.password,
       required this.sellerName,
       required this.sellerAddress,
@@ -37,7 +37,7 @@ class UserApi {
 
     return UserApi(
         idSeller: data['id_seller'],
-        email: data['email'],
+        username: data['username'],
         password: data['password'],
         sellerName: data['seller_name'],
         sellerAddress: data['seller_address'],

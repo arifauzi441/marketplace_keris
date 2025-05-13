@@ -10,7 +10,7 @@ class UserApi {
   static final api = dotenv.env['API_URL'];
   int? idSeller;
   int? idAdmin;
-  String? email;
+  String? username;
   String? password;
   String? name;
   String? address;
@@ -21,7 +21,7 @@ class UserApi {
   UserApi({
     required this.idSeller,
     required this.idAdmin,
-    required this.email,
+    required this.username,
     required this.password,
     required this.name,
     required this.address,
@@ -36,7 +36,7 @@ class UserApi {
       return UserApi(
         idAdmin: data['id_admin'],
         idSeller: null,
-        email: data['email'],
+        username: data['username'],
         password: data['password'],
         name: data['admin_name'],
         address: data['admin_address'],
@@ -49,7 +49,7 @@ class UserApi {
     return UserApi(
       idSeller: data['id_seller'],
       idAdmin: null,
-      email: data['email'],
+      username: data['username'],
       password: data['password'],
       name: data['seller_name'],
       address: data['seller_address'],

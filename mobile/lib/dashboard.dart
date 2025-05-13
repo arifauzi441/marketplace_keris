@@ -74,7 +74,7 @@ class _DashboardState extends State<Dashboard> {
                         children: [
                           Expanded(
                             child: Text(
-                              user?.email ?? '',
+                              user?.username ?? '',
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style: TextStyle(
@@ -360,7 +360,7 @@ class _DashboardState extends State<Dashboard> {
                         children: [
                           Expanded(
                             child: Text(
-                              user?.email ?? '',
+                              user?.username ?? '',
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style: TextStyle(
