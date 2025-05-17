@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 11 Bulan Mei 2025 pada 11.21
+-- Waktu pembuatan: 16 Bulan Mei 2025 pada 17.43
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -55,6 +55,21 @@ INSERT INTO `admins` (`id_admin`, `username`, `password`, `admin_name`, `admin_a
 (8, 'sdlmawda', 'sad', NULL, 'sf', NULL, NULL, 'belum diterima', '2025-05-03 04:16:53', '2025-05-03 04:16:53'),
 (9, 'fajarw', '1234', NULL, NULL, '087850366625', NULL, 'belum diterima', '2025-05-07 04:27:51', '2025-05-07 04:27:51'),
 (10, 'fajar2', '1234', NULL, NULL, '0878503666257', NULL, 'belum diterima', '2025-05-07 06:00:17', '2025-05-07 06:00:17');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `adminverificationcodes`
+--
+
+CREATE TABLE `adminverificationcodes` (
+  `id_verification_code` int(11) NOT NULL,
+  `verification_code` int(11) DEFAULT NULL,
+  `expired_at` datetime DEFAULT NULL,
+  `id_admin` int(11) DEFAULT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -161,6 +176,21 @@ INSERT INTO `sellers` (`id_seller`, `username`, `password`, `seller_name`, `sell
 (6, 'blabla', '455', NULL, 'jlGaming', NULL, NULL, 'belum diterima', '2025-05-05 13:56:20', '2025-05-05 14:45:42'),
 (10, 'fajar', '123', NULL, NULL, '087850366625', NULL, 'diterima', '2025-05-07 04:08:58', '2025-05-07 06:07:11');
 
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `sellerverificationcodes`
+--
+
+CREATE TABLE `sellerverificationcodes` (
+  `id_verification_code` int(11) NOT NULL,
+  `verification_code` int(11) DEFAULT NULL,
+  `expired_at` datetime DEFAULT NULL,
+  `id_seller` int(11) DEFAULT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Indexes for dumped tables
 --
@@ -170,6 +200,13 @@ INSERT INTO `sellers` (`id_seller`, `username`, `password`, `seller_name`, `sell
 --
 ALTER TABLE `admins`
   ADD PRIMARY KEY (`id_admin`);
+
+--
+-- Indeks untuk tabel `adminverificationcodes`
+--
+ALTER TABLE `adminverificationcodes`
+  ADD PRIMARY KEY (`id_verification_code`),
+  ADD KEY `id_admin` (`id_admin`);
 
 --
 -- Indeks untuk tabel `productpicts`
@@ -192,6 +229,13 @@ ALTER TABLE `sellers`
   ADD PRIMARY KEY (`id_seller`);
 
 --
+-- Indeks untuk tabel `sellerverificationcodes`
+--
+ALTER TABLE `sellerverificationcodes`
+  ADD PRIMARY KEY (`id_verification_code`),
+  ADD KEY `id_seller` (`id_seller`);
+
+--
 -- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
@@ -200,6 +244,12 @@ ALTER TABLE `sellers`
 --
 ALTER TABLE `admins`
   MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT untuk tabel `adminverificationcodes`
+--
+ALTER TABLE `adminverificationcodes`
+  MODIFY `id_verification_code` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `productpicts`
@@ -217,11 +267,23 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT untuk tabel `sellers`
 --
 ALTER TABLE `sellers`
-  MODIFY `id_seller` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_seller` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT untuk tabel `sellerverificationcodes`
+--
+ALTER TABLE `sellerverificationcodes`
+  MODIFY `id_verification_code` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
+
+--
+-- Ketidakleluasaan untuk tabel `adminverificationcodes`
+--
+ALTER TABLE `adminverificationcodes`
+  ADD CONSTRAINT `adminverificationcodes_ibfk_1` FOREIGN KEY (`id_admin`) REFERENCES `admins` (`id_admin`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ketidakleluasaan untuk tabel `productpicts`
@@ -234,6 +296,12 @@ ALTER TABLE `productpicts`
 --
 ALTER TABLE `products`
   ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`id_seller`) REFERENCES `sellers` (`id_seller`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `sellerverificationcodes`
+--
+ALTER TABLE `sellerverificationcodes`
+  ADD CONSTRAINT `sellerverificationcodes_ibfk_1` FOREIGN KEY (`id_seller`) REFERENCES `sellers` (`id_seller`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

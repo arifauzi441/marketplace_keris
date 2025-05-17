@@ -1,11 +1,13 @@
-const { Op } = require("sequelize")
+const { Op, col } = require("sequelize")
 const Admin = require("../model/Admin")
 const Seller = require(`../model/SellerModel`)
 const jwt = require(`jsonwebtoken`)
+const AdminVerificationCode = require("../model/AdminVerificationCode")
+const SellerVerificationCode = require("../model/SellerVerificationCode")
 
-const register = async(req, res, next ) => {
+const register = async (req, res, next) => {
     try {
-        let {seller_phone, password, username} = req.body
+        let { seller_phone, password, username } = req.body
         let user = await Seller.findOne({
             where: {
                 [Op.or]: [
@@ -14,84 +16,218 @@ const register = async(req, res, next ) => {
                 ]
             }
         })
-        
-        if(user) return res.status(401).json({msg: "no hp / username telah digunakan"})
 
-        let data = {seller_phone, password, username, status: "belum diterima"}
+        if (user) return res.status(401).json({ msg: "no hp / username telah digunakan" })
 
-        await Seller.create(data,{fields: ["seller_phone", "password", "username", "status"]})
-        res.status(201).json({msg: "Berhasil melakukan registrasi, menunggu konfirmasi"})
+        let data = { seller_phone, password, username, status: "belum diterima" }
+
+        await Seller.create(data, { fields: ["seller_phone", "password", "username", "status"] })
+        res.status(201).json({ msg: "Berhasil melakukan registrasi, menunggu konfirmasi" })
     } catch (error) {
         console.log(error)
-        res.status(400).json({msg: error})
+        res.status(400).json({ msg: error })
     }
 }
 
-const registerAdmin = async(req, res, next ) => {
+const registerAdmin = async (req, res, next) => {
     try {
-        let {username, password, admin_phone} = req.body
-        let user = await Admin.findOne({where: {
-            [Op.or]: [
-                { admin_phone },
-                { username }
-            ]
-        }})
-        if(user) return res.status(401).json({msg: "no hp / username telah digunakan"})
+        let { username, password, admin_phone } = req.body
+        let user = await Admin.findOne({
+            where: {
+                [Op.or]: [
+                    { admin_phone },
+                    { username }
+                ]
+            }
+        })
+        if (user) return res.status(401).json({ msg: "no hp / username telah digunakan" })
 
-        let data = {username, password, admin_phone, status: "belum diterima"}
+        let data = { username, password, admin_phone, status: "belum diterima" }
 
-        await Admin.create(data,{fields: ["username", "password", "admin_phone", "status"]})
-        res.status(201).json({msg: "Berhasil melakukan registrasi, menunggu konfirmasi"})
+        await Admin.create(data, { fields: ["username", "password", "admin_phone", "status"] })
+        res.status(201).json({ msg: "Berhasil melakukan registrasi, menunggu konfirmasi" })
     } catch (error) {
         console.log(error)
-        res.status(400).json({msg: error})
+        res.status(400).json({ msg: error })
     }
 }
 
-const login = async(req, res, next) => {
+const login = async (req, res, next) => {
     try {
-        let{username, password} = req.body
+        let { username, password } = req.body
         let token = "";
-        let data = await Seller.findOne({where: {username}})
+        let data = await Seller.findOne({ where: { username } })
 
-        if(!data) return res.status(404).json({msg: "username tidak ditemukan", token: ""})
+        if (!data) return res.status(404).json({ msg: "username tidak ditemukan", token: "" })
 
-        if(password !== data.password) return res.status(401).json({msg: "Password salah", token: ""})
+        if (password !== data.password) return res.status(401).json({ msg: "Password salah", token: "" })
 
-        if(data.status === "belum diterima") return res.status(401).json({msg: "register dalam status belum diterima", token: ""})
+        if (data.status === "belum diterima") return res.status(401).json({ msg: "register dalam status belum diterima", token: "" })
         token = jwt.sign({
-            id : data.id_seller,
-            username : data.username
-        }, process.env.JWT_SECRET,{expiresIn: "1h"})
+            id: data.id_seller,
+            username: data.username
+        }, process.env.JWT_SECRET, { expiresIn: "1h" })
 
-        res.status(200).json({msg: "Berhasil Login", token})
+        res.status(200).json({ msg: "Berhasil Login", token })
     } catch (error) {
         console.log(error)
-        res.status(401).json({msg: error})
+        res.status(401).json({ msg: error })
     }
 }
 
-const loginAdmin = async(req, res, next) => {
+const loginAdmin = async (req, res, next) => {
     try {
-        let{username, password} = req.body
+        let { username, password } = req.body
         let token = "";
-        let data = await Admin.findOne({where: {username}})
+        let data = await Admin.findOne({ where: { username } })
 
-        if(!data) return res.status(404).json({msg: "username tidak ditemukan", token: ""})
+        if (!data) return res.status(404).json({ msg: "username tidak ditemukan", token: "" })
 
-        if(password !== data.password) return res.status(401).json({msg: "Password salah", token: ""})
+        if (password !== data.password) return res.status(401).json({ msg: "Password salah", token: "" })
 
-        if(data.status === "belum diterima") return res.status(401).json({msg: "register dalam status belum diterima", token: ""})
+        if (data.status === "belum diterima") return res.status(401).json({ msg: "register dalam status belum diterima", token: "" })
         token = jwt.sign({
-            id : data.id_admin,
-            username : data.username
-        }, process.env.JWT_SECRET,{expiresIn: "1h"})
+            id: data.id_admin,
+            username: data.username
+        }, process.env.JWT_SECRET, { expiresIn: "1h" })
 
-        res.status(200).json({msg: "Berhasil Login", token})
+        res.status(200).json({ msg: "Berhasil Login", token })
     } catch (error) {
         console.log(error)
-        res.status(401).json({msg: error})
+        res.status(401).json({ msg: error })
     }
 }
 
-module.exports = {register, registerAdmin, login, loginAdmin}
+const forgotPassword = async (req, res) => {
+    try {
+        let { phone_number, role } = req.body
+
+        if (role == "admin") {
+            let data = await Admin.findOne({ where: { admin_phone: phone_number, status: "diterima" } })
+            if (!data) return res.status(404).json({ msg: "no telepon tidak ditemukan" })
+
+            let random = Math.floor(100000 + Math.random() * 900000)
+            let expired_at = new Date(Date.now() + 1 * 60 * 1000)
+
+            let codeVerification = await AdminVerificationCode.create({
+                id_admin: data.id_admin,
+                verification_code: random,
+                expired_at: expired_at.toLocaleDateString().replace(/\//g, '-') +
+                    ' ' + expired_at.toLocaleTimeString('id-ID', { hour12: false }).replace(/\./g, ':')
+            })
+
+            return res.status(200).json({ "kode verifikasi": codeVerification.dataValues.verification_code })
+        } else {
+            let data = await Seller.findOne({ where: { seller_phone: phone_number, status: "diterima" } })
+            if (!data) return res.status(404).json({ msg: "no telepon tidak ditemukan" })
+
+            let random = Math.floor(100000 + Math.random() * 900000)
+            let expired_at = new Date(Date.now() + 1 * 60 * 1000)
+
+            let codeVerification = await SellerVerificationCode.create({
+                id_seller: data.id_seller,
+                verification_code: random,
+                expired_at: expired_at.toLocaleDateString().replace(/\//g, '-') +
+                    ' ' + expired_at.toLocaleTimeString('id-ID', { hour12: false }).replace(/\./g, ':')
+            })
+
+            return res.status(200).json({ "kode verifikasi": codeVerification.dataValues.verification_code })
+        }
+
+    } catch (error) {
+        console.log(error)
+        res.status(401).json({ msg: error })
+    }
+}
+
+const verifyCode = async (req, res) => {
+    try {
+        let { phone_number, role, verification_code } = req.body
+        let nowDate = new Date()
+
+        if (role == "admin") {
+            let data = await Admin.findOne({
+                where: {
+                    admin_phone: phone_number,
+                },
+                include: {
+                    model: AdminVerificationCode,
+                    where: {
+                        verification_code,
+                    },
+                    required: true
+                }
+            })
+
+            if (!data) return res.status(401).json({ msg: "kode verifikasi salah" })
+            if (nowDate >= data.AdminVerificationCode.expired_at) return res.status(401).json({ msg: "expired code" })
+
+            let token = jwt.sign({
+                adminId: data.id_admin
+            }, process.env.JWT_SECRET, { expiresIn: '5m' })
+
+            return res.status(200).json({ msg: "berhasil verifikasi token", token })
+        }
+
+        let data = await Seller.findOne({
+            where: {
+                seller_phone: phone_number,
+            },
+            include: {
+                model: SellerVerificationCode,
+                where: {
+                    verification_code,
+                },
+                required: true
+            }
+        })
+
+        if (!data) return res.status(401).json({ msg: "kode verifikasi salah" })
+        if (nowDate >= data.SellerVerificationCode.expired_at) return res.status(401).json({ msg: "expired code" })
+
+        let token = jwt.sign({
+            sellerId: data.id_seller
+        }, process.env.JWT_SECRET, { expiresIn: '5m' })
+
+        return res.status(200).json({ msg: "berhasil verifikasi kode", token })
+    } catch (error) {
+        console.log(error)
+        res.status(401).json({ msg: error })
+    }
+}
+
+const changePassword = async (req, res) => {
+    try {
+        let { password, confirm_password } = req.body
+
+        if (password != confirm_password) return res.status(401).json({ msg: "Confirm password tidak sesuai" })
+
+        if (!req.user.adminId && !req.user.sellerId) return res.status(401).json({ msg: "Tidak bisa merubah password" })
+
+        if (req.user.adminId) {
+            await Admin.update(
+                { password },
+                {
+                    where:{ id_admin: req.user.adminId }
+                }
+            )
+            return res.status(200).json({ msg: "Berhasil mengubah password" })
+        }
+
+        if (req.user.sellerId) {
+            await Seller.update(
+                { password },
+                {
+                    where:{ id_seller: req.user.sellerId }
+                }
+            )
+            return res.status(200).json({ msg: "Berhasil mengubah password" })
+        }
+
+    } catch (error) {
+        console.log(error)
+        res.status(401).json({ msg: error })
+    }
+}
+
+module.exports = { register, registerAdmin, login, loginAdmin, forgotPassword, verifyCode, changePassword }
