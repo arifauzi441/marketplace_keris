@@ -99,10 +99,12 @@ class _DashboardState extends State<Dashboard> {
                                             BorderRadius.circular(20)),
                                     contentPadding:
                                         EdgeInsets.symmetric(horizontal: 10)),
-                                onChanged: (value) => Future.delayed(Duration(milliseconds: 500), () => setState(() {
-                                  fetchAllUsers(value);
-                                  fetchPopularProduct(value);
-                                })),
+                                onChanged: (value) => Future.delayed(
+                                    Duration(milliseconds: 500),
+                                    () => setState(() {
+                                          fetchAllUsers(value);
+                                          fetchPopularProduct(value);
+                                        })),
                               ),
                             ),
                           )
