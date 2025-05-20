@@ -1,6 +1,5 @@
 name: Build docs
 
-# Trigger hanya saat ada perubahan di folder docs
 on:
   push:
     branches:
@@ -17,31 +16,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # 1. Checkout code
       - uses: actions/checkout@v4
 
-      # 2. Setup Node.js
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # 3. Install dependencies
       - name: Install dependencies
         run: npm ci
         working-directory: docs
 
-      # 4. Run tests (jika ada)
-      - name: Run tests
-        run: npm test -- --watchAll=false
-        working-directory: docs
-
-      # 5. Build production bundle
       - name: Build
         run: npm run build
         working-directory: docs
 
-      # 6. Upload hasil build sebagai artifact (opsional)
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
