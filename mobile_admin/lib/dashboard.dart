@@ -191,7 +191,7 @@ class _DashboardState extends State<Dashboard> {
                               Expanded(
                                 flex: 3,
                                 child: Center(
-                                  child: Text("Role",
+                                  child: Text("Rolee",
                                       style: TextStyle(color: Colors.white)),
                                 ),
                               ),
