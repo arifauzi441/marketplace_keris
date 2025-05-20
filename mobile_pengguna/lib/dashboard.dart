@@ -91,7 +91,7 @@ class _DashboardState extends State<Dashboard> {
                               width: MediaQuery.of(context).size.width * 0.4,
                               child: TextField(
                                 decoration: InputDecoration(
-                                    hintText: "Search",
+                                    hintText: "Search..",
                                     border: OutlineInputBorder(
                                         borderSide:
                                             BorderSide(color: Colors.black),
