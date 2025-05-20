@@ -43,7 +43,7 @@ jobs:
 
       # 6. Upload hasil build sebagai artifact (opsional)
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: docs-dist
           path: docs/dist
