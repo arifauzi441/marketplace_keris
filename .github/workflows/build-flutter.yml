@@ -1,0 +1,44 @@
+name: Build Flutter Mobile
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'mobile/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'mobile/**'
+
+jobs:
+  build-flutter:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout repo
+      - uses: actions/checkout@v4
+
+      # 2. Setup Flutter SDK
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: flutter pub get
+        working-directory: mobile
+
+      # 4. Build APK release
+      - name: Build APK release
+        run: flutter build apk --release
+        working-directory: mobile
+
+      # 5. Upload APK artifact
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: flutter-apk
+          path: mobile/build/app/outputs/flutter-apk/app-release.apk
