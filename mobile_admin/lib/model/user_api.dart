@@ -67,6 +67,67 @@ class UserApi {
     return UserApi.createUserApi(userResult);
   }
 
+  static Future<Map<String, dynamic>> forgotPassword(String adminPhone) async {
+    try {
+      String apiURL = '$api/auth/forgotPassword';
+      var apiResult = await http.post(Uri.parse(apiURL),
+          body: {"role": "admin", "phone_number": adminPhone});
+
+      var passResult = json.decode(apiResult.body);
+
+      return {
+        "msg": passResult['msg'],
+        "status": apiResult.statusCode,
+      };
+    } catch (e) {
+      print(e);
+      return {"msg": e};
+    }
+  }
+
+  static Future<Map<String, dynamic>> verifyCode(
+      String codeVerification, String adminPhone) async {
+    try {
+      String apiURL = '$api/auth/verifyCode';
+      var apiResult = await http.post(Uri.parse(apiURL), body: {
+        "role": "admin",
+        "phone_number": adminPhone,
+        "verification_code": codeVerification
+      });
+
+      var passResult = json.decode(apiResult.body);
+
+      return {
+        "msg": passResult['msg'],
+        "status": apiResult.statusCode,
+        "token": passResult["token"]
+      };
+    } catch (e) {
+      print(e);
+      return {"msg": e};
+    }
+  }
+
+  static Future<Map<String, dynamic>> ResetPassword(
+      String token, String password, String confirmPassword) async {
+    try {
+      String apiURL = '$api/auth/changePassword';
+      var apiResult = await http.post(Uri.parse(apiURL),
+          body: {"password": password, "confirm_password": confirmPassword},
+          headers: {"Authorization": "Bearer $token"});
+
+      var passResult = json.decode(apiResult.body);
+
+      return {
+        "msg": passResult['msg'],
+        "status": apiResult.statusCode,
+      };
+    } catch (e) {
+      print(e);
+      return {"msg": e};
+    }
+  }
+
   static Future<List<UserApi>> getAllUser(String token, String search) async {
     String apiURL = '$api/users/all-users?search=$search';
     var apiResult = await http.get(

@@ -92,13 +92,24 @@ class _ProductEmpuState extends State<ProductEmpu> {
                 padding: EdgeInsets.only(left: 20.0),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF53c737)),
-                    child: Text(
-                      'Kembali',
-                      style: TextStyle(color: Colors.white),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.5 * 0.5,
+                      height: MediaQuery.of(context).size.height * 0.04 +
+                          MediaQuery.of(context).size.width * 0.5 * 0.01,
+                      color: Color(0xFF53C737),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                            onTap: () => Navigator.pop(context),
+                            child: Center(
+                              child: Text(
+                                "Kembali",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            )),
+                      ),
                     ),
                   ),
                 ),

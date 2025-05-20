@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/dashboard.dart';
+import 'package:mobile/input_phone_number.dart';
 import 'package:mobile/model/login_api.dart';
 import 'package:mobile/register.dart';
 
@@ -24,7 +25,8 @@ class _LoginState extends State<Login> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: MediaQuery.of(context).size.height * 0.5,
+                height: MediaQuery.of(context).size.height * 0.5 +
+                    MediaQuery.of(context).size.width * 0.1,
                 width: MediaQuery.of(context).size.width * 0.8,
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -70,6 +72,25 @@ class _LoginState extends State<Login> {
                               ),
                         getTextField(context, "Username"),
                         getTextField(context, "Password"),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.8 * 0.8,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              InkWell(
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            InputPhoneNumber())),
+                                child: Text(
+                                  "Lupa Password?",
+                                  style: TextStyle(color: Colors.blue),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                     Column(
@@ -162,8 +183,9 @@ class _LoginState extends State<Login> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.5 * 0.10,
             child: TextField(
-              controller:
-                  (label == 'Username') ? _usernameController : _passwordController,
+              controller: (label == 'Username')
+                  ? _usernameController
+                  : _passwordController,
               cursorColor: Colors.green,
               decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(

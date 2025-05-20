@@ -1,230 +1,289 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:mobile_pengguna/detail_product.dart';
+import 'package:mobile_pengguna/model/product_api.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
-void main() {
-  runApp(PopulerProduct());
-}
+class PopulerProduct extends StatefulWidget {
+  const PopulerProduct({super.key});
 
-class PopulerProduct extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Produk Terlaris',
-      home: ProdukTerlarisPage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+  State<PopulerProduct> createState() => _PopulerProductState();
 }
 
-class ProdukTerlarisPage extends StatelessWidget {
-  final List<Map<String, String>> products = [
-    {
-      'name': 'Naga Nuwasena',
-      'price': 'Rp 4.000.000',
-      'image': 'https://storage.googleapis.com/a1aa/image/12313f63-feb6-4277-67e3-c0a629dd426b.jpg',
-    },
-    {
-      'name': 'Lintang Kemukus',
-      'price': 'Rp 4.000.000',
-      'image': 'https://storage.googleapis.com/a1aa/image/efbb2428-d598-4586-4085-53292bfc9df1.jpg',
-    },
-    {
-      'name': 'Ratu Pamingg',
-      'price': 'Rp 4.000.000',
-      'image': 'https://storage.googleapis.com/a1aa/image/a6e77653-a32b-4dc9-495c-7c36e2c79119.jpg',
-    },
-    {
-      'name': 'Surya Kencana',
-      'price': 'Rp 4.000.000',
-      'image': 'https://storage.googleapis.com/a1aa/image/4ae2db98-cdd6-4077-d604-ec09e79b3537.jpg',
-    },
-  ];
+class _PopulerProductState extends State<PopulerProduct> {
+  final String api = dotenv.env['API_URL'] ?? "";
+  List<ProductApi>? popularProduct;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPopularProduct('');
+  }
+
+  Future<void> fetchPopularProduct(String search) async {
+    try {
+      var response = await ProductApi.getPopularProduct(search);
+      setState(() {
+        popularProduct = response;
+      });
+    } catch (e) {
+      print("hai");
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
-          children: [
-            // Top bar
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-              child: Row(
-                children: [
-                  Image.network(
-                    'https://storage.googleapis.com/a1aa/image/d65f6ee8-bd82-4dcc-93aa-a36d909cf701.jpg',
-                    width: 24,
-                    height: 24,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Container(
+                  height: 70,
+                  decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(color: Colors.black, width: 1)),
                   ),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                        hintText: 'Search',
-                        hintStyle: TextStyle(fontSize: 12, color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(999),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(999),
-                          borderSide: BorderSide(color: Colors.green),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-
-            // Notifikasi button
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    shape: StadiumBorder(),
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  ),
-                  child: Text(
-                    'Notifikasi',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                ),
-              ),
-            ),
-
-            // Label
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Produk Terlaris',
-                  style: TextStyle(fontSize: 12),
-                ),
-              ),
-            ),
-
-            // Banner
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Stack(
-                alignment: Alignment.bottomLeft,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      'https://storage.googleapis.com/a1aa/image/165281e1-7e8b-4e93-e73b-3f88ec3a6729.jpg',
-                      height: 140,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 8,
-                    left: 8,
-                    child: Text(
-                      'Simbol Kegigihan dan\nWarisan Budaya',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        shadows: [Shadow(blurRadius: 4, color: Colors.black)],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            SizedBox(height: 8),
-
-            // Produk grid
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: GridView.builder(
-                  itemCount: products.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 12,
-                    crossAxisSpacing: 12,
-                    childAspectRatio: 0.72,
-                  ),
-                  itemBuilder: (context, index) {
-                    final product = products[index];
-                    return Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: (index == 1 || index == 3)
-                              ? Colors.green
-                              : Colors.grey.shade300,
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      padding: EdgeInsets.all(8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.network(
-                            product['image']!,
-                            height: 112,
-                            width: double.infinity,
-                            fit: BoxFit.contain,
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            product['name']!,
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 2),
-                          Text(
-                            product['price']!,
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
-                          ),
-                          SizedBox(height: 6),
-                          ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
-                              shape: StadiumBorder(),
-                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Center(
+                        child: Row(
+                          children: [
+                            Image(
+                              image: AssetImage('assets/images/logo-keris.png'),
+                              width: 50,
+                              height: 50,
                             ),
-                            child: Text(
-                              'Beli',
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          )
-                        ],
+                            Text("KerisSumenep")
+                          ],
+                        ),
                       ),
-                    );
-                  },
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: 200),
+                        child: Container(
+                          height: 30,
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          child: TextField(
+                            decoration: InputDecoration(
+                                hintText: "Search",
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(20)),
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 10)),
+                            onChanged: (value) => setState(() {}),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+              Padding(
+                padding: EdgeInsets.only(left: 20.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.5 * 0.5,
+                      height: MediaQuery.of(context).size.height * 0.04 + MediaQuery.of(context).size.width * 0.5 * 0.01,
+                      color: Color(0xFF53C737),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                            onTap: () => Navigator.pop(context),
+                            child: Center(
+                              child: Text(
+                                "Kembali",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            )),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              ConstrainedBox(
+                constraints: BoxConstraints(minHeight: 150),
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                  height: MediaQuery.of(context).size.width * 0.25,
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                          child: Image(
+                        image: AssetImage('assets/images/heropt.png'),
+                        fit: BoxFit.fitWidth,
+                      )),
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.5,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    AutoSizeText(
+                                      "Simbol Keagungan dan Warisan Budaya",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.5 *
+                                              0.1,
+                                          fontWeight: FontWeight.w600),
+                                      maxFontSize: 30,
+                                      minFontSize: 16,
+                                    ),
+                                    SizedBox(
+                                      height: 7,
+                                    ),
+                                    AutoSizeText(
+                                      "Miliki koleksi keris eksklusif dengan ukiran khas dan desain elegan. Setiap bilah mencerminkan keindahan seni tradisional yang penuh makna.",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.5 *
+                                              0.03),
+                                      maxFontSize: 16,
+                                      minFontSize: 7,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Produk Terlaris",
+                        style: TextStyle(fontSize: 16), // opsional
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    GridView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 200,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: 0.6),
+                        itemCount: popularProduct?.length ?? 1,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: Color(0xFF2E6C25), width: 2)),
+                            padding: EdgeInsets.all(5),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                    flex: 5,
+                                    child: Container(
+                                      child: (popularProduct?[index]
+                                                  .productPict
+                                                  .isEmpty ??
+                                              true)
+                                          ? Image(
+                                              image: AssetImage('images/2.png'),
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image(
+                                              image: NetworkImage(
+                                                  '${popularProduct?[index].productPict[0].path}'),
+                                              fit: BoxFit.cover,
+                                              width: double.infinity,
+                                            ),
+                                    )),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                        "${popularProduct?[index].productName}")),
+                                Text("${popularProduct?[index].productPrice}"),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5 *
+                                          0.5,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.04,
+                                      color: Color(0xFF53C737),
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                            onTap: () async {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          DetailProduct(
+                                                              product:
+                                                                  popularProduct?[
+                                                                      index])));
+                                            },
+                                            child: Center(
+                                              child: Text(
+                                                "Beli",
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            )),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        })
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'E-Tour',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_bag),
-            label: 'Produk',
-          ),
-        ],
-        selectedItemColor: Colors.green,
-        unselectedItemColor: Colors.grey,
-     ),
-);
-}
+    );
+  }
 }
