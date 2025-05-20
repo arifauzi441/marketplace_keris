@@ -194,7 +194,7 @@ export default function Tokokeris() {
           <div className="search-container">
             <input onChange={(event) => submit(event.target.value)}
               type="text"
-              placeholder="Cari keris..."
+              placeholder="Cari keris.."
               className="search-input"
             />
           </div>
