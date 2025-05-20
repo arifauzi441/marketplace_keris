@@ -79,7 +79,7 @@
     const redirectWa = () => {
         const phoneNumber = detailProduct.Seller.seller_phone || ""
         const waNumber = (phoneNumber.charAt(0) == '0') ? '62' + phoneNumber.substring(1) : phoneNumber
-        const message = 'Nama: \nNo hp: \nJenis dan jumlah keris: \nAlamat Lengkap'
+        const message = 'Nama: \nNo hp: \nJenis dan jumlah keris: \nAlamat Lengkap: '
         const encodedMessage = encodeURIComponent(message)
         const url = `https://wa.me/${waNumber}?text=${encodedMessage}`
 
