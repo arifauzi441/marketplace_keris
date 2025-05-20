@@ -162,7 +162,7 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "Anda belum menambahkan produk",
+                    "Anda belum menambahkan produk!",
                     style: TextStyle(fontSize: 14, color: Colors.black),
                   ),
                 ],
