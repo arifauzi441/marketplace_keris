@@ -4,6 +4,11 @@ const Seller = require(`../model/SellerModel`)
 const jwt = require(`jsonwebtoken`)
 const AdminVerificationCode = require("../model/AdminVerificationCode")
 const SellerVerificationCode = require("../model/SellerVerificationCode")
+const twilio = require("twilio")
+const { default: axios } = require("axios")
+const qs = require('querystring');
+
+const client = twilio(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN)
 
 const register = async (req, res, next) => {
     try {
@@ -115,8 +120,26 @@ const forgotPassword = async (req, res) => {
                 expired_at: expired_at.toLocaleDateString().replace(/\//g, '-') +
                     ' ' + expired_at.toLocaleTimeString('id-ID', { hour12: false }).replace(/\./g, ':')
             })
+            let global_phone_number = (phone_number.startsWith('0')) ? `62` + phone_number.slice(1) : phone_number
+            const payload = qs.stringify({
+                userkey: process.env.ZANZIVA_USER_KEY,
+                passkey: process.env.ZANZIVA_PASS_KEY,
+                to: global_phone_number,
+                brand: "(Marketplace Keris)",
+                otp: codeVerification.dataValues.verification_code
+            });
 
-            return res.status(200).json({ "kode verifikasi": codeVerification.dataValues.verification_code })
+            const response = await axios.post('https://console.zenziva.net/waofficial/api/sendWAOfficial/', payload, {
+                headers: {
+                    'Content-Type': "application/x-www-form-urlencoded"
+                }
+            })
+            if (response.data.status) {
+                return res.status(200).json({ message: 'WA OTP sent successfully' });
+            } else {
+                return res.status(500).json({ error: 'Failed to send WA OTP', details: response.data.status });
+            }
+
         } else {
             let data = await Seller.findOne({ where: { seller_phone: phone_number, status: "diterima" } })
             if (!data) return res.status(404).json({ msg: "no telepon tidak ditemukan" })
@@ -131,7 +154,25 @@ const forgotPassword = async (req, res) => {
                     ' ' + expired_at.toLocaleTimeString('id-ID', { hour12: false }).replace(/\./g, ':')
             })
 
-            return res.status(200).json({ "kode verifikasi": codeVerification.dataValues.verification_code })
+            let global_phone_number = (phone_number.startsWith('0')) ? `62` + phone_number.slice(1) : phone_number
+            const payload = qs.stringify({
+                userkey: process.env.ZANZIVA_USER_KEY,
+                passkey: process.env.ZANZIVA_PASS_KEY,
+                to: global_phone_number,
+                brand: "(Marketplace Keris)",
+                otp: codeVerification.dataValues.verification_code
+            });
+
+            const response = await axios.post('https://console.zenziva.net/waofficial/api/sendWAOfficial/', payload, {
+                headers: {
+                    'Content-Type': "application/x-www-form-urlencoded"
+                }
+            })
+            if (response.data.status) {
+                return res.status(200).json({ message: 'WA OTP sent successfully' });
+            } else {
+                return res.status(500).json({ error: 'Failed to send WA OTP', details: response.data.status });
+            }
         }
 
     } catch (error) {
@@ -143,6 +184,7 @@ const forgotPassword = async (req, res) => {
 const verifyCode = async (req, res) => {
     try {
         let { phone_number, role, verification_code } = req.body
+        console.log(req.body)
         let nowDate = new Date()
 
         if (role == "admin") {
@@ -208,7 +250,7 @@ const changePassword = async (req, res) => {
             await Admin.update(
                 { password },
                 {
-                    where:{ id_admin: req.user.adminId }
+                    where: { id_admin: req.user.adminId }
                 }
             )
             return res.status(200).json({ msg: "Berhasil mengubah password" })
@@ -218,7 +260,7 @@ const changePassword = async (req, res) => {
             await Seller.update(
                 { password },
                 {
-                    where:{ id_seller: req.user.sellerId }
+                    where: { id_seller: req.user.sellerId }
                 }
             )
             return res.status(200).json({ msg: "Berhasil mengubah password" })

@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_admin/dashboard.dart';
-import 'package:mobile_admin/input_phone_number.dart';
-import 'package:mobile_admin/model/login_api.dart';
-import 'package:mobile_admin/register.dart';
+import 'package:mobile/login.dart';
+import 'package:mobile/model/user_api.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class ResetPassword extends StatefulWidget {
+  final String token;
+  const ResetPassword({super.key, required this.token});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<ResetPassword> createState() => _ResetPasswordState();
 }
 
-class _LoginState extends State<Login> {
+class _ResetPasswordState extends State<ResetPassword> {
   String errorMsg = '';
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _confirmNewPasswordController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    String token = widget.token;
     return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
@@ -25,7 +26,7 @@ class _LoginState extends State<Login> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: MediaQuery.of(context).size.height * 0.5 +
+                height: MediaQuery.of(context).size.height * 0.45 +
                     MediaQuery.of(context).size.width * 0.1,
                 width: MediaQuery.of(context).size.width * 0.8,
                 decoration: BoxDecoration(
@@ -43,18 +44,18 @@ class _LoginState extends State<Login> {
                   children: [
                     Container(
                       height: 50,
-                      width: 100,
+                      width: 150,
                       decoration: BoxDecoration(
                           color: Colors.green,
                           borderRadius: BorderRadius.vertical(
                               top: Radius.zero, bottom: Radius.circular(20))),
                       child: Center(
                         child: Text(
-                          "Login",
+                          "Reset Password",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -70,27 +71,8 @@ class _LoginState extends State<Login> {
                             : SizedBox(
                                 height: 0,
                               ),
-                        getTextField(context, "Username"),
                         getTextField(context, "Password"),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.8 * 0.8,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              InkWell(
-                                onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            InputPhoneNumber())),
-                                child: Text(
-                                  "Lupa Password?",
-                                  style: TextStyle(color: Colors.blue),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                        getTextField(context, "Confirm Password"),
                       ],
                     ),
                     Column(
@@ -106,23 +88,22 @@ class _LoginState extends State<Login> {
                               child: InkWell(
                                 onTap: () async {
                                   try {
-                                    var result = await LoginApi.login(
-                                        _usernameController.text,
-                                        _passwordController.text);
-                                    print("hai");
+                                    var result = await UserApi.ResetPassword(
+                                      token,
+                                        _confirmNewPasswordController.text,
+                                        _newPasswordController.text);
                                     if (!mounted) return;
 
-                                    if (result.token.isNotEmpty) {
+                                    if (result['status'] == 200) {
                                       if (!mounted) return;
                                       Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => Dashboard(
-                                                  token: result.token)));
+                                              builder: (context) => Login()));
                                     }
 
                                     setState(() {
-                                      errorMsg = result.msg;
+                                      errorMsg = result['msg'];
                                     });
                                   } catch (e) {
                                     print(e);
@@ -148,17 +129,10 @@ class _LoginState extends State<Login> {
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text("Belum punya akun ? "),
                                 InkWell(
-                                    onTap: () => {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Register()))
-                                        },
+                                    onTap: () => {Navigator.pop(context)},
                                     child: Text(
-                                      "Daftar",
+                                      "Kembali",
                                       style: TextStyle(color: Colors.green),
                                     ))
                               ]),
@@ -184,9 +158,9 @@ class _LoginState extends State<Login> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.5 * 0.10,
             child: TextField(
-              controller: (label == 'Username')
-                  ? _usernameController
-                  : _passwordController,
+              controller: (label == 'Password')
+                  ? _newPasswordController
+                  : _confirmNewPasswordController,
               cursorColor: Colors.green,
               decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(

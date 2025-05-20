@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_pengguna/dashboard.dart';
 import 'package:mobile_pengguna/model/user_api.dart';
+import 'package:mobile_pengguna/product_empu.dart';
 
 class DaftarEmpu extends StatefulWidget {
   const DaftarEmpu({super.key});
@@ -180,7 +180,7 @@ class _DaftarEmpuState extends State<DaftarEmpu> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => DaftarEmpu(),
+                                  builder: (context) => ProductEmpu(users: users?[index]),
                                 ),
                               );
                             },
