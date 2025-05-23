@@ -33,7 +33,6 @@ class _DashboardState extends State<Dashboard> {
         users = response;
       });
     } catch (e) {
-      print("hai");
       print(e);
     }
   }
@@ -45,7 +44,6 @@ class _DashboardState extends State<Dashboard> {
         popularProduct = response;
       });
     } catch (e) {
-      print("hai");
       print(e);
     }
   }
@@ -53,70 +51,57 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           Column(
             children: [
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ClipOval(
-                      child: Image.asset(
-                        "images/potrait.png",
-                        width: 40,
-                        height: 40,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              "KerisSumenep",
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 16),
+                padding: const EdgeInsets.all(16.0),
+                child: Container(
+                  height: 70,
+                  decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(color: Colors.black, width: 1)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Center(
+                        child: Row(
+                          children: [
+                            Image(
+                              image: AssetImage('assets/images/logo-keris.png'),
+                              width: 50,
+                              height: 50,
                             ),
+                            Text("KerisSumenep")
+                          ],
+                        ),
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: 200),
+                        child: Container(
+                          height: 30,
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          child: TextField(
+                            decoration: InputDecoration(
+                                hintText: "Search",
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(20)),
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 10)),
+                            onChanged: (value) => setState(() {
+                              fetchAllUsers(value);
+                              fetchPopularProduct(value);
+                            }),
                           ),
-                          SizedBox(width: 10),
-                          ConstrainedBox(
-                            constraints: BoxConstraints(maxWidth: 200),
-                            child: Container(
-                              height: 30,
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              child: TextField(
-                                decoration: InputDecoration(
-                                    hintText: "Search..",
-                                    border: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.black),
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    contentPadding:
-                                        EdgeInsets.symmetric(horizontal: 10)),
-                                onChanged: (value) => Future.delayed(
-                                    Duration(milliseconds: 500),
-                                    () => setState(() {
-                                          fetchAllUsers(value);
-                                          fetchPopularProduct(value);
-                                        })),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Divider(thickness: 1, color: Colors.black),
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -145,7 +130,7 @@ class _DashboardState extends State<Dashboard> {
                                         builder: (context) => DaftarEmpu()));
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
+                                backgroundColor: Color(0xFF53C737),
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 7, vertical: 7),
                               ),
@@ -195,7 +180,7 @@ class _DashboardState extends State<Dashboard> {
                                     (users?[index].sellerPhoto == null)
                                         ? ClipOval(
                                             child: Image.asset(
-                                              "images/potrait.png",
+                                              "images/account.png",
                                               width: 80.0,
                                               height: 80.0,
                                               fit: BoxFit.cover,
@@ -244,7 +229,7 @@ class _DashboardState extends State<Dashboard> {
                                         builder: (context) => PopulerProduct()))
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
+                                backgroundColor: Color(0xFF53C737),
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 7, vertical: 7),
                               ),
@@ -299,7 +284,7 @@ class _DashboardState extends State<Dashboard> {
                                               true)
                                           ? Center(
                                               child: Image.asset(
-                                                "images/potrait.png",
+                                                "images/bg.jpg",
                                                 height: imageSize,
                                                 width: imageSize,
                                                 fit: BoxFit.cover,
@@ -328,7 +313,7 @@ class _DashboardState extends State<Dashboard> {
                                         child: ElevatedButton(
                                           onPressed: () {},
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.green,
+                                            backgroundColor: Color(0xFF53C737),
                                             padding: EdgeInsets.symmetric(
                                                 horizontal: 12, vertical: 8),
                                             textStyle: TextStyle(fontSize: 14),

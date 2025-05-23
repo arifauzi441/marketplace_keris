@@ -28,7 +28,6 @@ class UserApi {
     if (data == null) {
       throw Exception("Response tidak memiliki key 'data'");
     }
-    print("hai");
     List<dynamic> temp = data['Products'] ?? [];
 
     return UserApi(

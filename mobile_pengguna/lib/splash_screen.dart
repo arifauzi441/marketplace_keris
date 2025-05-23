@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_admin/login.dart';
+import 'package:mobile_pengguna/dashboard.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
             context,
             PageRouteBuilder(
                 pageBuilder: (context, animation, secondaryAnimation) =>
-                    Login(),
+                    Dashboard(),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
                   return FadeTransition(
@@ -61,7 +61,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         flex: 4,
                         child: Container(
                           child:
-                              Image(image: AssetImage('images/logo-keris.png')),
+                              Image(image: AssetImage('images/logo-keris-crop.png')),
                         )),
                     Expanded(
                         flex: 3,

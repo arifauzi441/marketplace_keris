@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:mobile_pengguna/dashboard.dart';
 import 'package:mobile_pengguna/model/user_api.dart';
 import 'package:mobile_pengguna/product_empu.dart';
 
@@ -36,67 +35,56 @@ class _DaftarEmpuState extends State<DaftarEmpu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           Column(
             children: [
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ClipOval(
-                      child: Image.asset(
-                        "images/potrait.png",
-                        width: 40,
-                        height: 40,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              "KerisSumenep",
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 16),
+                padding: const EdgeInsets.all(16.0),
+                child: Container(
+                  height: 70,
+                  decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(color: Colors.black, width: 1)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Center(
+                        child: Row(
+                          children: [
+                            Image(
+                              image: AssetImage('assets/images/logo-keris.png'),
+                              width: 50,
+                              height: 50,
                             ),
+                            Text("KerisSumenep")
+                          ],
+                        ),
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: 200),
+                        child: Container(
+                          height: 30,
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          child: TextField(
+                            decoration: InputDecoration(
+                                hintText: "Search",
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(20)),
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 10)),
+                            onChanged: (value) => setState(() {
+                              fetchAllUsers(value);
+                            }),
                           ),
-                          SizedBox(width: 10),
-                          ConstrainedBox(
-                            constraints: BoxConstraints(maxWidth: 200),
-                            child: Container(
-                              height: 30,
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              child: TextField(
-                                decoration: InputDecoration(
-                                    hintText: "Search",
-                                    border: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.black),
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    contentPadding:
-                                        EdgeInsets.symmetric(horizontal: 10)),
-                                onChanged: (value) => Future.delayed(Duration(milliseconds: 500), () => setState(() {
-                                  fetchAllUsers(value);
-                                })),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Divider(thickness: 1, color: Colors.black),
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -104,33 +92,33 @@ class _DaftarEmpuState extends State<DaftarEmpu> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 120,
-                              height: 25,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Dashboard()));
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 25, vertical: 1),
-                                ),
-                                child: Text(
-                                  "Kembali",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 15.0),
-                                ),
+                        padding: EdgeInsets.only(left: 20.0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              width:
+                                  MediaQuery.of(context).size.width * 0.5 * 0.5,
+                              height:
+                                  MediaQuery.of(context).size.height * 0.04 +
+                                      MediaQuery.of(context).size.width *
+                                          0.5 *
+                                          0.01,
+                              color: Color(0xFF53C737),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                    onTap: () => Navigator.pop(context),
+                                    child: Center(
+                                      child: Text(
+                                        "Kembali",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    )),
                               ),
                             ),
-                          ],
+                          ),
                         ),
                       ),
                       Container(
@@ -180,7 +168,8 @@ class _DaftarEmpuState extends State<DaftarEmpu> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ProductEmpu(users: users?[index]),
+                                  builder: (context) =>
+                                      ProductEmpu(users: users?[index]),
                                 ),
                               );
                             },
