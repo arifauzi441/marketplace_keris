@@ -30,7 +30,7 @@ class _DashboardState extends State<Dashboard> {
         users = response;
       });
     } catch (e) {
-        print("haiii");
+      print("haiii");
       print(e);
     }
   }
@@ -39,6 +39,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

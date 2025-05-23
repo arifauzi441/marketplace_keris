@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile_pengguna/model/product_api.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:android_intent_plus/android_intent.dart';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 class DetailProduct extends StatefulWidget {
   final ProductApi? product;
@@ -25,18 +28,38 @@ class _DetailProductState extends State<DetailProduct> {
   }
 
   void openWhatsApp(String phoneNumber) async {
-    String intePhoneNumber =
+    String intPhoneNumber =
         (phoneNumber[0] == '0') ? '62${phoneNumber.substring(1)}' : phoneNumber;
+
     String message =
         'Nama: \nNo hp: \nJenis dan jumlah keris: \nAlamat Lengkap: ';
+    if (kIsWeb) {
+      // Jika Web, langsung buka url WA
+      final Uri url = Uri.parse(
+          'https://wa.me/$intPhoneNumber?text=${Uri.encodeComponent(message)}');
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url);
+      } else {
+        throw 'Tidak dapat membuka WhatsApp';
+      }
+    } else if (Platform.isAndroid) {
+      final intent = AndroidIntent(
+        action: 'action_view',
+        data:
+            'https://wa.me/$intPhoneNumber?text=${Uri.encodeComponent(message)}',
+        package: 'com.whatsapp',
+      );
 
-    Uri whatsAppUrl = Uri.parse(
-        'https://wa.me/$intePhoneNumber?text=${Uri.encodeComponent(message)}');
-
-    if (await canLaunchUrl(whatsAppUrl)) {
-      await launchUrl(whatsAppUrl, mode: LaunchMode.externalApplication);
+      await intent.launch();
     } else {
-      throw 'tidak dapat membuka whatsApp';
+      // Untuk iOS, fallback ke url_launcher
+      final Uri url = Uri.parse(
+          'https://wa.me/$intPhoneNumber?text=${Uri.encodeComponent(message)}');
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url);
+      } else {
+        throw 'Tidak dapat membuka WhatsApp';
+      }
     }
   }
 
@@ -74,13 +97,23 @@ class _DetailProductState extends State<DetailProduct> {
                 padding: EdgeInsets.only(left: 20.0),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF53c737)),
-                    child: Text(
-                      'Kembali',
-                      style: TextStyle(color: Colors.white),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.5 * 0.5,
+                      height: MediaQuery.of(context).size.height * 0.04 + MediaQuery.of(context).size.width * 0.5 * 0.01,
+                      color: Color(0xFF53C737),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                            onTap: () => Navigator.pop(context),
+                            child: Center(
+                              child: Text(
+                                "Kembali",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            )),
+                      ),
                     ),
                   ),
                 ),

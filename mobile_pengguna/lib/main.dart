@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_pengguna/dashboard.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:mobile_pengguna/splash_screen.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: 'assets/.env');
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Dashboard(),
+      home: SplashScreen(),
     );
   }
 }
