@@ -38,6 +38,8 @@ class _DashboardState extends State<Dashboard> {
   @override
   @override
   Widget build(BuildContext context) {
+    users?.sort((a, b) =>
+        (a.status == 'belum diterima' ? 0 : 1).compareTo(b.status == 'belum diterima' ? 0 : 1));
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(

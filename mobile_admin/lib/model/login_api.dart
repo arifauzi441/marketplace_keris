@@ -15,7 +15,6 @@ class LoginApi {
   }
 
   static Future<LoginApi> login(String username, String password) async {
-    print(api.toString());
     String apiURL = '$api/auth/login-admin';
 
     var apiResult = await http
