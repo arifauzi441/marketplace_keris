@@ -12,7 +12,7 @@ const client = twilio(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN)
 
 const register = async (req, res, next) => {
     try {
-        let { seller_phone, password, username } = req.body
+        let { seller_phone, password, username, seller_name } = req.body
         let user = await Seller.findOne({
             where: {
                 [Op.or]: [
@@ -24,9 +24,9 @@ const register = async (req, res, next) => {
 
         if (user) return res.status(401).json({ msg: "no hp / username telah digunakan" })
 
-        let data = { seller_phone, password, username, status: "belum diterima" }
+        let data = { seller_phone, password, username, seller_name, status: "belum diterima" }
 
-        await Seller.create(data, { fields: ["seller_phone", "password", "username", "status"] })
+        await Seller.create(data, { fields: ["seller_phone", "password", "seller_name", "username", "status"] })
         res.status(201).json({ msg: "Berhasil melakukan registrasi, menunggu konfirmasi" })
     } catch (error) {
         console.log(error)
@@ -36,7 +36,7 @@ const register = async (req, res, next) => {
 
 const registerAdmin = async (req, res, next) => {
     try {
-        let { username, password, admin_phone } = req.body
+        let { username, password, admin_phone, admin_name } = req.body
         let user = await Admin.findOne({
             where: {
                 [Op.or]: [
@@ -47,9 +47,9 @@ const registerAdmin = async (req, res, next) => {
         })
         if (user) return res.status(401).json({ msg: "no hp / username telah digunakan" })
 
-        let data = { username, password, admin_phone, status: "belum diterima" }
+        let data = { username, password, admin_phone, admin_name, status: "belum diterima" }
 
-        await Admin.create(data, { fields: ["username", "password", "admin_phone", "status"] })
+        await Admin.create(data, { fields: ["username", "password", "admin_name", "admin_phone", "status"] })
         res.status(201).json({ msg: "Berhasil melakukan registrasi, menunggu konfirmasi" })
     } catch (error) {
         console.log(error)

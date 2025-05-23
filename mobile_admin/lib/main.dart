@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:mobile_admin/login.dart';
+import 'package:mobile_admin/splash_screen.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: 'assets/.env');
@@ -18,7 +18,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Login(),
+      home: SplashScreen(),
     );
   }
 }
