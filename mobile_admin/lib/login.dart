@@ -29,177 +29,201 @@ class _LoginState extends State<Login> {
                 width: double.infinity,
                 height: MediaQuery.of(context).size.height * 0.3,
                 child: Image(
-                  image: AssetImage('images/bg-auth.png'),
+                  image: AssetImage('assets/images/bg-auth.png'),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 90,
-                    width: 110,
-                    child: Image(
-                      image: AssetImage('images/logo-keris.png'),
-                      fit: BoxFit.cover,
-                    ),
+            LayoutBuilder(builder: (context, constraints) {
+              return SingleChildScrollView(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
                   ),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.5 +
-                        MediaQuery.of(context).size.width * 0.1,
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Color(0xFF53C737), width: 3),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black12,
-                              spreadRadius: 5,
-                              blurRadius: 3,
-                              offset: Offset(12, 12))
-                        ]),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          height: 50,
-                          width: 100,
-                          decoration: BoxDecoration(
-                              color: Color(0xFF53C737),
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.zero,
-                                  bottom: Radius.circular(20))),
-                          child: Center(
-                            child: Text(
-                              "Login",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
+                  child: IntrinsicHeight(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 90,
+                            width: 110,
+                            child: Image(
+                              image: AssetImage('assets/images/logo-keris.png'),
+                              fit: BoxFit.cover,
                             ),
                           ),
-                        ),
-                        Column(
-                          children: [
-                            (errorMsg.isNotEmpty)
-                                ? Text(
-                                    errorMsg,
-                                    style: TextStyle(color: Colors.red),
-                                    textAlign: TextAlign.center,
-                                  )
-                                : SizedBox(
-                                    height: 0,
-                                  ),
-                            getTextField(context, "Username"),
-                            getTextField(context, "Password"),
-                            Container(
-                              width:
-                                  MediaQuery.of(context).size.width * 0.8 * 0.8,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  InkWell(
-                                    onTap: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                InputPhoneNumber())),
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.5 +
+                                MediaQuery.of(context).size.width * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                    color: Color(0xFF53C737), width: 3),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black12,
+                                      spreadRadius: 5,
+                                      blurRadius: 3,
+                                      offset: Offset(12, 12))
+                                ]),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  height: 50,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xFF53C737),
+                                      borderRadius: BorderRadius.vertical(
+                                          top: Radius.zero,
+                                          bottom: Radius.circular(20))),
+                                  child: Center(
                                     child: Text(
-                                      "Lupa Password?",
-                                      style: TextStyle(color: Colors.blue),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 110,
-                              height: 35,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Material(
-                                  color: Color(0xFF53C737),
-                                  child: InkWell(
-                                    onTap: () async {
-                                      try {
-                                        var result = await LoginApi.login(
-                                            _usernameController.text,
-                                            _passwordController.text);                         
-                                        if (!mounted) return;
-
-                                        if (result.token.isNotEmpty) {
-                                          if (!mounted) return;
-                                          Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Dashboard(
-                                                          token:
-                                                              result.token)));
-                                        }
-
-                                        setState(() {
-                                          errorMsg = result.msg;
-                                        });
-                                      } catch (e) {
-                                        print(e);
-                                      }
-                                    },
-                                    child: Center(
-                                      child: Text(
-                                        "Masuk",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
+                                      "Login",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(0, 10, 0, 30),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                Column(
                                   children: [
-                                    Text("Belum punya akun ? "),
-                                    InkWell(
-                                        onTap: () => {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          Register()))
+                                    (errorMsg.isNotEmpty)
+                                        ? Text(
+                                            errorMsg,
+                                            style: TextStyle(color: Colors.red),
+                                            textAlign: TextAlign.center,
+                                          )
+                                        : SizedBox(
+                                            height: 0,
+                                          ),
+                                    getTextField(context, "Username"),
+                                    getTextField(context, "Password"),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.8 *
+                                          0.8,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          InkWell(
+                                            onTap: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        InputPhoneNumber())),
+                                            child: Text(
+                                              "Lupa Password?",
+                                              style:
+                                                  TextStyle(color: Colors.blue),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: 110,
+                                      height: 35,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: Material(
+                                          color: Color(0xFF53C737),
+                                          child: InkWell(
+                                            onTap: () async {
+                                              try {
+                                                var result =
+                                                    await LoginApi.login(
+                                                        _usernameController
+                                                            .text,
+                                                        _passwordController
+                                                            .text);
+                                                if (!mounted) return;
+
+                                                if (result.token.isNotEmpty) {
+                                                  if (!mounted) return;
+                                                  Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              Dashboard(
+                                                                  token: result
+                                                                      .token)));
+                                                }
+
+                                                setState(() {
+                                                  errorMsg = result.msg;
+                                                });
+                                              } catch (e) {
+                                                print(e);
+                                              }
                                             },
-                                        child: Text(
-                                          "Daftar",
-                                          style: TextStyle(
-                                              color: Color(0xFF53C737)),
-                                        ))
-                                  ]),
-                            )
-                          ],
-                        )
-                      ],
+                                            child: Center(
+                                              child: Text(
+                                                "Masuk",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(0, 10, 0, 30),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text("Belum punya akun ? "),
+                                            InkWell(
+                                                onTap: () => {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      Register()))
+                                                    },
+                                                child: Text(
+                                                  "Daftar",
+                                                  style: TextStyle(
+                                                      color: Color(0xFF53C737)),
+                                                ))
+                                          ]),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.2 -
+                                  MediaQuery.of(context).size.width * 0.1)
+                        ],
+                      ),
                     ),
                   ),
-                  SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.2 -
-                          MediaQuery.of(context).size.width * 0.1)
-                ],
-              ),
-            ),
+                ),
+              );
+            }),
           ],
         ));
   }

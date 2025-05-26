@@ -19,16 +19,16 @@ class _SplashScreenState extends State<SplashScreen> {
         () => Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) => Login(),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              },
-              transitionDuration: Duration(milliseconds: 700)
-            )));
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    Login(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                },
+                transitionDuration: Duration(milliseconds: 700))));
   }
 
   @override
@@ -59,8 +59,9 @@ class _SplashScreenState extends State<SplashScreen> {
                     Expanded(
                         flex: 4,
                         child: Container(
-                          child:
-                              Image(image: AssetImage('images/logo-keris.png')),
+                          child: Image(
+                              image:
+                                  AssetImage('assets/images/logo-keris.png')),
                         )),
                     Expanded(
                         flex: 3,

@@ -105,7 +105,7 @@ class _DashboardState extends State<Dashboard> {
                           child: ClipOval(
                             child: (user?.photo == null)
                                 ? Image.asset(
-                                    "images/account.png",
+                                    "assets/images/account.png",
                                     width: 40.0,
                                     height: 40.0,
                                     fit: BoxFit.cover,
