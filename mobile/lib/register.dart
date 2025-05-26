@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/login.dart';
 import 'package:mobile/model/register_api.dart';
@@ -21,6 +22,7 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
         body: Stack(
           children: [
@@ -30,149 +32,171 @@ class _RegisterState extends State<Register> {
                 width: double.infinity,
                 height: MediaQuery.of(context).size.height * 0.3,
                 child: Image(
-                  image: AssetImage('images/bg-auth.png'),
+                  image: AssetImage('assets/images/bg-auth.png'),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 90,
-                    width: 110,
-                    child: Image(
-                      image: AssetImage('images/logo-keris.png'),
-                      fit: BoxFit.cover,
-                    ),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Color(0xFF53C737), width: 3),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black12,
-                              spreadRadius: 5,
-                              blurRadius: 3,
-                              offset: Offset(12, 12))
-                        ]),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          height: 50,
-                          width: 100,
-                          decoration: BoxDecoration(
-                              color: Color(0xFF53C737),
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.zero,
-                                  bottom: Radius.circular(20))),
-                          child: Center(
-                            child: Text(
-                              "Register",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            (register.msg.isNotEmpty)
-                                ? Text(
-                                    register.msg,
-                                    style: (register.statusCode != 201)
-                                        ? TextStyle(color: Colors.red)
-                                        : TextStyle(color: Color(0xFF53C737)),
-                                    textAlign: TextAlign.center,
-                                  )
-                                : SizedBox(
-                                    height: 0,
-                                  ),
-                            getTextField(context, "Name"),
-                            getTextField(context, "Username"),
-                            getTextField(context, "Password"),
-                            getTextField(context, "Phone"),
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
+                    child: IntrinsicHeight(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              margin: EdgeInsets.only(top: 25),
+                              height: 90,
                               width: 110,
-                              height: 35,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Material(
-                                  color: Color(0xFF53C737),
-                                  child: InkWell(
-                                    onTap: () async {
-                                      try {
-                                        var result = await RegisterApi.register(
-                                            _usernameController.text,
-                                            _passwordController.text,
-                                            _sellerNameController.text,
-                                            _phoneController.text);
-
-                                        setState(() {
-                                          register = result;
-                                        });
-                                      } catch (e) {
-                                        print(e);
-                                      }
-                                    },
+                              child: Image(
+                                image: AssetImage('assets/images/logo-keris.png'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      color: Color(0xFF53C737), width: 3),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black12,
+                                        spreadRadius: 5,
+                                        blurRadius: 3,
+                                        offset: Offset(12, 12))
+                                  ]),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    height: 50,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                        color: Color(0xFF53C737),
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.zero,
+                                            bottom: Radius.circular(20))),
                                     child: Center(
                                       child: Text(
-                                        "Daftar",
+                                        "Register",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                   ),
-                                ),
+                                  Column(
+                                    children: [
+                                      (register.msg.isNotEmpty)
+                                          ? Text(
+                                              register.msg,
+                                              style: (register.statusCode != 201)
+                                                  ? TextStyle(color: Colors.red)
+                                                  : TextStyle(
+                                                      color: Color(0xFF53C737)),
+                                              textAlign: TextAlign.center,
+                                            )
+                                          : SizedBox(
+                                              height: 0,
+                                            ),
+                                      getTextField(context, "Name"),
+                                      getTextField(context, "Username"),
+                                      getTextField(context, "Password"),
+                                      getTextField(context, "Phone"),
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(top: 25),
+                                        width: 110,
+                                        height: 35,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(20),
+                                          child: Material(
+                                            color: Color(0xFF53C737),
+                                            child: InkWell(
+                                              onTap: () async {
+                                                try {
+                                                  var result =
+                                                      await RegisterApi.register(
+                                                          _usernameController.text,
+                                                          _passwordController.text,
+                                                          _sellerNameController
+                                                              .text,
+                                                          _phoneController.text);
+                
+                                                  setState(() {
+                                                    register = result;
+                                                  });
+                                                } catch (e) {
+                                                  print(e);
+                                                }
+                                              },
+                                              child: Center(
+                                                child: Text(
+                                                  "Daftar",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.fromLTRB(0, 10, 0, 30),
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text("Sudah punya akun ? "),
+                                              InkWell(
+                                                  onTap: () => {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        Login()))
+                                                      },
+                                                  child: Text(
+                                                    "Login",
+                                                    style: TextStyle(
+                                                        color: Color(0xFF53C737)),
+                                                  ))
+                                            ]),
+                                      )
+                                    ],
+                                  )
+                                ],
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(0, 10, 0, 30),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("Sudah punya akun ? "),
-                                    InkWell(
-                                        onTap: () => {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          Login()))
-                                            },
-                                        child: Text(
-                                          "Login",
-                                          style: TextStyle(
-                                              color: Color(0xFF53C737)),
-                                        ))
-                                  ]),
-                            )
+                            SizedBox(
+                                height: MediaQuery.of(context).size.height * 0.2 -
+                                    MediaQuery.of(context).size.width * 0.1)
                           ],
-                        )
-                      ],
+                        ),
+                      ),
                     ),
                   ),
-                  SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.2 -
-                          MediaQuery.of(context).size.width * 0.1)
-                ],
-              ),
+                );
+              }
             ),
           ],
         ));

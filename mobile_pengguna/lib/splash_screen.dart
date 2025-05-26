@@ -61,7 +61,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         flex: 4,
                         child: Container(
                           child:
-                              Image(image: AssetImage('images/logo-keris-crop.png')),
+                              Image(image: AssetImage('assets/images/logo-keris-crop.png')),
                         )),
                     Expanded(
                         flex: 3,
