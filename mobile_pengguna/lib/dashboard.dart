@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+// import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_pengguna/daftar_empu.dart';
 import 'package:mobile_pengguna/detail_product.dart';
 import 'package:mobile_pengguna/model/product_api.dart';
@@ -57,50 +57,83 @@ class _DashboardState extends State<Dashboard> {
           Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Container(
-                  height: 70,
-                  decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(color: Colors.black, width: 1)),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Center(
-                        child: Row(
-                          children: [
-                            Image(
-                              image: AssetImage('assets/images/logo-keris.png'),
-                              width: 50,
-                              height: 50,
-                            ),
-                            Text("KerisSumenep")
-                          ],
+                padding: const EdgeInsets.all(15.0),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    double screenWidth = MediaQuery.of(context).size.width;
+                    double logoSize;
+                    double fontSize;
+                    double searchWidth;
+
+                    if (screenWidth <= 320) {
+                      logoSize = 45;
+                      fontSize = 14;
+                      searchWidth = screenWidth * 0.4;
+                    } else if (screenWidth <= 375) {
+                      logoSize = 45;
+                      fontSize = 14;
+                      searchWidth = screenWidth * 0.4;
+                    } else if (screenWidth <= 425) {
+                      logoSize = 45;
+                      fontSize = 14;
+                      searchWidth = screenWidth * 0.4;
+                    } else if (screenWidth <= 600) {
+                      logoSize = 45;
+                      fontSize = 18;
+                      searchWidth = screenWidth * 0.4;
+                    } else {
+                      logoSize = 50;
+                      fontSize = 20;
+                      searchWidth = screenWidth * 0.6;
+                    }
+
+                    return Container(
+                      height: 70,
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(color: Colors.black, width: 1),
                         ),
                       ),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: 200),
-                        child: Container(
-                          height: 30,
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          child: TextField(
-                            decoration: InputDecoration(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Image.asset(
+                                'assets/images/logo-keris.png',
+                                width: logoSize,
+                                height: logoSize,
+                              ),
+                              Text(
+                                "KerisSumenep",
+                                style: TextStyle(
+                                  fontSize: fontSize,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            height: 35,
+                            width: searchWidth,
+                            child: TextField(
+                              decoration: InputDecoration(
                                 hintText: "Search",
                                 border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.black),
-                                    borderRadius: BorderRadius.circular(20)),
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 10)),
-                            onChanged: (value) => setState(() {
-                              fetchAllUsers(value);
-                              fetchPopularProduct(value);
-                            }),
+                                  borderSide: BorderSide(color: Colors.black),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                              ),
+                              onChanged: (value) => setState(() {
+                                fetchAllUsers(value);
+                                fetchPopularProduct(value);
+                              }),
+                            ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
               Expanded(
@@ -118,7 +151,11 @@ class _DashboardState extends State<Dashboard> {
                               "Daftar Nama Empu",
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 18.0,
+                                fontSize: MediaQuery.of(context).size.width *
+                                    0.5 *
+                                    0.5 *
+                                    0.45 *
+                                    0.45,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -132,11 +169,18 @@ class _DashboardState extends State<Dashboard> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Color(0xFF53C737),
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 7, vertical: 7),
+                                    horizontal: 10, vertical: 7),
                               ),
                               child: Text(
                                 "Selengkapnya",
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: MediaQuery.of(context).size.width *
+                                      0.5 *
+                                      0.5 *
+                                      0.35 *
+                                      0.45,
+                                ),
                               ),
                             ),
                           ],
@@ -171,33 +215,75 @@ class _DashboardState extends State<Dashboard> {
                                   border: Border.all(color: Colors.black),
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
-                                padding: EdgeInsets.all(10.0),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    (users?[index].sellerPhoto == null)
-                                        ? ClipOval(
-                                            child: Image.asset(
-                                              "images/account.png",
-                                              width: 80.0,
-                                              height: 80.0,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          )
-                                        : ClipOval(
-                                            child: Image.network(
-                                              "$api/${users?[index].sellerPhoto}",
-                                              width: 80.0,
-                                              height: 80.0,
-                                              fit: BoxFit.cover,
-                                            ),
+                                padding: EdgeInsets.all(2.0),
+                                child: Builder(
+                                  builder: (context) {
+                                    double screenWidth =
+                                        MediaQuery.of(context).size.width;
+                                    double nameFontSize;
+                                    double nameFontSize2;
+                                    if (screenWidth <= 320) {
+                                      nameFontSize = 15;
+                                      nameFontSize2 = 14;
+                                    } else if (screenWidth <= 375) {
+                                      nameFontSize = 15;
+                                      nameFontSize2 = 14;
+                                    } else if (screenWidth <= 425) {
+                                      nameFontSize = 16;
+                                      nameFontSize2 = 14;
+                                    } else if (screenWidth <= 575) {
+                                      nameFontSize = 18;
+                                      nameFontSize2 = 15;
+                                    } else if (screenWidth <= 800) {
+                                      nameFontSize = 20;
+                                      nameFontSize2 = 16;
+                                    } else {
+                                      nameFontSize = 20;
+                                      nameFontSize2 = 20;
+                                    }
+                                    return Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        (users?[index].sellerPhoto == null)
+                                            ? ClipOval(
+                                                child: Image.asset(
+                                                  "images/account.png",
+                                                  width: 80.0,
+                                                  height: 80.0,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              )
+                                            : ClipOval(
+                                                child: Image.network(
+                                                  "$api/${users?[index].sellerPhoto}",
+                                                  width: 80.0,
+                                                  height: 80.0,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                        SizedBox(height: 6),
+                                        Text(
+                                          "${users?[index].sellerName}",
+                                          style: TextStyle(
+                                            fontSize: nameFontSize,
+                                            fontWeight: FontWeight.normal,
+                                            overflow: TextOverflow.ellipsis
                                           ),
-                                    SizedBox(height: 6),
-                                    Text("${users?[index].sellerName}"),
-                                    Text("${users?[index].sellerPhone}"),
-                                  ],
+                                        ),
+                                        Text(
+                                          "${users?[index].sellerPhone}",
+                                          style: TextStyle(
+                                              fontSize: nameFontSize2,
+                                              fontWeight: FontWeight.normal,
+                                              overflow: TextOverflow.ellipsis
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 ),
                               ),
                             );
@@ -205,7 +291,7 @@ class _DashboardState extends State<Dashboard> {
                         ),
                       ),
                       SizedBox(
-                        height: 15.0,
+                        height: 20.0,
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -217,7 +303,11 @@ class _DashboardState extends State<Dashboard> {
                               "Produk Terlaris",
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 18.0,
+                                fontSize: MediaQuery.of(context).size.width *
+                                    0.5 *
+                                    0.5 *
+                                    0.48 *
+                                    0.45,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -231,11 +321,18 @@ class _DashboardState extends State<Dashboard> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Color(0xFF53C737),
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 7, vertical: 7),
+                                    horizontal: 10, vertical: 7),
                               ),
                               child: Text(
                                 "Selengkapnya",
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: MediaQuery.of(context).size.width *
+                                      0.5 *
+                                      0.5 *
+                                      0.35 *
+                                      0.45,
+                                ),
                               ),
                             )
                           ],
@@ -302,10 +399,170 @@ class _DashboardState extends State<Dashboard> {
                                       Text(
                                         "${popularProduct?[index].productName}",
                                         overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                              .size
+                                              .width *
+                                              0.5 *
+                                              0.5 *
+                                              0.3 *
+                                              0.45,
+                                        ),
                                       ),
                                       Text(
                                         "${popularProduct?[index].productPrice}",
                                         overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                              .size
+                                              .width *
+                                              0.5 *
+                                              0.5 *
+                                              0.3 *
+                                              0.45,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: ElevatedButton(
+                                          onPressed: () {},
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Color(0xFF53C737),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 15, vertical: 3),
+                                            textStyle: TextStyle(fontSize: 14),
+                                          ),
+                                          child: Text(
+                                            "Beli",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.5 *
+                                                  0.5 *
+                                                  0.4 *
+                                                  0.45,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Produk Terbaru",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: MediaQuery.of(context).size.width *
+                                    0.5 *
+                                    0.5 *
+                                    0.48 *
+                                    0.45,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      GridView.builder(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 0.58,
+                        ),
+                        itemCount: popularProduct?.length ?? 1,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DetailProduct(
+                                    product: popularProduct?[index],
+                                  ),
+                                ),
+                              );
+                            },
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                double imageSize = constraints.maxWidth * 0.9;
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      (popularProduct?[index]
+                                                  .productPict
+                                                  .isEmpty ??
+                                              true)
+                                          ? Center(
+                                              child: Image.asset(
+                                                "images/bg.jpg",
+                                                height: imageSize,
+                                                width: imageSize,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            )
+                                          : Center(
+                                              child: Image.network(
+                                                "${popularProduct?[index].productPict[0].path}",
+                                                height: imageSize,
+                                                width: imageSize,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                      Spacer(),
+                                      Text(
+                                        "${popularProduct?[index].productName}",
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.5 *
+                                              0.5 *
+                                              0.3 *
+                                              0.45,
+                                        ),
+                                      ),
+                                      Text(
+                                        "${popularProduct?[index].productPrice}",
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.5 *
+                                              0.5 *
+                                              0.3 *
+                                              0.45,
+                                        ),
                                       ),
                                       Spacer(),
                                       Align(
@@ -320,8 +577,16 @@ class _DashboardState extends State<Dashboard> {
                                           ),
                                           child: Text(
                                             "Beli",
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.5 *
+                                                  0.5 *
+                                                  0.4 *
+                                                  0.45,  
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -333,105 +598,6 @@ class _DashboardState extends State<Dashboard> {
                           );
                         },
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black,
-                      offset: Offset(0, -1),
-                      spreadRadius: 1,
-                    ),
-                  ],
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      topRight: Radius.circular(8)),
-                ),
-                child: Align(
-                  alignment: Alignment(0, 0.9),
-                  child: Row(
-                    children: [
-                      Spacer(),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Dashboard()),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          backgroundColor: Colors.transparent,
-                          shadowColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero),
-                          padding: EdgeInsets.zero,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SvgPicture.network(
-                              'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/icons/house.svg',
-                              width: 24,
-                              height: 24,
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              "E-Tour",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 10),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Spacer(),
-                      SizedBox(
-                        height: 40,
-                        child: VerticalDivider(
-                          color: Colors.grey,
-                          thickness: 1,
-                        ),
-                      ),
-                      Spacer(),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Dashboard()),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          backgroundColor: Colors.transparent,
-                          shadowColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero),
-                          padding: EdgeInsets.zero,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SvgPicture.network(
-                              'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/icons/bag-check.svg',
-                              width: 24,
-                              height: 24,
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              "Toko",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 10),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Spacer(),
                     ],
                   ),
                 ),
