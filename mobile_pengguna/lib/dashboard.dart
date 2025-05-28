@@ -348,7 +348,7 @@ class _DashboardState extends State<Dashboard> {
                           crossAxisSpacing: 10,
                           childAspectRatio: 0.58,
                         ),
-                        itemCount: popularProduct?.length ?? 1,
+                        itemCount: 3,
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {

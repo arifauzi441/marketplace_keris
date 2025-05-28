@@ -7,6 +7,13 @@ const SellerVerificationCode = require("../model/SellerVerificationCode")
 const twilio = require("twilio")
 const { default: axios } = require("axios")
 const qs = require('querystring');
+const admin = require('firebase-admin');
+
+const serviceAccount = require('../marketplace-keris-firebase-adminsdk-fbsvc-ddea34fe93.json');
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+});
 
 const client = twilio(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN)
 
@@ -27,6 +34,24 @@ const register = async (req, res, next) => {
         let data = { seller_phone, password, username, seller_name, status: "belum diterima" }
 
         await Seller.create(data, { fields: ["seller_phone", "password", "seller_name", "username", "status"] })
+
+        const admins = await Admin.findAll({attributes: ['fcm_token']})
+
+        const tokens = admins.map(a => a.fcm_token).filter(t => t);
+
+        if (tokens.length > 0) {
+            const message = {
+                notification: {
+                    title: "Seller Baru",
+                    body: `Seller ${seller_name} baru saja mendaftar.`,
+                },
+                tokens: tokens,
+            };
+
+            const response = await admin.messaging().sendEachForMulticast(message);
+            console.log('Notifikasi terkirim:', response.successCount);
+        }
+
         res.status(201).json({ msg: "Berhasil melakukan registrasi, menunggu konfirmasi" })
     } catch (error) {
         console.log(error)

@@ -64,7 +64,8 @@ class UserApi {
     var apiResult = await http
         .get(Uri.parse(apiURL), headers: {"Authorization": "Bearer $token"});
     var userResult = json.decode(apiResult.body);
-    return UserApi.createUserApi(userResult);
+    print(userResult);
+    return UserApi.createUserApi(userResult['data']);
   }
 
   static Future<Map<String, dynamic>> forgotPassword(String adminPhone) async {

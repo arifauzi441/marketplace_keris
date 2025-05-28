@@ -13,6 +13,7 @@ const Admin = db.define(`admin`,{
     admin_address: DataTypes.STRING,
     admin_phone: DataTypes.STRING,
     admin_photo: DataTypes.STRING,
+    fcm_token: DataTypes.STRING,
     status: DataTypes.ENUM(`diterima`,`belum diterima`),
 })
 

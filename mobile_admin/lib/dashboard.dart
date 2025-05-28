@@ -1,7 +1,11 @@
+import 'dart:convert';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile_admin/login.dart';
 import 'package:mobile_admin/model/user_api.dart';
+import 'package:http/http.dart' as http;
 
 class Dashboard extends StatefulWidget {
   final String token;
@@ -12,6 +16,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  String? fcmToken;
   final String api = dotenv.env['API_URL'] ?? "";
   UserApi? user;
   List<UserApi>? users;
@@ -20,7 +25,65 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
+    fetchUser();
     fetchAllUsers('');
+    Future.delayed(Duration(milliseconds: 700), () {
+      setupFCM();
+    });
+  }
+
+  Future<void> setupFCM() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    // Request permission (iOS)
+    await messaging.requestPermission();
+
+    // Dapatkan token
+    String? token = await messaging.getToken();
+    setState(() {
+      fcmToken = token;
+    });
+    print("FCM Token: $token");
+
+    // Kirim token ke backend
+    if (token != null) {
+      print("hai");
+      await sendTokenToServer(token);
+    }
+
+    // Handle notifikasi saat app di foreground
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Received message in foreground: ${message.notification?.title}');
+      // Bisa tampilkan notifikasi lokal di sini jika mau
+    });
+  }
+
+  Future<void> sendTokenToServer(String token) async {
+    final url = Uri.parse('$api/users/admin/save-token');
+    final response = await http.post(url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(
+            {'token': token, 'id_admin': user?.idAdmin}) // misal admin_id 1
+        );
+    if (response.statusCode == 200) {
+      print("Token saved on server");
+    } else {
+      print("Failed to save token");
+    }
+  }
+
+  Future<void> fetchUser() async {
+    try {
+      UserApi? fetchedUser = await UserApi.getUser(token);
+      if (!mounted) return;
+      setState(() {
+        user = fetchedUser;
+        print(fetchedUser.idAdmin);
+      });
+      print("fetching ....");
+    } catch (e) {
+      print("Error fetching user: $e");
+    }
   }
 
   Future<void> fetchAllUsers(String search) async {
@@ -38,8 +101,8 @@ class _DashboardState extends State<Dashboard> {
   @override
   @override
   Widget build(BuildContext context) {
-    users?.sort((a, b) =>
-        (a.status == 'belum diterima' ? 0 : 1).compareTo(b.status == 'belum diterima' ? 0 : 1));
+    users?.sort((a, b) => (a.status == 'belum diterima' ? 0 : 1)
+        .compareTo(b.status == 'belum diterima' ? 0 : 1));
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(

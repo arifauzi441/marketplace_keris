@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "903717298895",
+    "project_id": "marketplace-keris",
+    "storage_bucket": "marketplace-keris.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:903717298895:android:8e496c7ce49b7faef28dba",
+        "android_client_info": {
+          "package_name": "com.example.mobile_admin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQU_avokj3SDg0oQZsjvHmZwuQHl5PQ60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
