@@ -43,8 +43,10 @@ class UserApi {
 
   static Future<UserApi> getUser(String token) async {
     String apiURL = '$api/users/seller';
-    var apiResult = await http
-        .get(Uri.parse(apiURL), headers: {"Authorization": "Bearer $token"});
+    var apiResult = await http.get(Uri.parse(apiURL), headers: {
+      "Authorization": "Bearer $token",
+      'ngrok-skip-browser-warning': 'true'
+    });
     var userResult = json.decode(apiResult.body);
     return UserApi.createUserApi(userResult);
   }
@@ -52,8 +54,9 @@ class UserApi {
   static Future<List<UserApi>> getAllSeller(String search) async {
     try {
       String apiURL = '$api/users/all-seller?search=$search';
-      var apiResult =
-          await http.get(Uri.parse(apiURL)).timeout(Duration(seconds: 5));
+      var apiResult = await http.get(Uri.parse(apiURL), headers: {
+        'ngrok-skip-browser-warning': 'true'
+      }).timeout(Duration(seconds: 5));
 
       var userResult = json.decode(apiResult.body);
       List<UserApi> datas = (userResult['data'] as List)

@@ -1,8 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile_pengguna/detail_product.dart';
 import 'package:mobile_pengguna/model/product_api.dart';
 import 'package:mobile_pengguna/model/user_api.dart';
+import 'package:http/http.dart' as http;
 
 class ProductEmpu extends StatefulWidget {
   final UserApi? users;
@@ -24,14 +27,25 @@ class _ProductEmpuState extends State<ProductEmpu> {
 
   Future<void> fetchSellerProduct(String search) async {
     try {
-      var response =
-          await ProductApi.getProductbySeller(widget.users?.idSeller ?? 1);
+      var response = await ProductApi.getProductbySeller(
+          widget.users?.idSeller ?? 1, search);
       setState(() {
         sellerProduct = response;
       });
     } catch (e) {
       print("hai");
       print(e);
+    }
+  }
+
+  Future<Uint8List?> fetchImageBytes(String url) async {
+    final response = await http
+        .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
+
+    if (response.statusCode == 200) {
+      return response.bodyBytes; // <-- Ini kembalian berupa Uint8List
+    } else {
+      return null;
     }
   }
 
@@ -80,7 +94,9 @@ class _ProductEmpuState extends State<ProductEmpu> {
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding:
                                     EdgeInsets.symmetric(horizontal: 10)),
-                            onChanged: (value) => setState(() {}),
+                            onChanged: (value) => setState(() {
+                              fetchSellerProduct(value);
+                            }),
                           ),
                         ),
                       )
@@ -156,18 +172,31 @@ class _ProductEmpuState extends State<ProductEmpu> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(999),
                           child: Container(
-                              height: MediaQuery.of(context).size.width * 0.25,
-                              width: MediaQuery.of(context).size.width * 0.25,
-                              child: (widget.users?.sellerPhoto == null)
-                                  ? Image(
-                                      image: AssetImage('images/potrait.png'),
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image(
-                                      image: NetworkImage(
-                                          '$api/${widget.users?.sellerPhoto}'),
-                                      fit: BoxFit.cover,
-                                    )),
+                            height: MediaQuery.of(context).size.width * 0.25,
+                            width: MediaQuery.of(context).size.width * 0.25,
+                            child: (widget.users?.sellerPhoto == null)
+                                ? Image(
+                                    image: AssetImage('images/potrait.png'),
+                                    fit: BoxFit.cover,
+                                  )
+                                : FutureBuilder<Uint8List?>(
+                                    future: fetchImageBytes(
+                                        '$api/${widget.users?.sellerPhoto}'),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return CircularProgressIndicator();
+                                      } else if (snapshot.hasData) {
+                                        return Image.memory(
+                                          snapshot.data!,
+                                          fit: BoxFit.cover,
+                                        ); // <-- Tampilkan gambar
+                                      } else {
+                                        return Text("Gagal memuat gambar");
+                                      }
+                                    },
+                                  ),
+                          ),
                         ),
                       ],
                     ),
@@ -218,11 +247,23 @@ class _ProductEmpuState extends State<ProductEmpu> {
                                               image: AssetImage('images/2.png'),
                                               fit: BoxFit.cover,
                                             )
-                                          : Image(
-                                              image: NetworkImage(
+                                          : FutureBuilder<Uint8List?>(
+                                              future: fetchImageBytes(
                                                   '${sellerProduct?[index].productPict[0].path}'),
-                                              fit: BoxFit.cover,
-                                              width: double.infinity,
+                                              builder: (context, snapshot) {
+                                                if (snapshot.connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return CircularProgressIndicator();
+                                                } else if (snapshot.hasData) {
+                                                  return Image.memory(
+                                                    snapshot.data!,
+                                                    fit: BoxFit.cover,
+                                                  ); // <-- Tampilkan gambar
+                                                } else {
+                                                  return Text(
+                                                      "Gagal memuat gambar");
+                                                }
+                                              },
                                             ),
                                     )),
                                 SizedBox(

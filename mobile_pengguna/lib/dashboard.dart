@@ -1,6 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
 import 'package:mobile_pengguna/daftar_empu.dart';
 import 'package:mobile_pengguna/detail_product.dart';
 import 'package:mobile_pengguna/model/product_api.dart';
@@ -45,6 +48,17 @@ class _DashboardState extends State<Dashboard> {
       });
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<Uint8List?> fetchImageBytes(String url) async {
+    final response = await http
+        .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
+
+    if (response.statusCode == 200) {
+      return response.bodyBytes; // <-- Ini kembalian berupa Uint8List
+    } else {
+      return null;
     }
   }
 
@@ -122,7 +136,8 @@ class _DashboardState extends State<Dashboard> {
                                   borderSide: BorderSide(color: Colors.black),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
-                                contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 0),
                               ),
                               onChanged: (value) => setState(() {
                                 fetchAllUsers(value);
@@ -257,29 +272,45 @@ class _DashboardState extends State<Dashboard> {
                                                 ),
                                               )
                                             : ClipOval(
-                                                child: Image.network(
-                                                  "$api/${users?[index].sellerPhoto}",
-                                                  width: 80.0,
-                                                  height: 80.0,
-                                                  fit: BoxFit.cover,
+                                                child:
+                                                    FutureBuilder<Uint8List?>(
+                                                  future: fetchImageBytes(
+                                                      "$api/${users?[index].sellerPhoto}"),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return CircularProgressIndicator();
+                                                    } else if (snapshot
+                                                        .hasData) {
+                                                      return Image.memory(
+                                                          snapshot.data!,
+                                                          width: 80.0,
+                                                          height: 80.0,
+                                                          fit: BoxFit
+                                                              .cover); // <-- Tampilkan gambar
+                                                    } else {
+                                                      return Text(
+                                                          "Gagal memuat gambar");
+                                                    }
+                                                  },
                                                 ),
                                               ),
                                         SizedBox(height: 6),
                                         Text(
                                           "${users?[index].sellerName}",
                                           style: TextStyle(
-                                            fontSize: nameFontSize,
-                                            fontWeight: FontWeight.normal,
-                                            overflow: TextOverflow.ellipsis
-                                          ),
+                                              fontSize: nameFontSize,
+                                              fontWeight: FontWeight.normal,
+                                              overflow: TextOverflow.ellipsis),
                                         ),
                                         Text(
                                           "${users?[index].sellerPhone}",
                                           style: TextStyle(
                                               fontSize: nameFontSize2,
                                               fontWeight: FontWeight.normal,
-                                              overflow: TextOverflow.ellipsis
-                                          ),
+                                              overflow: TextOverflow.ellipsis),
                                         ),
                                       ],
                                     );
@@ -350,110 +381,143 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         itemCount: 3,
                         itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => DetailProduct(
-                                    product: popularProduct?[index],
-                                  ),
-                                ),
-                              );
-                            },
-                            child: LayoutBuilder(
-                              builder: (context, constraints) {
-                                double imageSize = constraints.maxWidth * 0.9;
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      (popularProduct?[index]
-                                                  .productPict
-                                                  .isEmpty ??
-                                              true)
-                                          ? Center(
-                                              child: Image.asset(
-                                                "images/bg.jpg",
-                                                height: imageSize,
-                                                width: imageSize,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            )
-                                          : Center(
-                                              child: Image.network(
-                                                "${popularProduct?[index].productPict[0].path}",
-                                                height: imageSize,
-                                                width: imageSize,
-                                                fit: BoxFit.cover,
+                          int length = popularProduct?.length ?? 0;
+                          return (index.toInt() < length)
+                              ? GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DetailProduct(
+                                          product: popularProduct?[index],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: LayoutBuilder(
+                                    builder: (context, constraints) {
+                                      double imageSize =
+                                          constraints.maxWidth * 0.9;
+                                      return Container(
+                                        decoration: BoxDecoration(
+                                          border:
+                                              Border.all(color: Colors.black),
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                        ),
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            (popularProduct?[index]
+                                                        .productPict
+                                                        .isEmpty ??
+                                                    true)
+                                                ? Center(
+                                                    child: Image.asset(
+                                                      "images/bg.jpg",
+                                                      height: imageSize,
+                                                      width: imageSize,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  )
+                                                : Center(
+                                                    child: FutureBuilder<
+                                                        Uint8List?>(
+                                                      future: fetchImageBytes(
+                                                          popularProduct?[index]
+                                                                  .productPict[
+                                                                      0]
+                                                                  .path ??
+                                                              ""),
+                                                      builder:
+                                                          (context, snapshot) {
+                                                        if (snapshot
+                                                                .connectionState ==
+                                                            ConnectionState
+                                                                .waiting) {
+                                                          return CircularProgressIndicator();
+                                                        } else if (snapshot
+                                                            .hasData) {
+                                                          return Image.memory(
+                                                              snapshot.data!,
+                                                              width: imageSize,
+                                                              height: imageSize,
+                                                              fit: BoxFit
+                                                                  .cover); // <-- Tampilkan gambar
+                                                        } else {
+                                                          return Text(
+                                                              "Gagal memuat gambar");
+                                                        }
+                                                      },
+                                                    ),
+                                                  ),
+                                            Spacer(),
+                                            Text(
+                                              "${popularProduct?[index].productName}",
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontSize: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.5 *
+                                                    0.5 *
+                                                    0.3 *
+                                                    0.45,
                                               ),
                                             ),
-                                      Spacer(),
-                                      Text(
-                                        "${popularProduct?[index].productName}",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: MediaQuery.of(context)
-                                              .size
-                                              .width *
-                                              0.5 *
-                                              0.5 *
-                                              0.3 *
-                                              0.45,
-                                        ),
-                                      ),
-                                      Text(
-                                        "${popularProduct?[index].productPrice}",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: MediaQuery.of(context)
-                                              .size
-                                              .width *
-                                              0.5 *
-                                              0.5 *
-                                              0.3 *
-                                              0.45,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: ElevatedButton(
-                                          onPressed: () {},
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Color(0xFF53C737),
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 15, vertical: 3),
-                                            textStyle: TextStyle(fontSize: 14),
-                                          ),
-                                          child: Text(
-                                            "Beli",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.5 *
-                                                  0.5 *
-                                                  0.4 *
-                                                  0.45,
+                                            Text(
+                                              "${popularProduct?[index].productPrice}",
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontSize: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.5 *
+                                                    0.5 *
+                                                    0.3 *
+                                                    0.45,
+                                              ),
                                             ),
-                                          ),
+                                            Spacer(),
+                                            Align(
+                                              alignment: Alignment.bottomRight,
+                                              child: ElevatedButton(
+                                                onPressed: () {},
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      Color(0xFF53C737),
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 15,
+                                                      vertical: 3),
+                                                  textStyle:
+                                                      TextStyle(fontSize: 14),
+                                                ),
+                                                child: Text(
+                                                  "Beli",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.5 *
+                                                            0.5 *
+                                                            0.4 *
+                                                            0.45,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                    ],
+                                      );
+                                    },
                                   ),
-                                );
-                              },
-                            ),
-                          );
+                                )
+                              : SizedBox();
                         },
                       ),
                       SizedBox(
@@ -530,11 +594,29 @@ class _DashboardState extends State<Dashboard> {
                                               ),
                                             )
                                           : Center(
-                                              child: Image.network(
-                                                "${popularProduct?[index].productPict[0].path}",
-                                                height: imageSize,
-                                                width: imageSize,
-                                                fit: BoxFit.cover,
+                                              child: FutureBuilder<Uint8List?>(
+                                                future: fetchImageBytes(
+                                                    popularProduct?[index]
+                                                            .productPict[0]
+                                                            .path ??
+                                                        ""),
+                                                builder: (context, snapshot) {
+                                                  if (snapshot
+                                                          .connectionState ==
+                                                      ConnectionState.waiting) {
+                                                    return CircularProgressIndicator();
+                                                  } else if (snapshot.hasData) {
+                                                    return Image.memory(
+                                                        snapshot.data!,
+                                                        width: imageSize,
+                                                        height: imageSize,
+                                                        fit: BoxFit
+                                                            .cover); // <-- Tampilkan gambar
+                                                  } else {
+                                                    return Text(
+                                                        "Gagal memuat gambar");
+                                                  }
+                                                },
                                               ),
                                             ),
                                       Spacer(),
@@ -585,7 +667,7 @@ class _DashboardState extends State<Dashboard> {
                                                   0.5 *
                                                   0.5 *
                                                   0.4 *
-                                                  0.45,  
+                                                  0.45,
                                             ),
                                           ),
                                         ),

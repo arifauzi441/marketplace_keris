@@ -1,7 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile_pengguna/model/user_api.dart';
 import 'package:mobile_pengguna/product_empu.dart';
+import 'package:http/http.dart' as http;
 
 class DaftarEmpu extends StatefulWidget {
   const DaftarEmpu({super.key});
@@ -29,6 +32,17 @@ class _DaftarEmpuState extends State<DaftarEmpu> {
     } catch (e) {
       print("hai");
       print(e);
+    }
+  }
+
+  Future<Uint8List?> fetchImageBytes(String url) async {
+    final response = await http
+        .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
+
+    if (response.statusCode == 200) {
+      return response.bodyBytes; // <-- Ini kembalian berupa Uint8List
+    } else {
+      return null;
     }
   }
 
@@ -197,11 +211,28 @@ class _DaftarEmpuState extends State<DaftarEmpu> {
                                                   width: imageSize,
                                                   fit: BoxFit.cover,
                                                 )
-                                              : Image.network(
-                                                  "$api/${users?[index].sellerPhoto}",
-                                                  height: imageSize,
-                                                  width: imageSize,
-                                                  fit: BoxFit.cover,
+                                              : FutureBuilder<Uint8List?>(
+                                                  future: fetchImageBytes(
+                                                      "$api/${users?[index].sellerPhoto}"),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return CircularProgressIndicator();
+                                                    } else if (snapshot
+                                                        .hasData) {
+                                                      return Image.memory(
+                                                          snapshot.data!,
+                                                          width: imageSize,
+                                                          height: imageSize,
+                                                          fit: BoxFit
+                                                              .cover); // <-- Tampilkan gambar
+                                                    } else {
+                                                      return Text(
+                                                          "Gagal memuat gambar");
+                                                    }
+                                                  },
                                                 ),
                                         ),
                                       ),

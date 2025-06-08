@@ -50,9 +50,8 @@ class ProductApi {
 
   static Future<List<ProductApi>> getPopularProduct(String search) async {
     String apiURL = '$api/product/populer-product?search=$search';
-    var apiResult = await http.get(
-      Uri.parse(apiURL),
-    );
+    var apiResult = await http.get(Uri.parse(apiURL),
+        headers: {'ngrok-skip-browser-warning': 'true'});
     var userResult = json.decode(apiResult.body);
 
     List<ProductApi> datas = (userResult['product'] as List)
@@ -63,18 +62,19 @@ class ProductApi {
     return datas;
   }
 
-  static Future<List<ProductApi>> getProductbySeller(int sellerId) async {
-    String apiURL = '$api/product/seller/$sellerId';
-    var apiResult = await http.get(
-      Uri.parse(apiURL),
-    );
+  static Future<List<ProductApi>> getProductbySeller(int sellerId, String search) async {
+    String apiURL = '$api/product/seller/$sellerId?search=$search';
+    var apiResult = await http.get(Uri.parse(apiURL),
+        headers: {'ngrok-skip-browser-warning': 'true'});
     var userResult = json.decode(apiResult.body);
 
     List<ProductApi> datas = (userResult['product']['Products'] as List)
-        .map((data) => ProductApi.createProductApi({"Seller":
-              {"seller_name": userResult['product']['seller_name'],
-              "seller_phone": userResult['product']['seller_phone'],
-              "seller_photo": userResult['product']['seller_photo'],},
+        .map((data) => ProductApi.createProductApi({
+              "Seller": {
+                "seller_name": userResult['product']['seller_name'],
+                "seller_phone": userResult['product']['seller_phone'],
+                "seller_photo": userResult['product']['seller_photo'],
+              },
               ...data as Map<String, dynamic>
             }))
         .toList();

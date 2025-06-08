@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -98,6 +99,17 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
+  Future<Uint8List?> fetchImageBytes(String url) async {
+    final response = await http
+        .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
+
+    if (response.statusCode == 200) {
+      return response.bodyBytes;
+    } else {
+      return null;
+    }
+  }
+
   @override
   @override
   Widget build(BuildContext context) {
@@ -173,11 +185,20 @@ class _DashboardState extends State<Dashboard> {
                                     height: 40.0,
                                     fit: BoxFit.cover,
                                   )
-                                : Image.network(
-                                    "$api/${user?.photo}",
-                                    width: 40.0,
-                                    height: 40.0,
-                                    fit: BoxFit.cover,
+                                : FutureBuilder<Uint8List?>(
+                                    future:
+                                        fetchImageBytes("$api/${user?.photo}"),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return CircularProgressIndicator();
+                                      } else if (snapshot.hasData) {
+                                        return Image.memory(snapshot
+                                            .data!); // <-- Tampilkan gambar
+                                      } else {
+                                        return Text("Gagal memuat gambar");
+                                      }
+                                    },
                                   ),
                           ),
                         ),

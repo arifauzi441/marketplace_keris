@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile/add_item.dart';
@@ -8,6 +10,7 @@ import 'package:mobile/edit_profil.dart';
 import 'package:mobile/login.dart';
 import 'package:mobile/model/product_api.dart';
 import 'package:mobile/model/user_api.dart';
+import 'package:http/http.dart' as http;
 
 class Dashboard extends StatefulWidget {
   final String? token;
@@ -41,6 +44,17 @@ class _DashboardState extends State<Dashboard> {
       print("fetching ....");
     } catch (e) {
       print("Error fetching user: $e");
+    }
+  }
+
+  Future<Uint8List?> fetchImageBytes(String url) async {
+    final response = await http
+        .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
+
+    if (response.statusCode == 200) {
+      return response.bodyBytes; // <-- Ini kembalian berupa Uint8List
+    } else {
+      return null;
     }
   }
 
@@ -92,11 +106,23 @@ class _DashboardState extends State<Dashboard> {
                                       height: 40.0,
                                       fit: BoxFit.cover,
                                     )
-                                  : Image.network(
-                                      "$api/${user?.sellerPhoto}",
-                                      width: 40.0,
-                                      height: 40.0,
-                                      fit: BoxFit.cover,
+                                  : FutureBuilder<Uint8List?>(
+                                      future: fetchImageBytes(
+                                          "$api/${user?.sellerPhoto}"),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return CircularProgressIndicator();
+                                        } else if (snapshot.hasData) {
+                                          return Image.memory(snapshot.data!,
+                                              width: 40.0,
+                                              height: 40.0,
+                                              fit: BoxFit
+                                                  .cover); // <-- Tampilkan gambar
+                                        } else {
+                                          return Text("Gagal memuat gambar");
+                                        }
+                                      },
                                     ),
                             ),
                           ),
@@ -378,11 +404,24 @@ class _DashboardState extends State<Dashboard> {
                                       height: 40.0,
                                       fit: BoxFit.cover,
                                     )
-                                  : Image.network(
-                                      "$api/${user?.sellerPhoto}",
-                                      width: 40.0,
-                                      height: 40.0,
-                                      fit: BoxFit.cover,
+                                  : FutureBuilder<Uint8List?>(
+                                      future: fetchImageBytes(
+                                          '$api/${user?.sellerPhoto}'),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return CircularProgressIndicator();
+                                        } else if (snapshot.hasData) {
+                                          return Image.memory(
+                                            snapshot.data!,
+                                            width: 40.0,
+                                            height: 40.0,
+                                            fit: BoxFit.cover,
+                                          ); // <-- Tampilkan gambar
+                                        } else {
+                                          return Text("Gagal memuat gambar");
+                                        }
+                                      },
                                     ),
                             ),
                           ),
@@ -507,19 +546,30 @@ class _DashboardState extends State<Dashboard> {
                               borderRadius: BorderRadius.circular(8),
                               child: AspectRatio(
                                 aspectRatio: 1,
-                                child:
-                                    (user?.product[index].productPict.isEmpty ??
-                                            true)
-                                        ? Image.asset(
-                                            'images/potrait.png',
-                                            fit: BoxFit.cover,
-                                          )
-                                        : Image.network(
-                                            user?.product[index].productPict[0]
-                                                    .path ??
-                                                "",
-                                            fit: BoxFit.cover,
-                                          ),
+                                child: (user?.product[index].productPict
+                                            .isEmpty ??
+                                        true)
+                                    ? Image.asset(
+                                        'images/potrait.png',
+                                        fit: BoxFit.cover,
+                                      )
+                                    : FutureBuilder<Uint8List?>(
+                                        future: fetchImageBytes(
+                                            "${user?.product[index].productPict[0].path}"),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return CircularProgressIndicator();
+                                          } else if (snapshot.hasData) {
+                                            return Image.memory(
+                                              snapshot.data!,
+                                              fit: BoxFit.cover,
+                                            ); // <-- Tampilkan gambar
+                                          } else {
+                                            return Text("Gagal memuat gambar");
+                                          }
+                                        },
+                                      ),
                               ),
                             ),
                             SizedBox(

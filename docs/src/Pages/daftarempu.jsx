@@ -20,7 +20,12 @@ export default function Tokokeris() {
 
     useEffect(() => {
         const fetchAllSeller = async () => {
-            const response = await axios.get(`${API_URL}/users/all-seller?search=${search}`)
+            const response = await axios.get(`${API_URL}/users/all-seller?search=${search}`, {
+                headers: {
+                    'ngrok-skip-browser-warning': 'true'
+                }
+            })
+            console.log(response.data)
             setAllSeller(response.data.data)
 
             const blobUrls = await Promise.all(
@@ -45,9 +50,9 @@ export default function Tokokeris() {
 
     const submit = (s) => {
         setTimeout(() => {
-          setSearch(s)
+            setSearch(s)
         }, 1000);
-      }
+    }
 
     const dataEmpu = allSeller?.map((seller, index) => {
         return {

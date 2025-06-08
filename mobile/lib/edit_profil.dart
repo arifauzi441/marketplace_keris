@@ -27,7 +27,8 @@ class _EditProfilState extends State<EditProfil> {
   Future<void> urlToFile(String imageUrl) async {
     try {
       final uri = Uri.parse(imageUrl);
-      final response = await http.get(uri);
+      final response =
+          await http.get(uri, headers: {'ngrok-skip-browser-warning': 'true'});
 
       if (response.statusCode != 200) {
         throw Exception('Gagal download gambar: ${response.statusCode}');
@@ -158,12 +159,12 @@ class _EditProfilState extends State<EditProfil> {
                                             _phoneController.text,
                                             _addressController.text);
                                         if (!mounted) return;
-        
+
                                         if (result['status'] == 200) {
                                           if (!mounted) return;
                                           Navigator.pop(context, true);
                                         }
-        
+
                                         setState(() {
                                           msg = result['msg'];
                                         });
