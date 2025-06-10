@@ -35,7 +35,7 @@ const register = async (req, res, next) => {
 
         await Seller.create(data, { fields: ["seller_phone", "password", "seller_name", "username", "status"] })
 
-        const admins = await Admin.findAll({attributes: ['fcm_token']})
+        const admins = await Admin.findAll({ attributes: ['fcm_token'] })
 
         const tokens = admins.map(a => a.fcm_token).filter(t => t);
 
@@ -146,23 +146,22 @@ const forgotPassword = async (req, res) => {
                     ' ' + expired_at.toLocaleTimeString('id-ID', { hour12: false }).replace(/\./g, ':')
             })
             let global_phone_number = (phone_number.startsWith('0')) ? `62` + phone_number.slice(1) : phone_number
-            const payload = qs.stringify({
-                userkey: process.env.ZANZIVA_USER_KEY,
-                passkey: process.env.ZANZIVA_PASS_KEY,
-                to: global_phone_number,
-                brand: "(Marketplace Keris)",
-                otp: codeVerification.dataValues.verification_code
-            });
-
-            const response = await axios.post('https://console.zenziva.net/waofficial/api/sendWAOfficial/', payload, {
+            const response = await axios({
+                method: 'post',
+                url: 'https://api.fonnte.com/send',
                 headers: {
-                    'Content-Type': "application/x-www-form-urlencoded"
+                    Authorization: process.env.API_KEY
+                },
+                data: {
+                    target: global_phone_number,
+                    message: `Kode OTP kamu adalah: ${codeVerification.dataValues.verification_code}`,
+                    countryCode: '62',
                 }
-            })
+            });
             if (response.data.status) {
                 return res.status(200).json({ message: 'WA OTP sent successfully' });
             } else {
-                return res.status(500).json({ error: 'Failed to send WA OTP', details: response.data.status });
+                return res.status(500).json({ error: 'Failed to send WA OTP', details: response });
             }
 
         } else {
@@ -180,23 +179,22 @@ const forgotPassword = async (req, res) => {
             })
 
             let global_phone_number = (phone_number.startsWith('0')) ? `62` + phone_number.slice(1) : phone_number
-            const payload = qs.stringify({
-                userkey: process.env.ZANZIVA_USER_KEY,
-                passkey: process.env.ZANZIVA_PASS_KEY,
-                to: global_phone_number,
-                brand: "(Marketplace Keris)",
-                otp: codeVerification.dataValues.verification_code
-            });
-
-            const response = await axios.post('https://console.zenziva.net/waofficial/api/sendWAOfficial/', payload, {
+            const response = await axios({
+                method: 'post',
+                url: 'https://api.fonnte.com/send',
                 headers: {
-                    'Content-Type': "application/x-www-form-urlencoded"
+                    Authorization: process.env.API_KEY
+                },
+                data: {
+                    target: global_phone_number,
+                    message: `Kode OTP kamu adalah: ${codeVerification.dataValues.verification_code}`,
+                    countryCode: '62',
                 }
-            })
+            });
             if (response.data.status) {
                 return res.status(200).json({ message: 'WA OTP sent successfully' });
             } else {
-                return res.status(500).json({ error: 'Failed to send WA OTP', details: response.data.status });
+                return res.status(500).json({ error: 'Failed to send WA OTP', details: response.data });
             }
         }
 
@@ -209,7 +207,6 @@ const forgotPassword = async (req, res) => {
 const verifyCode = async (req, res) => {
     try {
         let { phone_number, role, verification_code } = req.body
-        console.log(req.body)
         let nowDate = new Date()
 
         if (role == "admin") {
@@ -248,6 +245,8 @@ const verifyCode = async (req, res) => {
                 required: true
             }
         })
+        console.log(nowDate)
+        console.log(data.SellerVerificationCode.expired_at)
 
         if (!data) return res.status(401).json({ msg: "kode verifikasi salah" })
         if (nowDate >= data.SellerVerificationCode.expired_at) return res.status(401).json({ msg: "expired code" })
