@@ -293,29 +293,31 @@ export default function Tokokeris() {
           transition={{ duration: 0.6 }}
         >
           <h1 className="product-title">Paling Banyak Dilihat</h1>
-          <Link to={"/produk-terlaris"}>
+          {/* <Link to={"/produk-terlaris"}>
             <button className="see-more-btn">Selengkapnya</button>
-          </Link>
+          </Link> */}
         </motion.div>
+
       <motion.section className="product-container">
+        <div className="product-hero"
+          style={{ backgroundImage: `url(${productHeroImage})` }}
+        >
+          <div className="product-subtitle">
+            <p>Simbol Keagungan dan Warisan Budaya</p>
+          </div>
+          <div>
+            <p className="product-description">
+              Miliki koleksi keris eksklusif dengan ukiran khas dan desain elegan.
+              Setiap bilah mencerminkan keindahan seni tradisional yang penuh makna.
+            </p>
+          </div>
+        </div>
+
         <motion.div className="product-grid"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.8 }}
         >
-          <div className="product-hero"
-            style={{ backgroundImage: `url(${productHeroImage})` }}
-          >
-            <div className="product-subtitle">
-              <p>Simbol Keagungan dan Warisan Budaya</p>
-            </div>
-            <div>
-              <p className="product-description">
-                Miliki koleksi keris eksklusif dengan ukiran khas dan desain elegan.
-              </p>
-            </div>
-          </div>
-
           {popularProducts && popularProducts.length >= 0 &&
             popularProducts.slice(0, 3).map((product, index) => (
               <Link to={`/detail-produk/${product.id_product}`}>
@@ -323,7 +325,6 @@ export default function Tokokeris() {
               </Link>)
             )
           }
-
         </motion.div>
       </motion.section>
 
