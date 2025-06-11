@@ -28,12 +28,12 @@ class _DetailProductState extends State<DetailProduct> {
         : "";
   }
 
-  void openWhatsApp(String phoneNumber) async {
+  void openWhatsApp(String productName, String phoneNumber) async {
     String intPhoneNumber =
         (phoneNumber[0] == '0') ? '62${phoneNumber.substring(1)}' : phoneNumber;
 
     String message =
-        'Nama: \nNo hp: \nJenis dan jumlah keris: \nAlamat Lengkap: ';
+        'Nama: \nNo hp: \nJenis: $productName \njumlah keris: \nAlamat Lengkap: ';
     if (kIsWeb) {
       // Jika Web, langsung buka url WA
       final Uri url = Uri.parse(
@@ -312,7 +312,7 @@ class _DetailProductState extends State<DetailProduct> {
                               width: 50,
                               height: 50,
                               child: Image(
-                                image: AssetImage('images/potrait.png'),
+                                image: AssetImage('images/account.png'),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -368,6 +368,7 @@ class _DetailProductState extends State<DetailProduct> {
                       color: Colors.transparent,
                       child: InkWell(
                           onTap: () => openWhatsApp(
+                            widget.product?.productName ?? "",
                               widget.product?.seller?.sellerPhone ?? ""),
                           child: Center(
                             child: Text(

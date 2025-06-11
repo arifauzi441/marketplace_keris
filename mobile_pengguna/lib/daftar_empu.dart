@@ -207,7 +207,7 @@ class _DaftarEmpuState extends State<DaftarEmpu> {
                                             child: (users?[index].sellerPhoto ==
                                                     null)
                                                 ? Image.asset(
-                                                    "images/potrait.png",
+                                                    "images/account.png",
                                                     height: imageSize,
                                                     width: imageSize,
                                                     fit: BoxFit.cover,

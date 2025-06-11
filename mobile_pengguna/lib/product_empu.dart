@@ -6,6 +6,7 @@ import 'package:mobile_pengguna/detail_product.dart';
 import 'package:mobile_pengguna/model/product_api.dart';
 import 'package:mobile_pengguna/model/user_api.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class ProductEmpu extends StatefulWidget {
   final UserApi? users;
@@ -176,7 +177,7 @@ class _ProductEmpuState extends State<ProductEmpu> {
                             width: MediaQuery.of(context).size.width * 0.25,
                             child: (widget.users?.sellerPhoto == null)
                                 ? Image(
-                                    image: AssetImage('images/potrait.png'),
+                                    image: AssetImage('images/account.png'),
                                     fit: BoxFit.cover,
                                   )
                                 : FutureBuilder<Uint8List?>(
@@ -217,129 +218,102 @@ class _ProductEmpuState extends State<ProductEmpu> {
                     SizedBox(
                       height: 20,
                     ),
-                    GridView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 200,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            childAspectRatio: 0.6),
-                        itemCount: sellerProduct?.length ?? 1,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                    color: Color(0xFF2E6C25), width: 2)),
-                            padding: EdgeInsets.all(5),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  flex: 5,
-                                  child: Container(
-                                    width: 200,
-                                    child: (sellerProduct?[index]
-                                                .productPict
-                                                .isEmpty ??
-                                            true)
-                                        ? Image(
-                                            image: AssetImage('images/2.png'),
-                                            fit: BoxFit.cover,
-                                          )
-                                        : FutureBuilder<Uint8List?>(
-                                            future: fetchImageBytes(
-                                                '${sellerProduct?[index].productPict[0].path}'),
-                                            builder: (context, snapshot) {
-                                              if (snapshot.connectionState ==
-                                                  ConnectionState.waiting) {
-                                                return CircularProgressIndicator();
-                                              } else if (snapshot.hasData) {
-                                                return Image.memory(
-                                                  snapshot.data!,
-                                                  fit: BoxFit.cover,
-                                                ); // <-- Tampilkan gambar
-                                              } else {
-                                                return Text(
-                                                    "Gagal memuat gambar");
-                                              }
+                    StaggeredGrid.extent(
+                      maxCrossAxisExtent: 200,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      children:
+                          List.generate(sellerProduct?.length ?? 1, (index) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border:
+                                Border.all(color: Color(0xFF2E6C25), width: 2),
+                          ),
+                          padding: EdgeInsets.all(5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 200,
+                                height: 150,
+                                child: (sellerProduct?[index]
+                                            .productPict
+                                            .isEmpty ??
+                                        true)
+                                    ? Image.asset('images/2.png',
+                                        fit: BoxFit.cover)
+                                    : FutureBuilder<Uint8List?>(
+                                        future: fetchImageBytes(
+                                            '${sellerProduct?[index].productPict[0].path}'),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return Center(
+                                                child:
+                                                    CircularProgressIndicator());
+                                          } else if (snapshot.hasData) {
+                                            return Image.memory(
+                                              snapshot.data!,
+                                              fit: BoxFit.cover,
+                                            );
+                                          } else {
+                                            return Text("Gagal memuat gambar");
+                                          }
+                                        },
+                                      ),
+                              ),
+                              SizedBox(height: 5),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("${sellerProduct?[index].productName}", style: TextStyle(fontSize: 16),),
+                                  Text("${sellerProduct?[index].productPrice}"),
+                                  SizedBox(height: 20),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Container(
+                                        width: 200,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.04,
+                                        color: Color(0xFF53C737),
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      DetailProduct(
+                                                          product:
+                                                              sellerProduct?[
+                                                                  index]),
+                                                ),
+                                              );
                                             },
-                                          ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Expanded(
-                                  flex: 6,
-                                  child: Container(
-                                    child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Container(
-                                          width: 200,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                  "${sellerProduct?[index].productName}"),
-                                              Text(
-                                                  "${sellerProduct?[index].productPrice}"),
-                                            ],
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            child: Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.5 *
-                                                  0.5,
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.04,
-                                              color: Color(0xFF53C737),
-                                              child: Material(
-                                                color: Colors.transparent,
-                                                child: InkWell(
-                                                    onTap: () async {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  DetailProduct(
-                                                                      product:
-                                                                          sellerProduct?[
-                                                                              index])));
-                                                    },
-                                                    child: Center(
-                                                      child: Text(
-                                                        "Beli",
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white),
-                                                      ),
-                                                    )),
+                                            child: Center(
+                                              child: Text(
+                                                "Beli",
+                                                style: TextStyle(
+                                                    color: Colors.white),
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ],
+                                      ),
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                          );
-                        })
+                                ],
+                              )
+                            ],
+                          ),
+                        );
+                      }),
+                    )
                   ],
                 ),
               )
