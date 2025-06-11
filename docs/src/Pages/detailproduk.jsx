@@ -94,7 +94,7 @@
             <div className="dividers"></div>
             <div className="profil-empu">
                 <img src={empu1} alt="Empu Sepuh" />
-                <span>Empu Sepuh</span>
+                <span>{detailProduct.Seller?.seller_name || ""}</span>
             </div>
             <div className="dividers"></div>
             <button className="btn-hubungi" onClick={redirectWa}>Hubungi Sekarang</button>

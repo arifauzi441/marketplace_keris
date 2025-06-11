@@ -177,6 +177,13 @@ export default function Tokokeris() {
     }, 1000);
   }
 
+  const formatRupiah = (amount) => {
+        return new Intl.NumberFormat("id-ID",{
+            style: "currency",
+            currency: "IDR"
+        }).format(amount)
+  }
+
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* Header */}
@@ -321,7 +328,7 @@ export default function Tokokeris() {
           {popularProducts && popularProducts.length >= 0 &&
             popularProducts.slice(0, 3).map((product, index) => (
               <Link to={`/detail-produk/${product.id_product}`}>
-                <ProductItem image={imagePopularProduct[index]} name={product?.product_name} price={product?.product_price} id_product={product?.id_product} />
+                <ProductItem image={imagePopularProduct[index]} name={product?.product_name} price={formatRupiah(product?.product_price)} id_product={product?.id_product} />
               </Link>)
             )
           }
@@ -349,7 +356,7 @@ export default function Tokokeris() {
                   id_product={produk.id_product}
                   image={produk.ProductPicts.length > 0 ? imageProduct[index] : imageProduct[index]}
                   name={produk.product_name}
-                  price={produk.product_price}
+                  price={formatRupiah(produk.product_price)}
                 />
               </Link>
             </motion.div>

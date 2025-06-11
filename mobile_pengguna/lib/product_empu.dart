@@ -237,82 +237,105 @@ class _ProductEmpuState extends State<ProductEmpu> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Expanded(
-                                    flex: 5,
-                                    child: Container(
-                                      child: (sellerProduct?[index]
-                                                  .productPict
-                                                  .isEmpty ??
-                                              true)
-                                          ? Image(
-                                              image: AssetImage('images/2.png'),
-                                              fit: BoxFit.cover,
-                                            )
-                                          : FutureBuilder<Uint8List?>(
-                                              future: fetchImageBytes(
-                                                  '${sellerProduct?[index].productPict[0].path}'),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.connectionState ==
-                                                    ConnectionState.waiting) {
-                                                  return CircularProgressIndicator();
-                                                } else if (snapshot.hasData) {
-                                                  return Image.memory(
-                                                    snapshot.data!,
-                                                    fit: BoxFit.cover,
-                                                  ); // <-- Tampilkan gambar
-                                                } else {
-                                                  return Text(
-                                                      "Gagal memuat gambar");
-                                                }
-                                              },
-                                            ),
-                                    )),
+                                  flex: 5,
+                                  child: Container(
+                                    width: 200,
+                                    child: (sellerProduct?[index]
+                                                .productPict
+                                                .isEmpty ??
+                                            true)
+                                        ? Image(
+                                            image: AssetImage('images/2.png'),
+                                            fit: BoxFit.cover,
+                                          )
+                                        : FutureBuilder<Uint8List?>(
+                                            future: fetchImageBytes(
+                                                '${sellerProduct?[index].productPict[0].path}'),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return CircularProgressIndicator();
+                                              } else if (snapshot.hasData) {
+                                                return Image.memory(
+                                                  snapshot.data!,
+                                                  fit: BoxFit.cover,
+                                                ); // <-- Tampilkan gambar
+                                              } else {
+                                                return Text(
+                                                    "Gagal memuat gambar");
+                                              }
+                                            },
+                                          ),
+                                  ),
+                                ),
                                 SizedBox(
                                   height: 5,
                                 ),
                                 Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                        "${sellerProduct?[index].productName}")),
-                                Text("${sellerProduct?[index].productPrice}"),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.5 *
-                                          0.5,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.04,
-                                      color: Color(0xFF53C737),
-                                      child: Material(
-                                        color: Colors.transparent,
-                                        child: InkWell(
-                                            onTap: () async {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          DetailProduct(
-                                                              product:
-                                                                  sellerProduct?[
-                                                                      index])));
-                                            },
-                                            child: Center(
-                                              child: Text(
-                                                "Beli",
-                                                style: TextStyle(
-                                                    color: Colors.white),
+                                  flex: 6,
+                                  child: Container(
+                                    child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          width: 200,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                  "${sellerProduct?[index].productName}"),
+                                              Text(
+                                                  "${sellerProduct?[index].productPrice}"),
+                                            ],
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.5 *
+                                                  0.5,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.04,
+                                              color: Color(0xFF53C737),
+                                              child: Material(
+                                                color: Colors.transparent,
+                                                child: InkWell(
+                                                    onTap: () async {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  DetailProduct(
+                                                                      product:
+                                                                          sellerProduct?[
+                                                                              index])));
+                                                    },
+                                                    child: Center(
+                                                      child: Text(
+                                                        "Beli",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    )),
                                               ),
-                                            )),
-                                      ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ),
+                                )
                               ],
                             ),
                           );

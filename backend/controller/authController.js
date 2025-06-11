@@ -159,9 +159,9 @@ const forgotPassword = async (req, res) => {
                 }
             });
             if (response.data.status) {
-                return res.status(200).json({ message: 'WA OTP sent successfully' });
+                return res.status(200).json({ msg: 'WA OTP sent successfully' });
             } else {
-                return res.status(500).json({ error: 'Failed to send WA OTP', details: response });
+                return res.status(500).json({ msg: 'Failed to send WA OTP', details: response.data });
             }
 
         } else {
@@ -192,9 +192,9 @@ const forgotPassword = async (req, res) => {
                 }
             });
             if (response.data.status) {
-                return res.status(200).json({ message: 'WA OTP sent successfully' });
+                return res.status(200).json({ msg: 'WA OTP sent successfully' });
             } else {
-                return res.status(500).json({ error: 'Failed to send WA OTP', details: response.data });
+                return res.status(500).json({ msg: 'Failed to send WA OTP', details: response.data });
             }
         }
 

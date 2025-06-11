@@ -55,6 +55,13 @@ export default function Tokokeris() {
     fetchSellerProduct()
   }, []);
 
+  const formatRupiah = (amount) => {
+        return new Intl.NumberFormat("id-ID",{
+            style: "currency",
+            currency: "IDR"
+        }).format(amount)
+  }
+
   // komponen ProductItem
   const ProdukCard = ({ image, name, price, id }) => (
     <div className="kartu-produk">
@@ -63,7 +70,7 @@ export default function Tokokeris() {
       </div>
       <span className="nama-produk">{name}</span>
       <div className="harga-dan-beli">
-        <span className="harga-produk">{price}</span>
+        <span className="harga-produk">{formatRupiah(price)}</span>
         <Link to={`/detail-produk/${id}`}>
           <button className="tombol-beli">Beli</button>
         </Link>
