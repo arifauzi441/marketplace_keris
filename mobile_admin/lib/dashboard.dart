@@ -113,8 +113,17 @@ class _DashboardState extends State<Dashboard> {
   @override
   @override
   Widget build(BuildContext context) {
-    users?.sort((a, b) => (a.status == 'belum diterima' ? 0 : 1)
-        .compareTo(b.status == 'belum diterima' ? 0 : 1));
+    users?.sort((a, b) {
+      int statusCompare = (a.status == 'belum diterima' ? 0 : 1)
+          .compareTo(b.status == 'belum diterima' ? 0 : 1);
+      if (statusCompare != 0) return statusCompare;
+
+      DateTime dateA = a.createdAt ?? DateTime(2000);
+      DateTime dateB = b.createdAt ?? DateTime(2000);
+
+      return dateB.compareTo(dateA);
+    });
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(

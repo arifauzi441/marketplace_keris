@@ -39,6 +39,7 @@ const getAllUsers = async (req, res, next) => {
     try {
         let search = req.query.search || ""
         let sellerData = await Seller.findAll({
+            order: [["id_seller", "DESC"]],
             attributes: { exclude: ['password'] },
             where: {
                 [Op.or]: {
@@ -49,6 +50,7 @@ const getAllUsers = async (req, res, next) => {
             }
         });
         let adminData = await Admin.findAll({
+            order: [["id_admin", "DESC"]],
             where: {
                 [Op.or]: {
                     status: { [Op.like]: `%${search}%` },

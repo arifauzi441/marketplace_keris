@@ -17,6 +17,7 @@ class UserApi {
   String? photo;
   String? phone;
   String? status;
+  DateTime? createdAt;
 
   UserApi({
     required this.idSeller,
@@ -28,6 +29,7 @@ class UserApi {
     required this.phone,
     required this.photo,
     required this.status,
+    required this.createdAt,
   });
 
   factory UserApi.createUserApi(Map<String, dynamic> object) {
@@ -43,6 +45,7 @@ class UserApi {
         phone: data['admin_phone'],
         photo: data['admin_photo'],
         status: data['status'],
+        createdAt: DateTime.parse(data['createdAt']),
       );
     }
 
@@ -56,6 +59,7 @@ class UserApi {
       phone: data['seller_phone'],
       photo: data['seller_photo'],
       status: data['status'],
+      createdAt: DateTime.parse(data['createdAt']),
     );
   }
 
