@@ -42,7 +42,7 @@ const getActiveProduct = async (req, res, next) => {
             },
             include: [
                 { model: ProductPict },
-                { model: Seller, attributes: ['seller_name','seller_phone','seller_photo'] }
+                { model: Seller, where: {status: "diterima"}, attributes: ['seller_name','seller_phone','seller_photo'] }
             ]
         })
         res.status(200).json({ product })
@@ -98,7 +98,7 @@ const getPopularProductByCounts = async (req, res, next) => {
             order: [['click_counts', 'DESC']],
             include: [
                 { model: ProductPict },
-                { model: Seller, attributes: ['seller_name','seller_phone','seller_photo'] }
+                { model: Seller, where: {status: "diterima"}, attributes: ['seller_name','seller_phone','seller_photo'] }
             ]
         })
 
