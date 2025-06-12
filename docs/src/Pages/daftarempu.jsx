@@ -7,6 +7,7 @@ import "../styles/detail.css";
 import "../styles/daftarempu.css"
 
 import logoImage from "../assets/Images/logo-keris.png";
+import defaultSellerPhoto from "../assets/Images/account.png"
 import empuImage from "../assets/Images/empu1.jpg"
 import axios from "axios";
 
@@ -55,7 +56,7 @@ export default function Tokokeris() {
 
     const dataEmpu = allSeller?.map((seller, index) => {
         return {
-            img: sellerImage[index],
+            img: (sellerImage[index] == "") ? defaultSellerPhoto : sellerImage[index],
             nama: seller.seller_name,
             kontak: seller.seller_phone,
             sellerId: seller.id_seller
@@ -127,7 +128,6 @@ export default function Tokokeris() {
                             <img src={empu.img} alt={empu.nama} className="foto-empu" />
                             <div className="daftar-info-empu">
                                 <h3 className="daftar-nama-empu">{empu.nama}</h3>
-                                <p className="daftar-kontak-empu">{empu.kontak}</p>
                                 <Link to={`/produk-empu/${empu.sellerId}`} className="link-produk">Lihat Produk</Link>
                             </div>
                         </div>

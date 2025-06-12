@@ -73,7 +73,7 @@ const getProductById = async (req, res, next) => {
             where: { id_product: req.params.id },
             include: [
                 { model: ProductPict },
-                { model: Seller, attributes: ['seller_name','seller_phone'] }
+                { model: Seller, attributes: ['seller_name','seller_phone','seller_photo'] }
             ]
         })
 
