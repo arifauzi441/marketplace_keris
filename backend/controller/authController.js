@@ -225,7 +225,6 @@ const verifyCode = async (req, res) => {
 
             if (!data) return res.status(401).json({ msg: "kode verifikasi salah" })
             if (nowDate >= data.AdminVerificationCode.expired_at) return res.status(401).json({ msg: "expired code" })
-
             let token = jwt.sign({
                 adminId: data.id_admin
             }, process.env.JWT_SECRET, { expiresIn: '5m' })
