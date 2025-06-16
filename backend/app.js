@@ -28,6 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 (async () => {
   await connectDB()
 })()
+console.log("hai")
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
