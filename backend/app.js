@@ -38,6 +38,7 @@ app.use('/images/:path', cors({
   origin: 'https://toko.kerissumenep.com',
   methods: ['GET']
 }, async(req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
   const response = await axios.get(`https://api.toko.kerissumenep.com/images/${req.params.path}`, {
         responseType: 'arraybuffer',
       });
