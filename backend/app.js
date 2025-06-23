@@ -35,6 +35,10 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use('/images', (req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://toko.kerissumenep.com');
+  next();
+});
 app.use(express.static(path.join(__dirname, 'public')));
 
 (async () => {
