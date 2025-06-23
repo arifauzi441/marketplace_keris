@@ -150,9 +150,6 @@ export default function Tokokeris() {
           response.data.product.map(async (imageEndpoint) => {
             if (imageEndpoint.product.length > 0) {
               const res = await axios.get(`${API_URL}/${imageEndpoint.product[0].path}`, {
-                headers: {
-                  'ngrok-skip-browser-warning': 'true'
-                },
                 responseType: 'blob'
               });
               return URL.createObjectURL(res.data);
