@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 23 Jun 2025 pada 11.59
+-- Waktu pembuatan: 23 Jun 2025 pada 12.15
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -125,21 +125,21 @@ CREATE TABLE `productpicts` (
 --
 
 INSERT INTO `productpicts` (`id_product_pict`, `path`, `id_product`, `createdAt`, `updatedAt`) VALUES
-(84, 'images/product_images/1745987307510 - 1000033177.jpg', 34, '2025-04-30 04:28:27', '2025-04-30 04:28:27'),
-(86, 'images/product_images/1745987373927 - 1000033181.jpg', 36, '2025-04-30 04:29:34', '2025-04-30 04:29:34'),
-(87, 'images/product_images/1745987520752 - 1000033182.jpg', 37, '2025-04-30 04:32:00', '2025-04-30 04:32:00'),
-(88, 'images/product_images/1745987629023 - 1000033178.jpg', 38, '2025-04-30 04:33:49', '2025-04-30 04:33:49'),
-(89, 'images/product_images/1745987656940 - 1000033179.jpg', 39, '2025-04-30 04:34:17', '2025-04-30 04:34:17'),
-(90, 'images/product_images/1745987688059 - 1000033180.jpg', 40, '2025-04-30 04:34:50', '2025-04-30 04:34:50'),
-(91, 'images/product_images/1745987720344 - 1000033173.jpg', 41, '2025-04-30 04:35:20', '2025-04-30 04:35:20'),
-(92, 'images/product_images/1745987786764 - 1000033175.jpg', 42, '2025-04-30 04:36:26', '2025-04-30 04:36:26'),
-(93, 'images/product_images/1745988240567 - 1000033171.jpg', 43, '2025-04-30 04:44:04', '2025-04-30 04:44:04'),
-(94, 'images/product_images/1745988241547 - 1000032496.jpg', 43, '2025-04-30 04:44:04', '2025-04-30 04:44:04'),
-(95, 'images/product_images/1745988243266 - 1000033181.jpg', 43, '2025-04-30 04:44:04', '2025-04-30 04:44:04'),
-(99, 'images/product_images/1745988282662 - 1000033172.jpg', 45, '2025-04-30 04:44:43', '2025-04-30 04:44:43'),
-(100, 'images/product_images/1745988282681 - 1000033181.jpg', 45, '2025-04-30 04:44:43', '2025-04-30 04:44:43'),
-(101, 'images/product_images/1745988283005 - 1000032496.jpg', 45, '2025-04-30 04:44:43', '2025-04-30 04:44:43'),
-(103, 'images/product_images/1750633018870 - product35Photo1750632998511.png', 35, '2025-06-22 22:56:58', '2025-06-22 22:56:58');
+(84, 'images/product_images/1745987307510.jpg', 34, '2025-04-30 04:28:27', '2025-04-30 04:28:27'),
+(86, 'images/product_images/1745987373927.jpg', 36, '2025-04-30 04:29:34', '2025-04-30 04:29:34'),
+(87, 'images/product_images/1745987520752.jpg', 37, '2025-04-30 04:32:00', '2025-04-30 04:32:00'),
+(88, 'images/product_images/1745987629023.jpg', 38, '2025-04-30 04:33:49', '2025-04-30 04:33:49'),
+(89, 'images/product_images/1745987656940.jpg', 39, '2025-04-30 04:34:17', '2025-04-30 04:34:17'),
+(90, 'images/product_images/1745987688059.jpg', 40, '2025-04-30 04:34:50', '2025-04-30 04:34:50'),
+(91, 'images/product_images/1745987720344.jpg', 41, '2025-04-30 04:35:20', '2025-04-30 04:35:20'),
+(92, 'images/product_images/1745987786764.jpg', 42, '2025-04-30 04:36:26', '2025-04-30 04:36:26'),
+(93, 'images/product_images/1745988240567.jpg', 43, '2025-04-30 04:44:04', '2025-04-30 04:44:04'),
+(94, 'images/product_images/1745988241547.jpg', 43, '2025-04-30 04:44:04', '2025-04-30 04:44:04'),
+(95, 'images/product_images/1745988243266.jpg', 43, '2025-04-30 04:44:04', '2025-04-30 04:44:04'),
+(99, 'images/product_images/1745988282662.jpg', 45, '2025-04-30 04:44:43', '2025-04-30 04:44:43'),
+(100, 'images/product_images/1745988282681.jpg', 45, '2025-04-30 04:44:43', '2025-04-30 04:44:43'),
+(101, 'images/product_images/1745988283005.jpg', 45, '2025-04-30 04:44:43', '2025-04-30 04:44:43'),
+(103, 'images/product_images/1750633018870.png', 35, '2025-06-22 22:56:58', '2025-06-22 22:56:58');
 
 -- --------------------------------------------------------
 
@@ -204,8 +204,8 @@ CREATE TABLE `sellers` (
 INSERT INTO `sellers` (`id_seller`, `username`, `password`, `seller_name`, `seller_address`, `seller_phone`, `seller_photo`, `status`, `createdAt`, `updatedAt`) VALUES
 (1, 'ari3', 'lll', 'ari fauzi', 'jl Sapeken no.5 blok kk', '082335838167', NULL, 'diterima', '2025-05-02 16:58:41', '2025-06-22 22:54:19'),
 (2, 'ari', '44', 'Ibram Maulana', 'pabian', '085852769382', 'images/user_images/1749099580750.jpg', 'diterima', '2025-04-23 13:53:50', '2025-06-05 04:59:40'),
-(3, 'veri', '335', 'vernanda', 'Jl Tuwowo', '081216679709', 'images/user_images/1749099454693 - 1000092213.jpg', 'diterima', '2025-04-27 11:30:50', '2025-06-05 04:57:35'),
-(4, 'mawlaz', '123', 'agiel', 'jl. torjuNNB', '085517290', 'images/user_images/1749099636824 - 1000092215.jpg', 'diterima', '2025-04-29 08:30:10', '2025-06-05 05:00:37'),
+(3, 'veri', '335', 'vernanda', 'Jl Tuwowo', '081216679709', 'images/user_images/1749099454693.jpg', 'diterima', '2025-04-27 11:30:50', '2025-06-05 04:57:35'),
+(4, 'mawlaz', '123', 'agiel', 'jl. torjuNNB', '085517290', 'images/user_images/1749099636824.jpg', 'diterima', '2025-04-29 08:30:10', '2025-06-05 05:00:37'),
 (5, 'arifauzi441@gmail.com', '2', NULL, 'fdhhvghh', NULL, NULL, 'belum diterima', '2025-04-30 05:25:32', '2025-06-04 05:09:31'),
 (6, 'blabla', '455', NULL, 'jlGaming', NULL, NULL, 'belum diterima', '2025-05-05 13:56:20', '2025-05-05 14:45:42'),
 (10, 'fajar', 'fajar', NULL, NULL, '087850366625', NULL, 'belum diterima', '2025-05-07 04:08:58', '2025-06-10 16:36:56'),
@@ -214,14 +214,14 @@ INSERT INTO `sellers` (`id_seller`, `username`, `password`, `seller_name`, `sell
 (14, 'Qasasi56', 'gokil', NULL, NULL, '082336667', NULL, 'belum diterima', '2025-05-23 13:48:34', '2025-06-22 23:01:04'),
 (15, 'king szrc', 'gokil', 'Danang Susetyo P.', NULL, '088777666543', NULL, 'belum diterima', '2025-05-23 13:56:09', '2025-05-25 12:58:42'),
 (16, 'sdfsdf', 'wsefsdf', 'sdfsf', NULL, '234234', NULL, 'belum diterima', '2025-05-23 17:21:05', '2025-05-23 17:21:05'),
-(17, 'imryzo', '33', 'aqil yoga', 'dakdul', '089531322122', 'images/user_images/1749100021695 - 1000092217.jpg', 'diterima', '2025-05-25 11:41:26', '2025-06-05 05:07:01'),
+(17, 'imryzo', '33', 'aqil yoga', 'dakdul', '089531322122', 'images/user_images/1749100021695.jpg', 'diterima', '2025-05-25 11:41:26', '2025-06-05 05:07:01'),
 (18, 'thertuen', '555', 'fauzi', NULL, '085852586638', NULL, 'belum diterima', '2025-05-27 14:49:18', '2025-05-27 14:49:18'),
 (19, 'gqgqvq', 'vavqv', 'fahga', NULL, '6484848', NULL, 'belum diterima', '2025-05-27 14:52:50', '2025-05-27 14:52:50'),
 (20, 'thereturn', '678', 'Ahmad Ari Fauzi', NULL, '088855325658', NULL, 'belum diterima', '2025-05-27 15:38:08', '2025-05-27 15:38:08'),
 (21, 'orca', 'bsbsj', 'IBRAM ORAC', NULL, '34584649464', NULL, 'belum diterima', '2025-05-28 04:52:35', '2025-05-28 04:52:35'),
 (22, 'Pramono', '2344', 'Aqil Yoga', NULL, '08854376192', NULL, 'belum diterima', '2025-05-28 05:04:13', '2025-05-28 05:04:13'),
 (23, 'gsggsg', 'geu7dg', 'hshshs', NULL, '6494848480', NULL, 'belum diterima', '2025-06-04 05:12:47', '2025-06-04 05:12:47'),
-(24, 'dafahtml', 'ggg', 'dafa fahrisi', '', '08548764861', 'images/user_images/1749099069192 - 1000092213.jpg', 'belum diterima', '2025-06-04 06:05:33', '2025-06-05 04:58:21'),
+(24, 'dafahtml', 'ggg', 'dafa fahrisi', '', '08548764861', 'images/user_images/1749099069192.jpg', 'belum diterima', '2025-06-04 06:05:33', '2025-06-05 04:58:21'),
 (25, 'dgggg', 'vghhb', 'ffgh', NULL, '556688565', NULL, 'belum diterima', '2025-06-10 16:37:24', '2025-06-10 16:37:24'),
 (26, 'ggg', 'ggg', 'hhh', NULL, '333', NULL, 'belum diterima', '2025-06-10 17:02:48', '2025-06-10 17:02:48');
 
