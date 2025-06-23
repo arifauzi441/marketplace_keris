@@ -37,6 +37,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/images', (req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'https://toko.kerissumenep.com');
+  res.setHeader('Access-Control-Allow-Methods', 'GET');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept');
   next();
 });
 app.use(express.static(path.join(__dirname, 'public')));
