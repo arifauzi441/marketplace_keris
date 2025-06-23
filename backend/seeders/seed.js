@@ -9,7 +9,6 @@ async function runSqlFile() {
   const filePath = path.join(__dirname, 'db_marketplace.sql');
   const sql = fs.readFileSync(filePath, 'utf8');
 
-  // Jalankan query SQL langsung ke database
   try {
     const connection = await mysql.createConnection({
       host: process.env.DB_HOST,
