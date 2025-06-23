@@ -26,4 +26,4 @@ jobs:
           script: |
             cd ${{ secrets.SSH_DIR }}
             node seeders/seed.js
-            node app.js
+            npm Install
