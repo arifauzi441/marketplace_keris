@@ -33,6 +33,11 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use('/images', cors({
+  origin: 'https://toko.kerissumenep.com',
+  methods: ['GET'],
+}), express.static(path.join(__dirname, 'public', 'images')));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 (async () => {
