@@ -23,7 +23,7 @@ const allowedOrigins = ['https://toko.kerissumenep.com'];
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, Error("hai"));
+      callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
@@ -33,20 +33,6 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use('/images/:path', cors({
-  origin: 'https://toko.kerissumenep.com',
-  methods: ['GET']
-}, async(req, res) => {
-  res.set('Access-Control-Allow-Origin', '*');
-  const response = await axios.get(`https://api.toko.kerissumenep.com/images/${req.params.path}`, {
-        responseType: 'arraybuffer',
-      });
-      const imageBuffer = Buffer.from(response.data, 'binary');
-      const base64Image = imageBuffer.toString('base64');
-      const image = `data:${response.headers['content-type']};base64,${base64Image}`;
-      return image;
-}), express.static(path.join(__dirname, 'public')));
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 (async () => {
