@@ -126,12 +126,7 @@ export default function Tokokeris() {
             if (imageEndpoint.seller_photo == null) {
               return " "
             }
-            const res = await axios.get(`${API_URL}/${imageEndpoint.seller_photo}`, {
-              headers: {
-                'ngrok-skip-browser-warning': 'true'
-              },
-              responseType: 'blob'
-            });
+            const res = await axios.get(`${API_URL}/${imageEndpoint.seller_photo}`);
             return URL.createObjectURL(res.data);
           })
         );
