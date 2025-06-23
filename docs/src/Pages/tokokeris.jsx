@@ -95,7 +95,7 @@ export default function Tokokeris() {
         });
 
         const productData = response?.data?.product || [];
-
+        console.log(productData)
         // Generate image URLs
         const blobUrls = await Promise.all(
           productData.map(async (item) => {
