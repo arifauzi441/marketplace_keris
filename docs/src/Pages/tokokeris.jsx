@@ -94,8 +94,8 @@ export default function Tokokeris() {
         });
         const blobUrls = await Promise.all(
           response.data.product.map(async (imageEndpoint) => {
-            if (imageEndpoint.ProductPicts.length > 0) {
-              const res = await axios.get(`${API_URL}/${imageEndpoint.ProductPicts[0].path}`, {
+            if (imageEndpoint.productpicts.length > 0) {
+              const res = await axios.get(`${API_URL}/${imageEndpoint.productpicts[0].path}`, {
                 headers: {
                   'ngrok-skip-browser-warning': 'true'
                 },
@@ -150,8 +150,8 @@ export default function Tokokeris() {
         })
         const blobUrls = await Promise.all(
           response.data.product.map(async (imageEndpoint) => {
-            if (imageEndpoint.ProductPicts.length > 0) {
-              const res = await axios.get(`${API_URL}/${imageEndpoint.ProductPicts[0].path}`, {
+            if (imageEndpoint.productpicts.length > 0) {
+              const res = await axios.get(`${API_URL}/${imageEndpoint.productpicts[0].path}`, {
                 headers: {
                   'ngrok-skip-browser-warning': 'true'
                 },
@@ -358,7 +358,7 @@ export default function Tokokeris() {
             ><Link to={`/detail-produk/${produk.id_product}`} onClick={() => incrementClick(produk.id_product)}>
                 <ProdukCard
                   id_product={produk.id_product}
-                  image={produk.ProductPicts.length > 0 ? imageProduct[index] : imageProduct[index]}
+                  image={produk.productpicts.length > 0 ? imageProduct[index] : imageProduct[index]}
                   name={produk.product_name}
                   price={formatRupiah(produk.product_price)}
                 />
