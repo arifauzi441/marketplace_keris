@@ -60,3 +60,4 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD_FRONTEND }}
           local-dir: docs/dist/
           server-dir: ${{ secrets.REMOTE_DIR }}
+          protocol: ftp
