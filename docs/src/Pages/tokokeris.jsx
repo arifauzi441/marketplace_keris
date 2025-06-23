@@ -95,7 +95,6 @@ export default function Tokokeris() {
         });
 
         const productData = response?.data?.product || [];
-        console.log(productData)
         // Generate image URLs
         const blobUrls = await Promise.all(
           productData.map(async (item) => {
@@ -156,16 +155,24 @@ export default function Tokokeris() {
             'ngrok-skip-browser-warning': 'true'
           }
         })
+        const productData = response?.data?.product || [];
+        // Generate image URLs
         const blobUrls = await Promise.all(
-          response.data.product.map(async (imageEndpoint) => {
-            if (imageEndpoint.product && imageEndpoint.product.length > 0) {
-              const res = await axios.get(`${API_URL}/${imageEndpoint.productpicts[0].path}`, {
-                responseType: 'blob'
-              });
-              return URL.createObjectURL(res.data);
-            } else {
-              return " "
-            };
+          productData.map(async (item) => {
+            // Jika tidak ada path produk, return string kosong
+            const path = item?.productpicts?.[0]?.path;
+            if (path) {
+              try {
+                const res = await axios.get(`${API_URL}/${path}`, {
+                  responseType: 'blob'
+                });
+                return URL.createObjectURL(res.data);
+              } catch (err) {
+                console.error("Gagal mengambil gambar:", err);
+                return ""; // fallback jika gagal ambil gambar
+              }
+            }
+            return ""; // fallback jika tidak ada path
           })
         );
         setImagePopularProduct(blobUrls)
