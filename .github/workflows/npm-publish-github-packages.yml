@@ -40,10 +40,17 @@ jobs:
   ftp-deploy:
     name: Upload Docs to FTP
     runs-on: ubuntu-latest
+    needs: build
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docs-dist
+          path: docs/dist
 
       - name: Upload docs via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -51,6 +58,5 @@ jobs:
           server: ${{ secrets.FTP_HOST_FRONTEND }}
           username: ${{ secrets.FTP_USERNAME_FRONTEND }}
           password: ${{ secrets.FTP_PASSWORD_FRONTEND }}
-          local-dir: docs/dist/                        
-          server-dir: ${{ secrets.REMOTE_DIR }}  
-          protocol: ftp
+          local-dir: docs/dist
+          server-dir: ${{ secrets.REMOTE_DIR }}
