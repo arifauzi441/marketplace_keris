@@ -8,7 +8,7 @@ const {Product, ProductPict, Admin, Seller, AdminVerificationCode, SellerVerific
 async function runSqlFile() {
   const filePath = path.join(__dirname, 'db_marketplace.sql');
   const sql = fs.readFileSync(filePath, 'utf8');
-
+// 
   try {
     const connection = await mysql.createConnection({
       host: process.env.DB_HOST,
