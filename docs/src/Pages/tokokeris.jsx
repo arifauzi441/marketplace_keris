@@ -92,6 +92,22 @@ export default function Tokokeris() {
             'ngrok-skip-browser-warning': 'true'
           }
         });
+        const blobUrls = await Promise.all(
+          response.data.product.map(async (imageEndpoint) => {
+            if (imageEndpoint.productpicts.length > 0) {
+              const res = await axios.get(`${API_URL}/${imageEndpoint.productpicts[0].path}`, {
+                headers: {
+                  'ngrok-skip-browser-warning': 'true'
+                },
+                responseType: 'blob'
+              });
+              return URL.createObjectURL(res.data);
+            } else {
+              return " "
+            }
+          })
+        );
+        setImageProduct(blobUrls)
         setProducts(response.data.product);
       } catch (error) {
         console.error("Gagal mengambil data product:", error);
@@ -105,6 +121,16 @@ export default function Tokokeris() {
             'ngrok-skip-browser-warning': 'true'
           }
         });
+        const blobUrls = await Promise.all(
+          response.data.data.map(async (imageEndpoint) => {
+            if (imageEndpoint.seller_photo == null) {
+              return " "
+            }
+            const res = await axios.get(`${API_URL}/${imageEndpoint.seller_photo}`);
+            return URL.createObjectURL(res.data);
+          })
+        );
+        setImageSellers(blobUrls)
         setSellers(response.data.data);
       } catch (error) {
         console.error("Gagal mengambil data seller:", error);
@@ -117,6 +143,22 @@ export default function Tokokeris() {
             'ngrok-skip-browser-warning': 'true'
           }
         })
+        const blobUrls = await Promise.all(
+          response.data.product.map(async (imageEndpoint) => {
+            if (imageEndpoint.productpicts.length > 0) {
+              const res = await axios.get(`${API_URL}/${imageEndpoint.productpicts[0].path}`, {
+                headers: {
+                  'ngrok-skip-browser-warning': 'true'
+                },
+                responseType: 'blob'
+              });
+              return URL.createObjectURL(res.data);
+            } else {
+              return " "
+            };
+          })
+        );
+        setImagePopularProduct(blobUrls)
         setPopularProduct(response.data.product)
       } catch (error) {
         console.log(error)
