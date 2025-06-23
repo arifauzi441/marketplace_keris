@@ -24,5 +24,6 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd ${{ secrets.REMOTE_DIR }}
+            cd ${{ secrets.SSH_DIR }}
             node seeders/seed.js
+            node app.js
