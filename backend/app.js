@@ -23,7 +23,7 @@ const allowedOrigins = ['https://toko.kerissumenep.com'];
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
+      callback(null, Error("hai"));
     } else {
       callback(new Error('Not allowed by CORS'));
     }
