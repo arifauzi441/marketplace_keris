@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 23 Jun 2025 pada 04.28
+-- Waktu pembuatan: 23 Jun 2025 pada 11.59
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -203,7 +203,7 @@ CREATE TABLE `sellers` (
 
 INSERT INTO `sellers` (`id_seller`, `username`, `password`, `seller_name`, `seller_address`, `seller_phone`, `seller_photo`, `status`, `createdAt`, `updatedAt`) VALUES
 (1, 'ari3', 'lll', 'ari fauzi', 'jl Sapeken no.5 blok kk', '082335838167', NULL, 'diterima', '2025-05-02 16:58:41', '2025-06-22 22:54:19'),
-(2, 'ari', '44', 'Ibram Maulana', 'pabian', '085852769382', 'images/user_images/1749099580750 - 1000092219.jpg', 'diterima', '2025-04-23 13:53:50', '2025-06-05 04:59:40'),
+(2, 'ari', '44', 'Ibram Maulana', 'pabian', '085852769382', 'images/user_images/1749099580750.jpg', 'diterima', '2025-04-23 13:53:50', '2025-06-05 04:59:40'),
 (3, 'veri', '335', 'vernanda', 'Jl Tuwowo', '081216679709', 'images/user_images/1749099454693 - 1000092213.jpg', 'diterima', '2025-04-27 11:30:50', '2025-06-05 04:57:35'),
 (4, 'mawlaz', '123', 'agiel', 'jl. torjuNNB', '085517290', 'images/user_images/1749099636824 - 1000092215.jpg', 'diterima', '2025-04-29 08:30:10', '2025-06-05 05:00:37'),
 (5, 'arifauzi441@gmail.com', '2', NULL, 'fdhhvghh', NULL, NULL, 'belum diterima', '2025-04-30 05:25:32', '2025-06-04 05:09:31'),
