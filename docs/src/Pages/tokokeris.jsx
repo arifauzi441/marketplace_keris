@@ -55,19 +55,20 @@ const incrementClick = async (id_product) => {
 // komponen ProductItem - produk terlaris
 const ProductItem = ({ image, name, price, id_product }) => {
   return (
-  <div className="product-item">
-    <div className="product-image-container">
-      <img src={image == " " ? sketsaKeris : image} alt={`Keris ${name}`} />
+    <div className="product-item">
+      <div className="product-image-container">
+        <img src={image == " " ? sketsaKeris : image} alt={`Keris ${name}`} />
+      </div>
+      <div className="product-item-content">
+        <span className="product-name">{name}</span>
+        <span className="product-price">{price}</span>
+        <Link to={`/detail-produk/${id_product}`} onClick={() => incrementClick(id_product)}>
+          <button className="buy-button">Beli</button>
+        </Link>
+      </div>
     </div>
-    <div className="product-item-content">
-      <span className="product-name">{name}</span>
-      <span className="product-price">{price}</span>
-      <Link to={`/detail-produk/${id_product}`} onClick={() => incrementClick(id_product)}>
-        <button className="buy-button">Beli</button>
-      </Link>
-    </div>
-  </div>
-)};
+  )
+};
 
 export default function Tokokeris() {
   const [search, setSearch] = useState('')
@@ -92,23 +93,35 @@ export default function Tokokeris() {
             'ngrok-skip-browser-warning': 'true'
           }
         });
+
+        const productData = response?.data?.product || [];
+
+        // Generate image URLs
         const blobUrls = await Promise.all(
-          response.data.product.map(async (imageEndpoint) => {
-            if (imageEndpoint.product && imageEndpoint.product.length > 0) {
-              const res = await axios.get(`${API_URL}/${imageEndpoint.product[0].path}`, {
-                headers: {
-                  'ngrok-skip-browser-warning': 'true'
-                },
-                responseType: 'blob'
-              });
-              return URL.createObjectURL(res.data);
-            } else {
-              return " "
+          productData.map(async (item) => {
+            // Jika tidak ada path produk, return string kosong
+            const path = item?.product?.[0]?.path;
+            if (path) {
+              try {
+                const res = await axios.get(`${API_URL}/${path}`, {
+                  headers: {
+                    'ngrok-skip-browser-warning': 'true'
+                  },
+                  responseType: 'blob'
+                });
+                return URL.createObjectURL(res.data);
+              } catch (err) {
+                console.error("Gagal mengambil gambar:", err);
+                return ""; // fallback jika gagal ambil gambar
+              }
             }
+            return ""; // fallback jika tidak ada path
           })
         );
-        setImageProduct(blobUrls)
-        setProducts(response.data.product);
+
+        setImageProduct(blobUrls);
+        setProducts(productData);
+
       } catch (error) {
         console.error("Gagal mengambil data product:", error);
       }
@@ -127,7 +140,7 @@ export default function Tokokeris() {
               return " "
             }
             const res = await axios.get(`${API_URL}/${imageEndpoint.seller_photo}`, {
-              
+
               responseType: 'blob'
             });
             return URL.createObjectURL(res.data);
