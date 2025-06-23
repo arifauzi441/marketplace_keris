@@ -37,6 +37,14 @@ app.use(cookieParser());
 app.use('/images/:path', cors({
   origin: 'https://toko.kerissumenep.com',
   methods: ['GET']
+}, async(req, res) => {
+  const response = await axios.get(`https://api.toko.kerissumenep.com/images/${req.params.path}`, {
+        responseType: 'arraybuffer',
+      });
+      const imageBuffer = Buffer.from(response.data, 'binary');
+      const base64Image = imageBuffer.toString('base64');
+      const image = `data:${response.headers['content-type']};base64,${base64Image}`;
+      return image;
 }), express.static(path.join(__dirname, 'public')));
 
 app.use(express.static(path.join(__dirname, 'public')));
