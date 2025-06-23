@@ -100,7 +100,7 @@ export default function Tokokeris() {
         const blobUrls = await Promise.all(
           productData.map(async (item) => {
             // Jika tidak ada path produk, return string kosong
-            const path = item?.product?.[0]?.path;
+            const path = item?.productpicts?.[0]?.path;
             if (path) {
               try {
                 const res = await axios.get(`${API_URL}/${path}`, {
