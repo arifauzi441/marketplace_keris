@@ -26,4 +26,4 @@ jobs:
           script: |
             source /home/kera3676/nodevenv/toko/20/bin/activate && cd ${{ secrets.SSH_DIR }}
             node seeders/seed.js
-            npm Install
+            npm install
