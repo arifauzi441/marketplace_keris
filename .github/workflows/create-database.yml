@@ -3,7 +3,7 @@ name: Run Create Database Command
 on:
   push:
     paths:
-      - 'seeders/**'
+      - 'backend/seeders/**'
     branches:
       - main
 
