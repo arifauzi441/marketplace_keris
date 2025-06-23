@@ -2,7 +2,7 @@ const {db} =require(`../config/db`)
 const {DataTypes} = require(`sequelize`)
 const Seller = require("./SellerModel")
 
-const Product = db.define(`Product`,{
+const Product = db.define(`product`,{
     id_product: {
         type: DataTypes.INTEGER,
         primaryKey: true,
