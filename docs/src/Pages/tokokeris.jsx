@@ -104,9 +104,6 @@ export default function Tokokeris() {
             if (path) {
               try {
                 const res = await axios.get(`${API_URL}/${path}`, {
-                  headers: {
-                    'ngrok-skip-browser-warning': 'true'
-                  },
                   responseType: 'blob'
                 });
                 return URL.createObjectURL(res.data);
