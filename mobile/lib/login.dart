@@ -253,6 +253,7 @@ class _LoginState extends State<Login> {
               cursorColor: Color(0xFF53C737),
               obscureText: (label == "Username") ? false : _obscureText,
               decoration: InputDecoration(
+                hintText: label,
                   suffixIcon: (label == 'Username')
                       ? Icon(Icons.person)
                       : (!_obscureText)
