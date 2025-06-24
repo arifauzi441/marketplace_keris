@@ -247,6 +247,7 @@ class _LoginState extends State<Login> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.5 * 0.10,
             child: TextField(
+              key: Key(label),
               controller: (label == 'Username')
                   ? _usernameController
                   : _passwordController,

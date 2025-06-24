@@ -3,13 +3,14 @@ const router = express.Router()
 const product = require(`../controller/productController`)
 const verifyToken = require(`../config/middleware/jwt`)
 const multer = require("multer") 
+const path= require("path")
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, "public/images/product_images")
     },
     filename: (req, file, cb) => {
-        cb(null, `${Date.now()}`)
+        cb(null, `${Date.now()}.${path.extname(file.originalname)}`)
     }
 })
 

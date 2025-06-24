@@ -31,7 +31,7 @@ class ProductApi {
       this.seller});
 
   factory ProductApi.createProductApi(Map<String, dynamic> object) {
-    List<dynamic> temp = object['ProductPicts'] ?? [];
+    List<dynamic> temp = object['productpicts'] ?? [];
 
     return ProductApi(
         idProduct: object['id_product'],
@@ -45,7 +45,7 @@ class ProductApi {
         productPict: temp
             .map((prodpict) => ProductPictApi.createProductPictApi(prodpict))
             .toList(),
-        seller: UserApi.createUserApi({"data": object['Seller']}));
+        seller: UserApi.createUserApi({"data": object['seller']}));
   }
 
   static Future<List<ProductApi>> getPopularProduct(String search) async {
@@ -68,9 +68,9 @@ class ProductApi {
         headers: {'ngrok-skip-browser-warning': 'true'});
     var userResult = json.decode(apiResult.body);
 
-    List<ProductApi> datas = (userResult['product']['Products'] as List)
+    List<ProductApi> datas = (userResult['product']['products'] as List)
         .map((data) => ProductApi.createProductApi({
-              "Seller": {
+              "seller": {
                 "seller_name": userResult['product']['seller_name'],
                 "seller_phone": userResult['product']['seller_phone'],
                 "seller_photo": userResult['product']['seller_photo'],

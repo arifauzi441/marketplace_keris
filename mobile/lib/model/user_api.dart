@@ -164,11 +164,12 @@ class UserApi {
       }
 
       var response = await apiResult.send();
+      print(response.statusCode);
       var userResult = json.decode(await response.stream.bytesToString());
-
       return {"msg": userResult['msg'], "status": response.statusCode};
     } catch (e) {
-      return {"msg": e};
+      print(e.toString());
+      return {"msg": e.toString()};
     }
   }
 }

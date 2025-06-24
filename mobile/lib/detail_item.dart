@@ -23,18 +23,19 @@ class _DetailItemState extends State<DetailItem> {
     _mainProductPict = (widget.product!.productPict.isNotEmpty)
         ? widget.product?.productPict[0].path ?? ""
         : "";
+    print(widget.product?.productPict[0].path);
   }
 
-  Future<Uint8List?> fetchImageBytes(String url) async {
-    final response = await http
-        .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
+  // Future<Uint8List?> fetchImageBytes(String url) async {
+  //   final response = await http
+  //       .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
 
-    if (response.statusCode == 200) {
-      return response.bodyBytes; // <-- Ini kembalian berupa Uint8List
-    } else {
-      return null;
-    }
-  }
+  //   if (response.statusCode == 200) {
+  //     return response.bodyBytes; // <-- Ini kembalian berupa Uint8List
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -73,30 +74,31 @@ class _DetailItemState extends State<DetailItem> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Container(
-                    width: MediaQuery.of(context).size.width * 0.86,
-                    height: MediaQuery.of(context).size.width * 0.86 * 0.75,
-                    color: Colors.white,
-                    child: (widget.product!.productPict.isEmpty ||
-                            _mainProductPict == "")
-                        ? Image.asset(
-                            'assets/images/bg.jpg',
-                            fit: BoxFit.cover,
-                          )
-                        : FutureBuilder<Uint8List?>(
-                            future: fetchImageBytes(_mainProductPict),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return CircularProgressIndicator();
-                              } else if (snapshot.hasData) {
-                                return Image.memory(
-                                    snapshot.data!); // <-- Tampilkan gambar
-                              } else {
-                                return Text("Gagal memuat gambar");
-                              }
-                            },
-                          ),
-                  ),
+                      width: MediaQuery.of(context).size.width * 0.86,
+                      height: MediaQuery.of(context).size.width * 0.86 * 0.75,
+                      color: Colors.white,
+                      child: (widget.product!.productPict.isEmpty ||
+                              _mainProductPict == "")
+                          ? Image.asset(
+                              'assets/images/bg.jpg',
+                              fit: BoxFit.cover,
+                            )
+                          : Image.network(_mainProductPict)
+                      // : FutureBuilder<Uint8List?>(
+                      //     future: fetchImageBytes(_mainProductPict),
+                      //     builder: (context, snapshot) {
+                      //       if (snapshot.connectionState ==
+                      //           ConnectionState.waiting) {
+                      //         return CircularProgressIndicator();
+                      //       } else if (snapshot.hasData) {
+                      //         return Image.memory(
+                      //             snapshot.data!); // <-- Tampilkan gambar
+                      //       } else {
+                      //         return Text("Gagal memuat gambar");
+                      //       }
+                      //     },
+                      //   ),
+                      ),
                 ),
               ),
               Padding(
@@ -112,56 +114,73 @@ class _DetailItemState extends State<DetailItem> {
                           child: Material(
                             color: Colors.transparent,
                             child: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  _mainProductPict =
-                                      (widget.product!.productPict.length <=
-                                              index)
-                                          ? ""
-                                          : widget.product?.productPict[index]
-                                                  .path ??
-                                              "";
-                                });
-                              },
-                              child: (widget.product!.productPict.length <=
-                                      index)
-                                  ? Ink.image(
-                                      image: AssetImage('assets/images/bg.jpg'),
-                                      width: MediaQuery.of(context).size.width *
-                                          0.86 *
-                                          0.2,
-                                      height:
-                                          MediaQuery.of(context).size.width *
-                                              0.86 *
-                                              0.2,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : FutureBuilder<Uint8List?>(
-                                      future: fetchImageBytes(widget.product!.productPict[index].path ?? ""),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return CircularProgressIndicator();
-                                        } else if (snapshot.hasData) {
-                                          return Image.memory(snapshot.data!,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.86 *
-                                                  0.2,
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.86 *
-                                                  0.2,
-                                              fit: BoxFit
-                                                  .cover); // <-- Tampilkan gambar
-                                        } else {
-                                          return Text("Gagal memuat gambar");
-                                        }
-                                      },
-                                    ),
-                            ),
+                                onTap: () {
+                                  setState(() {
+                                    _mainProductPict =
+                                        (widget.product!.productPict.length <=
+                                                index)
+                                            ? ""
+                                            : widget.product?.productPict[index]
+                                                    .path ??
+                                                "";
+                                  });
+                                },
+                                child: (widget.product!.productPict.length <=
+                                        index)
+                                    ? Ink.image(
+                                        image:
+                                            AssetImage('assets/images/bg.jpg'),
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.86 *
+                                                0.2,
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                0.86 *
+                                                0.2,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.network(
+                                        widget.product!.productPict[index]
+                                                .path ??
+                                            "",
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.86 *
+                                                0.2,
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                0.86 *
+                                                0.2,
+                                        fit: BoxFit.cover)
+                                // : FutureBuilder<Uint8List?>(
+                                //     future: fetchImageBytes(widget.product!
+                                //             .productPict[index].path ??
+                                //         ""),
+                                //     builder: (context, snapshot) {
+                                //       if (snapshot.connectionState ==
+                                //           ConnectionState.waiting) {
+                                //         return CircularProgressIndicator();
+                                //       } else if (snapshot.hasData) {
+                                //         return Image.memory(snapshot.data!,
+                                //             width: MediaQuery.of(context)
+                                //                     .size
+                                //                     .width *
+                                //                 0.86 *
+                                //                 0.2,
+                                //             height: MediaQuery.of(context)
+                                //                     .size
+                                //                     .width *
+                                //                 0.86 *
+                                //                 0.2,
+                                //             fit: BoxFit
+                                //                 .cover); // <-- Tampilkan gambar
+                                //       } else {
+                                //         return Text("Gagal memuat gambar");
+                                //       }
+                                //     },
+                                //   ),
+                                ),
                           )),
                     ),
                   ),
