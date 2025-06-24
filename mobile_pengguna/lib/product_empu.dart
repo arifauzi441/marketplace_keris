@@ -1,8 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile_pengguna/detail_product.dart';
 import 'package:mobile_pengguna/model/product_api.dart';
 import 'package:mobile_pengguna/model/user_api.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class ProductEmpu extends StatefulWidget {
   final UserApi? users;
@@ -24,14 +28,25 @@ class _ProductEmpuState extends State<ProductEmpu> {
 
   Future<void> fetchSellerProduct(String search) async {
     try {
-      var response =
-          await ProductApi.getProductbySeller(widget.users?.idSeller ?? 1);
+      var response = await ProductApi.getProductbySeller(
+          widget.users?.idSeller ?? 1, search);
       setState(() {
         sellerProduct = response;
       });
     } catch (e) {
       print("hai");
       print(e);
+    }
+  }
+
+  Future<Uint8List?> fetchImageBytes(String url) async {
+    final response = await http
+        .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
+
+    if (response.statusCode == 200) {
+      return response.bodyBytes; // <-- Ini kembalian berupa Uint8List
+    } else {
+      return null;
     }
   }
 
@@ -80,7 +95,9 @@ class _ProductEmpuState extends State<ProductEmpu> {
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding:
                                     EdgeInsets.symmetric(horizontal: 10)),
-                            onChanged: (value) => setState(() {}),
+                            onChanged: (value) => setState(() {
+                              fetchSellerProduct(value);
+                            }),
                           ),
                         ),
                       )
@@ -156,18 +173,31 @@ class _ProductEmpuState extends State<ProductEmpu> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(999),
                           child: Container(
-                              height: MediaQuery.of(context).size.width * 0.25,
-                              width: MediaQuery.of(context).size.width * 0.25,
-                              child: (widget.users?.sellerPhoto == null)
-                                  ? Image(
-                                      image: AssetImage('images/potrait.png'),
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image(
-                                      image: NetworkImage(
-                                          '$api/${widget.users?.sellerPhoto}'),
-                                      fit: BoxFit.cover,
-                                    )),
+                            height: MediaQuery.of(context).size.width * 0.25,
+                            width: MediaQuery.of(context).size.width * 0.25,
+                            child: (widget.users?.sellerPhoto == null)
+                                ? Image(
+                                    image: AssetImage('images/account.png'),
+                                    fit: BoxFit.cover,
+                                  )
+                                : FutureBuilder<Uint8List?>(
+                                    future: fetchImageBytes(
+                                        '$api/${widget.users?.sellerPhoto}'),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return CircularProgressIndicator();
+                                      } else if (snapshot.hasData) {
+                                        return Image.memory(
+                                          snapshot.data!,
+                                          fit: BoxFit.cover,
+                                        ); // <-- Tampilkan gambar
+                                      } else {
+                                        return Text("Gagal memuat gambar");
+                                      }
+                                    },
+                                  ),
+                          ),
                         ),
                       ],
                     ),
@@ -188,78 +218,82 @@ class _ProductEmpuState extends State<ProductEmpu> {
                     SizedBox(
                       height: 20,
                     ),
-                    GridView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 200,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            childAspectRatio: 0.6),
-                        itemCount: sellerProduct?.length ?? 1,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                    color: Color(0xFF2E6C25), width: 2)),
-                            padding: EdgeInsets.all(5),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                    flex: 5,
-                                    child: Container(
-                                      child: (sellerProduct?[index]
-                                                  .productPict
-                                                  .isEmpty ??
-                                              true)
-                                          ? Image(
-                                              image: AssetImage('images/2.png'),
+                    StaggeredGrid.extent(
+                      maxCrossAxisExtent: 200,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      children:
+                          List.generate(sellerProduct?.length ?? 1, (index) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border:
+                                Border.all(color: Color(0xFF2E6C25), width: 2),
+                          ),
+                          padding: EdgeInsets.all(5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 200,
+                                height: 150,
+                                child: (sellerProduct?[index]
+                                            .productPict
+                                            .isEmpty ??
+                                        true)
+                                    ? Image.asset('images/2.png',
+                                        fit: BoxFit.cover)
+                                    : FutureBuilder<Uint8List?>(
+                                        future: fetchImageBytes(
+                                            '${sellerProduct?[index].productPict[0].path}'),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return Center(
+                                                child:
+                                                    CircularProgressIndicator());
+                                          } else if (snapshot.hasData) {
+                                            return Image.memory(
+                                              snapshot.data!,
                                               fit: BoxFit.cover,
-                                            )
-                                          : Image(
-                                              image: NetworkImage(
-                                                  '${sellerProduct?[index].productPict[0].path}'),
-                                              fit: BoxFit.cover,
-                                              width: double.infinity,
-                                            ),
-                                    )),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                        "${sellerProduct?[index].productName}")),
-                                Text("${sellerProduct?[index].productPrice}"),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.5 *
-                                          0.5,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.04,
-                                      color: Color(0xFF53C737),
-                                      child: Material(
-                                        color: Colors.transparent,
-                                        child: InkWell(
-                                            onTap: () async {
+                                            );
+                                          } else {
+                                            return Text("Gagal memuat gambar");
+                                          }
+                                        },
+                                      ),
+                              ),
+                              SizedBox(height: 5),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("${sellerProduct?[index].productName}", style: TextStyle(fontSize: 16),),
+                                  Text("${sellerProduct?[index].productPrice}"),
+                                  SizedBox(height: 20),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Container(
+                                        width: 200,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.04,
+                                        color: Color(0xFF53C737),
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            onTap: () {
                                               Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          DetailProduct(
-                                                              product:
-                                                                  sellerProduct?[
-                                                                      index])));
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      DetailProduct(
+                                                          product:
+                                                              sellerProduct?[
+                                                                  index]),
+                                                ),
+                                              );
                                             },
                                             child: Center(
                                               child: Text(
@@ -267,15 +301,19 @@ class _ProductEmpuState extends State<ProductEmpu> {
                                                 style: TextStyle(
                                                     color: Colors.white),
                                               ),
-                                            )),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
-                        })
+                                ],
+                              )
+                            ],
+                          ),
+                        );
+                      }),
+                    )
                   ],
                 ),
               )

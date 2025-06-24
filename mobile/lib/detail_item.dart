@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/model/product_api.dart';
+import 'package:http/http.dart' as http;
 
 class DetailItem extends StatefulWidget {
   final String? token;
@@ -20,6 +23,17 @@ class _DetailItemState extends State<DetailItem> {
     _mainProductPict = (widget.product!.productPict.isNotEmpty)
         ? widget.product?.productPict[0].path ?? ""
         : "";
+  }
+
+  Future<Uint8List?> fetchImageBytes(String url) async {
+    final response = await http
+        .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
+
+    if (response.statusCode == 200) {
+      return response.bodyBytes; // <-- Ini kembalian berupa Uint8List
+    } else {
+      return null;
+    }
   }
 
   @override
@@ -68,9 +82,19 @@ class _DetailItemState extends State<DetailItem> {
                             'assets/images/bg.jpg',
                             fit: BoxFit.cover,
                           )
-                        : Image.network(
-                            _mainProductPict,
-                            fit: BoxFit.contain,
+                        : FutureBuilder<Uint8List?>(
+                            future: fetchImageBytes(_mainProductPict),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              } else if (snapshot.hasData) {
+                                return Image.memory(
+                                    snapshot.data!); // <-- Tampilkan gambar
+                              } else {
+                                return Text("Gagal memuat gambar");
+                              }
+                            },
                           ),
                   ),
                 ),
@@ -112,18 +136,30 @@ class _DetailItemState extends State<DetailItem> {
                                               0.2,
                                       fit: BoxFit.cover,
                                     )
-                                  : Ink.image(
-                                      image: NetworkImage(widget.product
-                                              ?.productPict[index].path ??
-                                          ""),
-                                      width: MediaQuery.of(context).size.width *
-                                          0.86 *
-                                          0.2,
-                                      height:
-                                          MediaQuery.of(context).size.width *
-                                              0.86 *
-                                              0.2,
-                                      fit: BoxFit.cover,
+                                  : FutureBuilder<Uint8List?>(
+                                      future: fetchImageBytes(widget.product!.productPict[index].path ?? ""),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return CircularProgressIndicator();
+                                        } else if (snapshot.hasData) {
+                                          return Image.memory(snapshot.data!,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.86 *
+                                                  0.2,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.86 *
+                                                  0.2,
+                                              fit: BoxFit
+                                                  .cover); // <-- Tampilkan gambar
+                                        } else {
+                                          return Text("Gagal memuat gambar");
+                                        }
+                                      },
                                     ),
                             ),
                           )),

@@ -9,24 +9,27 @@ import "../styles/toko.css";
 import heroImage from "../assets/Images/hero1.png";
 import productHeroImage from "../assets/Images/hero3.png";
 import logoImage from "../assets/Images/logo-keris.png";
+import defaultSellerPhoto from "../assets/Images/account.png"
+import sketsaKeris from "../assets/Images/keris-sketsa.png"
 
 const API_URL = import.meta.env.VITE_API_URL
 // Komponen EmpuCard
-const EmpuCard = ({ image, name, phone, id_seller }) => (
-  <Link to ={`/produk-empu/${id_seller}`}>
-  <div className="empu-card">
-    <img src={image} alt={name} className="empu-photo" />
-    <div className="empu-name">{name}</div>
-    <div className="empu-phone">{phone}</div>
-  </div>
-</Link>
-);
+const EmpuCard = ({ image, name, phone, id_seller }) => {
+  return (
+    <Link to={`/produk-empu/${id_seller}`}>
+      <div className="empu-card">
+        <img src={image} alt={name} className="empu-photo" />
+        <div className="empu-name">{name}</div>
+      </div>
+    </Link>
+  )
+};
 
 // Komponen ProdukCard - produk terbaru
 const ProdukCard = ({ image, name, price, id_product }) => (
   <div className="kartu-produk">
     <div className="gambar-produk">
-      <img src={image} alt={name} />
+      <img src={image == " " ? sketsaKeris : image} alt={name} />
     </div>
     <span className="nama-produk">{name}</span>
     <div className="harga-dan-beli">
@@ -40,9 +43,9 @@ const ProdukCard = ({ image, name, price, id_product }) => (
 
 const incrementClick = async (id_product) => {
   try {
-    let { msg } = await axios.get(`${API_URL}/product/increment-count/${id_product}`,{
+    let { msg } = await axios.get(`${API_URL}/product/increment-count/${id_product}`, {
       headers:
-        {'ngrok-skip-browser-warning': 'true'}
+        { 'ngrok-skip-browser-warning': 'true' }
     })
   } catch (error) {
     console.log(error)
@@ -50,20 +53,22 @@ const incrementClick = async (id_product) => {
 }
 
 // komponen ProductItem - produk terlaris
-const ProductItem = ({ image, name, price, id_product }) => (
-  <div className="product-item">
-    <div className="product-image-container">
-      <img src={image} alt={`Keris ${name}`} />
+const ProductItem = ({ image, name, price, id_product }) => {
+  return (
+    <div className="product-item">
+      <div className="product-image-container">
+        <img src={image == " " ? sketsaKeris : image} alt={`Keris ${name}`} />
+      </div>
+      <div className="product-item-content">
+        <span className="product-name">{name}</span>
+        <span className="product-price">{price}</span>
+        <Link to={`/detail-produk/${id_product}`} onClick={() => incrementClick(id_product)}>
+          <button className="buy-button">Beli</button>
+        </Link>
+      </div>
     </div>
-    <div className="product-item-content">
-      <span className="product-name">{name}</span>
-      <span className="product-price">{price}</span>
-      <Link to={`/detail-produk/${id_product}`} onClick={() => incrementClick(id_product)}>
-        <button className="buy-button">Beli</button>
-      </Link>
-    </div>
-  </div>
-);
+  )
+};
 
 export default function Tokokeris() {
   const [search, setSearch] = useState('')
@@ -88,23 +93,31 @@ export default function Tokokeris() {
             'ngrok-skip-browser-warning': 'true'
           }
         });
+
+        const productData = response?.data?.product || [];
+        // Generate image URLs
         const blobUrls = await Promise.all(
-          response.data.product.map(async (imageEndpoint) => {
-            if (imageEndpoint.ProductPicts.length > 0) {
-              const res = await axios.get(`${API_URL}/${imageEndpoint.ProductPicts[0].path}`, {
-                headers: {
-                  'ngrok-skip-browser-warning': 'true'
-                },
-                responseType: 'blob'
-              });
-              return URL.createObjectURL(res.data);
-            }else{
-              return " "
+          productData.map(async (item) => {
+            // Jika tidak ada path produk, return string kosong
+            const path = item?.productpicts?.[0]?.path;
+            if (path) {
+              try {
+                const res = await axios.get(`${API_URL}/${path}`, {
+                  responseType: 'blob'
+                });
+                return URL.createObjectURL(res.data);
+              } catch (err) {
+                console.error("Gagal mengambil gambar:", err);
+                return ""; // fallback jika gagal ambil gambar
+              }
             }
+            return ""; // fallback jika tidak ada path
           })
         );
-        setImageProduct(blobUrls)
-        setProducts(response.data.product);
+
+        setImageProduct(blobUrls);
+        setProducts(productData);
+
       } catch (error) {
         console.error("Gagal mengambil data product:", error);
       }
@@ -123,9 +136,7 @@ export default function Tokokeris() {
               return " "
             }
             const res = await axios.get(`${API_URL}/${imageEndpoint.seller_photo}`, {
-              headers: {
-                'ngrok-skip-browser-warning': 'true'
-              },
+
               responseType: 'blob'
             });
             return URL.createObjectURL(res.data);
@@ -144,19 +155,24 @@ export default function Tokokeris() {
             'ngrok-skip-browser-warning': 'true'
           }
         })
+        const productData = response?.data?.product || [];
+        // Generate image URLs
         const blobUrls = await Promise.all(
-          response.data.product.map(async (imageEndpoint) => {
-            if (imageEndpoint.ProductPicts.length > 0) {
-              const res = await axios.get(`${API_URL}/${imageEndpoint.ProductPicts[0].path}`, {
-                headers: {
-                  'ngrok-skip-browser-warning': 'true'
-                },
-                responseType: 'blob'
-              });
-              return URL.createObjectURL(res.data);
-            }else{
-              return " "
-            };
+          productData.map(async (item) => {
+            // Jika tidak ada path produk, return string kosong
+            const path = item?.productpicts?.[0]?.path;
+            if (path) {
+              try {
+                const res = await axios.get(`${API_URL}/${path}`, {
+                  responseType: 'blob'
+                });
+                return URL.createObjectURL(res.data);
+              } catch (err) {
+                console.error("Gagal mengambil gambar:", err);
+                return ""; // fallback jika gagal ambil gambar
+              }
+            }
+            return ""; // fallback jika tidak ada path
           })
         );
         setImagePopularProduct(blobUrls)
@@ -175,6 +191,13 @@ export default function Tokokeris() {
     setTimeout(() => {
       setSearch(s)
     }, 1000);
+  }
+
+  const formatRupiah = (amount) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR"
+    }).format(amount)
   }
 
   return (
@@ -205,7 +228,7 @@ export default function Tokokeris() {
             <li><a href="#">Profil</a></li>
             <li><a href="#">Berita</a></li>
             <li><a href="#">Arsip</a></li>
-            <li><a href="/toko-keris">Toko</a></li>
+            <li><a href="/">Toko</a></li>
             <li><a href="#">E-tour Guide</a></li>
           </ul>
         </nav>
@@ -253,9 +276,9 @@ export default function Tokokeris() {
           <p className="empu-title">Daftar Nama Empu</p>
           <div className="nav-arrows">
 
-          <Link to={"/daftar-empu"}>
-            <button className="see-more-btn">Selengkapnya</button>
-          </Link>
+            <Link to={"/daftar-empu"}>
+              <button className="see-more-btn">Selengkapnya</button>
+            </Link>
 
           </div>
         </div>
@@ -274,7 +297,7 @@ export default function Tokokeris() {
                 transition={{ delay: index * 0.1, duration: 0.5 }}
               >
                 <EmpuCard
-                  image={imageSellers[index]}
+                  image={(imageSellers[index] == " ") ? defaultSellerPhoto : imageSellers[index]}
                   name={empu.seller_name}
                   phone={empu.seller_phone}
                   id_seller={empu.id_seller}
@@ -288,49 +311,50 @@ export default function Tokokeris() {
       {/* Produk Terlaris */}
 
       <motion.div className="product-header"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h1 className="product-title">Paling Banyak Dilihat</h1>
-          <Link to={"/produk-terlaris"}>
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
+        <h1 className="product-title">Paling Banyak Dilihat</h1>
+        {/* <Link to={"/produk-terlaris"}>
             <button className="see-more-btn">Selengkapnya</button>
-          </Link>
-        </motion.div>
+          </Link> */}
+      </motion.div>
+
       <motion.section className="product-container">
+        <div className="product-hero"
+          style={{ backgroundImage: `url(${productHeroImage})` }}
+        >
+          <div className="product-subtitle">
+            <p>Simbol Keagungan dan Warisan Budaya</p>
+          </div>
+          <div>
+            <p className="product-description">
+              Miliki koleksi keris eksklusif dengan ukiran khas dan desain elegan.
+              Setiap bilah mencerminkan keindahan seni tradisional yang penuh makna.
+            </p>
+          </div>
+        </div>
+
         <motion.div className="product-grid"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.8 }}
         >
-          <div className="product-hero"
-            style={{ backgroundImage: `url(${productHeroImage})` }}
-          >
-            <div className="product-subtitle">
-              <p>Simbol Keagungan dan Warisan Budaya</p>
-            </div>
-            <div>
-              <p className="product-description">
-                Miliki koleksi keris eksklusif dengan ukiran khas dan desain elegan.
-              </p>
-            </div>
-          </div>
-
           {popularProducts && popularProducts.length >= 0 &&
             popularProducts.slice(0, 3).map((product, index) => (
               <Link to={`/detail-produk/${product.id_product}`}>
-                <ProductItem image={imagePopularProduct[index]} name={product?.product_name} price={product?.product_price} id_product={product?.id_product} />
+                <ProductItem image={imagePopularProduct[index]} name={product?.product_name} price={formatRupiah(product?.product_price)} id_product={product?.id_product} />
               </Link>)
             )
           }
-
         </motion.div>
       </motion.section>
 
       {/* Produk Terbaru */}
       <div className="judul-produk">Produk Terbaru</div>
       <motion.section className="produk-section">
-        
+
         <motion.div className="produk-grid"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -346,9 +370,9 @@ export default function Tokokeris() {
             ><Link to={`/detail-produk/${produk.id_product}`} onClick={() => incrementClick(produk.id_product)}>
                 <ProdukCard
                   id_product={produk.id_product}
-                  image={produk.ProductPicts.length > 0 ? imageProduct[index] : imageProduct[index]}
+                  image={produk.product && produk.product.length > 0 ? imageProduct[index] : imageProduct[index]}
                   name={produk.product_name}
-                  price={produk.product_price}
+                  price={formatRupiah(produk.product_price)}
                 />
               </Link>
             </motion.div>

@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize")
 const {db} = require("../config/db")
 const Admin = require("./Admin")
 
-const AdminVerificationCode = db.define("AdminVerificationCode", {
+const AdminVerificationCode = db.define("adminverificationcode", {
     id_verification_code : {
         type: DataTypes.INTEGER,
         autoIncrement: true,

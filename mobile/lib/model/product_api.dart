@@ -28,7 +28,7 @@ class ProductApi {
       required this.productPict});
 
   factory ProductApi.createProductApi(Map<String, dynamic> object) {
-    List<dynamic> temp = object['ProductPicts'] ?? [];
+    List<dynamic> temp = object['productpicts'] ?? [];
 
     return ProductApi(
         idProduct: object['id_product'],
@@ -54,6 +54,7 @@ class ProductApi {
     String apiUrl = '$api/product/store';
     var apiResult = http.MultipartRequest('POST', Uri.parse(apiUrl));
     apiResult.headers['Authorization'] = "Bearer $token";
+    apiResult.headers['ngrok-skip-browser-warning'] = 'true';
     apiResult.fields['product_name'] = name;
     apiResult.fields['product_price'] = price.toString();
     apiResult.fields['product_stock'] = stock.toString();
@@ -83,6 +84,7 @@ class ProductApi {
     String apiUrl = '$api/product/update/$idProduct';
     var apiResult = http.MultipartRequest('PATCH', Uri.parse(apiUrl));
     apiResult.headers['Authorization'] = 'Bearer $token';
+    apiResult.headers['ngrok-skip-browser-warning'] = 'true';
     apiResult.fields['id_product_pict'] = idProduct.toString();
     apiResult.fields['product_name'] = name;
     apiResult.fields['product_description'] = description;
@@ -97,17 +99,19 @@ class ProductApi {
             contentType: MediaType(mimeParts[0], mimeParts[1])));
       }
     }
-
     var productResult = await apiResult.send();
     var response = json.decode(await productResult.stream.bytesToString());
+    print(response);
     return {"msg": response['msg'], "status": productResult.statusCode};
   }
 
   static Future<Map<String, dynamic>> deleteProduct(
       int idProduct, String token) async {
     String apiURL = '$api/product/delete/$idProduct';
-    var apiResult =
-        await http.delete(Uri.parse(apiURL), headers: {"Authorization": token});
+    var apiResult = await http.delete(Uri.parse(apiURL), headers: {
+      "Authorization": token,
+      'ngrok-skip-browser-warning': 'true'
+    });
 
     var productResult = json.decode(apiResult.body);
     return {"msg": productResult['msg'], "status": apiResult.statusCode};
@@ -116,8 +120,10 @@ class ProductApi {
   static Future<Map<String, dynamic>> changeProductStatus(
       int idProduct, String token) async {
     String apiURL = '$api/product/change-status/$idProduct';
-    var apiResult =
-        await http.patch(Uri.parse(apiURL), headers: {"Authorization": token});
+    var apiResult = await http.patch(Uri.parse(apiURL), headers: {
+      "Authorization": token,
+      'ngrok-skip-browser-warning': 'true'
+    });
 
     var productResult = json.decode(apiResult.body);
     return {"msg": productResult['msg'], "status": apiResult.statusCode};

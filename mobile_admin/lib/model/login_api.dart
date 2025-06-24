@@ -17,8 +17,9 @@ class LoginApi {
   static Future<LoginApi> login(String username, String password) async {
     String apiURL = '$api/auth/login-admin';
 
-    var apiResult = await http
-        .post(Uri.parse(apiURL), body: {"username": username, "password": password});
+    var apiResult = await http.post(Uri.parse(apiURL),
+        body: {"username": username, "password": password},
+        headers: {'ngrok-skip-browser-warning': 'true'});
 
     var loginResult = json.decode(apiResult.body);
     return LoginApi.createLoginApi(loginResult);

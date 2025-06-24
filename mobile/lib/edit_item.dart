@@ -28,9 +28,10 @@ class _EditItemState extends State<EditItem> {
 
   Future<void> urlToFile(String imageUrl, int index) async {
     try {
-      print(imageUrl);
+      print("api " +imageUrl);
       final uri = Uri.parse(imageUrl);
-      final response = await http.get(uri);
+      final response =
+          await http.get(uri, headers: {'ngrok-skip-browser-warning': 'true'});
 
       if (response.statusCode != 200) {
         throw Exception('Gagal download gambar: ${response.statusCode}');
@@ -38,7 +39,8 @@ class _EditItemState extends State<EditItem> {
       print(response.bodyBytes.length);
 
       final tempDir = await getApplicationDocumentsDirectory();
-      final fileName = "product${widget.product?.idProduct}Photo${DateTime.now().millisecondsSinceEpoch}";
+      final fileName =
+          "product${widget.product?.idProduct}Photo${DateTime.now().millisecondsSinceEpoch}";
       final file = File('${tempDir.path}/$fileName.png');
 
       await file.writeAsBytes(response.bodyBytes);
@@ -208,14 +210,15 @@ class _EditItemState extends State<EditItem> {
                                                 _stockController.text,
                                                 _image,
                                                 widget.token.toString(),
-                                                widget.product!.idProduct ?? 999999);
+                                                widget.product!.idProduct ??
+                                                    999999);
                                         if (!mounted) return;
-        
+
                                         if (result['status'] == 200) {
                                           if (!mounted) return;
                                           Navigator.pop(context, true);
                                         }
-        
+
                                         setState(() {
                                           msg = result['msg'];
                                         });
@@ -312,7 +315,7 @@ class _EditItemState extends State<EditItem> {
               ],
             )
           : Center(
-            child: SizedBox(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.17 * 0.90,
                 height: MediaQuery.of(context).size.width * 0.17 * 0.90,
                 child: Stack(
@@ -340,7 +343,7 @@ class _EditItemState extends State<EditItem> {
                   ],
                 ),
               ),
-          ),
+            ),
     );
   }
 

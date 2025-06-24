@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize")
 const {db} = require("../config/db")
 const Seller = require("./SellerModel")
 
-const SellerVerificationCode = db.define("SellerVerificationCode", {
+const SellerVerificationCode = db.define("sellerverificationcode", {
     id_verification_code : {
         type: DataTypes.INTEGER,
         autoIncrement: true,

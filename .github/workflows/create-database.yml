@@ -1,0 +1,29 @@
+name: Run Create Database Command
+
+on:
+  push:
+    paths:
+      - 'backend/seeders/**'
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Run create db command
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Run Seeder Script on Remote Server via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            source /home/kera3676/nodevenv/toko/20/bin/activate && cd ${{ secrets.SSH_DIR }}
+            npm install
+            node seeders/seed.js

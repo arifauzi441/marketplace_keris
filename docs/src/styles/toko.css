@@ -260,18 +260,23 @@
 }
 
 .product-hero {
-  max-width: 525px;
+    width: 100%;
     background-size: cover;
     background-position: center;
     border-radius: 8px;
     padding: 2rem;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     border: 1px solid #eee;
-    height: 500px;
+    height: 300px;
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center; /* Tengah vertikal */
+    align-items: center;     /* Tengah horizontal */
+    text-align: center;      /* Tengah teks */
+    margin-bottom: 30px;
+    padding-left: 5rem;
+    padding-right: 5rem;
 }
 
 .product-hero::before {
@@ -286,14 +291,14 @@
 }
 
 .product-subtitle {
-    font-size: 30px;
+    font-size: 35px;
     font-weight: bold;
     color: white;
-    text-align: right;
-    margin-bottom: 0;
-    position: relative;
+    margin-bottom: 10px;
+    justify-content: center; /* Tengah vertikal */
+    align-items: center;     /* Tengah horizontal */
+    text-align: center;
     z-index: 1;
-    align-self: flex-end;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
@@ -301,10 +306,10 @@
     font-size: 18px;
     color: white;
     line-height: 1.6;
-    position: relative;
+    justify-content: center; /* Tengah vertikal */
+    align-items: center;     /* Tengah horizontal */
+    text-align: center;
     z-index: 1;
-    align-self: flex-start;
-    max-width: 70%;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
@@ -406,7 +411,10 @@
 
     /* PRODUK TERBARU */
     .produk-section {
-      padding: 0 5rem;
+      padding-top: 0;
+      padding-bottom: 0;
+      padding-left: 6rem;
+      padding-right: 4rem;
       margin: auto;
       margin-bottom: 5rem;
       width: 100%;
@@ -421,16 +429,23 @@
     }
 
     .produk-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 3.3rem;
+      margin: 0 auto;
     }    
 
     .produk-card {
       max-width: 260px;
+      height: 320px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
     }
 
     .kartu-produk {
+    max-width: 252px;
     border: 1px solid #ccc;
     border-radius: 10px;
     height: 320px; 

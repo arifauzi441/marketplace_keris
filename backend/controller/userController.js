@@ -39,6 +39,7 @@ const getAllUsers = async (req, res, next) => {
     try {
         let search = req.query.search || ""
         let sellerData = await Seller.findAll({
+            order: [["id_seller", "DESC"]],
             attributes: { exclude: ['password'] },
             where: {
                 [Op.or]: {
@@ -49,6 +50,7 @@ const getAllUsers = async (req, res, next) => {
             }
         });
         let adminData = await Admin.findAll({
+            order: [["id_admin", "DESC"]],
             where: {
                 [Op.or]: {
                     status: { [Op.like]: `%${search}%` },
@@ -69,6 +71,16 @@ const getAllUsers = async (req, res, next) => {
 const getUserById = async (req, res, next) => {
     try {
         let data = await Seller.findOne({ where: { id_seller: req.params.id } });
+        res.json({ msg: "Berhasil mengambil data", data })
+    } catch (error) {
+        console.log(error)
+        res.json({ msg: error })
+    }
+}
+
+const getAdminById = async (req, res, next) => {
+    try {
+        let data = await Admin.findOne({ where: { id_admin: req.user.id } });
         res.json({ msg: "Berhasil mengambil data", data })
     } catch (error) {
         console.log(error)
@@ -161,4 +173,18 @@ const changeStatus = async (req, res) => {
     }
 }
 
-module.exports = { getUserById, getUserWithProductById, getUsers, getAllUsers, updateUserById, changePassword, changeStatus }
+const saveToken = async (req, res) => {
+  try {
+    const { token, id_admin } = req.body;
+    console.log(id_admin)
+    await Admin.update({fcm_token: token}, { where: {id_admin}})
+    res.json({ status: 'success' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: 'error' });
+  }
+};
+
+
+
+module.exports = { saveToken, getAdminById, getUserById, getUserWithProductById, getUsers, getAllUsers, updateUserById, changePassword, changeStatus }

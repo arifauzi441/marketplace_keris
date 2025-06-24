@@ -34,45 +34,48 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: Center(
-          child: Column(
-            children: [
-              AutoSizeText(
-                "Selamat Datang di Keris Sumenep",
-                style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * 0.075,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF2E6C25)),
-                textAlign: TextAlign.center,
-                minFontSize: 20,
-                maxFontSize: 40,
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 50),
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.4 +
-                    MediaQuery.of(context).size.width * 0.1,
-                child: Column(
-                  children: [
-                    Expanded(
-                        flex: 4,
-                        child: Container(
-                          child: Image(
-                              image:
-                                  AssetImage('assets/images/logo-keris.png')),
-                        )),
-                    Expanded(
-                        flex: 3,
-                        child: Text(
-                          'Warisan keahlian menempa keris kini hadir di dunia digital. Jika Anda adalah seorang empu dari Desa Aengtongtong, Sumenep, kami mengundang Anda untuk bergabung dan memperkenalkan karya Anda kepada para pecinta keris.',
-                          textAlign: TextAlign.center,
-                        )),
-                  ],
+        padding: const EdgeInsets.fromLTRB(30.0, 50, 30, 0),
+        child: SafeArea(
+          child: Center(
+            child: Column(
+              children: [
+                AutoSizeText(
+                  "Selamat Datang di Keris Sumenep",
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.075,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF2E6C25)),
+                  textAlign: TextAlign.center,
+                  minFontSize: 20,
+                  maxFontSize: 40,
                 ),
-              )
-            ],
+                Container(
+                  margin: EdgeInsets.only(top: 50),
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.4 +
+                      MediaQuery.of(context).size.width * 0.1,
+                  child: Column(
+                    children: [
+                      Expanded(
+                          flex: 4,
+                          child: Container(
+                            child: Image(
+                                image:
+                                    AssetImage('assets/images/logo-keris.png')),
+                          )),
+                      Expanded(
+                          flex: 3,
+                          child: Text(
+                            'Warisan keahlian menempa keris kini hadir di dunia digital. Jika Anda adalah seorang empu dari Desa Aengtongtong, Sumenep, kami mengundang Anda untuk bergabung dan memperkenalkan karya Anda kepada para pecinta keris.',
+                            textAlign: TextAlign.center,
+                          )),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

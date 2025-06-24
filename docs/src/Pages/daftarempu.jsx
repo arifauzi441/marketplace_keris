@@ -7,6 +7,7 @@ import "../styles/detail.css";
 import "../styles/daftarempu.css"
 
 import logoImage from "../assets/Images/logo-keris.png";
+import defaultSellerPhoto from "../assets/Images/account.png"
 import empuImage from "../assets/Images/empu1.jpg"
 import axios from "axios";
 
@@ -20,16 +21,18 @@ export default function Tokokeris() {
 
     useEffect(() => {
         const fetchAllSeller = async () => {
-            const response = await axios.get(`${API_URL}/users/all-seller?search=${search}`)
+            const response = await axios.get(`${API_URL}/users/all-seller?search=${search}`, {
+                headers: {
+                    'ngrok-skip-browser-warning': 'true'
+                }
+            })
             setAllSeller(response.data.data)
 
+            let data = response?.data?.data
             const blobUrls = await Promise.all(
-                response.data.data.map(async seller => {
-                    if (!seller.seller_photo) return ""
-                    const response = await axios.get(`${API_URL}/${seller.seller_photo}`, {
-                        headers: {
-                            'ngrok-skip-browser-warning': 'true'
-                        },
+                data?.map(async seller => {
+                    if (!seller?.seller_photo) return ""
+                    const response = await axios.get(`${API_URL}/${seller?.seller_photo}`, {
                         responseType: 'blob'
                     })
                     return URL.createObjectURL(response.data)
@@ -51,7 +54,7 @@ export default function Tokokeris() {
 
     const dataEmpu = allSeller?.map((seller, index) => {
         return {
-            img: sellerImage[index],
+            img: (sellerImage[index] == "") ? defaultSellerPhoto : sellerImage[index],
             nama: seller.seller_name,
             kontak: seller.seller_phone,
             sellerId: seller.id_seller
@@ -86,7 +89,7 @@ export default function Tokokeris() {
                         <li><a href="#">Profil</a></li>
                         <li><a href="#">Berita</a></li>
                         <li><a href="#">Arsip</a></li>
-                        <li><a href="/toko-keris">Toko</a></li>
+                        <li><a href="/">Toko</a></li>
                         <li><a href="#">E-tour Guide</a></li>
                     </ul>
                 </nav>
@@ -102,7 +105,7 @@ export default function Tokokeris() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
             >
-                <Link to="/toko-keris">
+                <Link to="/">
                     <button className="btn-kembali">Kembali</button>
                 </Link>
             </motion.div>
@@ -123,7 +126,6 @@ export default function Tokokeris() {
                             <img src={empu.img} alt={empu.nama} className="foto-empu" />
                             <div className="daftar-info-empu">
                                 <h3 className="daftar-nama-empu">{empu.nama}</h3>
-                                <p className="daftar-kontak-empu">{empu.kontak}</p>
                                 <Link to={`/produk-empu/${empu.sellerId}`} className="link-produk">Lihat Produk</Link>
                             </div>
                         </div>

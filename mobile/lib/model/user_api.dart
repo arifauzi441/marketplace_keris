@@ -33,7 +33,7 @@ class UserApi {
     if (data == null) {
       throw Exception("Response tidak memiliki key 'data'");
     }
-    List<dynamic> temp = data['Products'] ?? [];
+    List<dynamic> temp = data['products'] ?? [];
 
     return UserApi(
         idSeller: data['id_seller'],
@@ -49,8 +49,10 @@ class UserApi {
 
   static Future<UserApi> getUser(String token) async {
     String apiURL = '$api/users/seller';
-    var apiResult = await http
-        .get(Uri.parse(apiURL), headers: {"Authorization": "Bearer $token"});
+    var apiResult = await http.get(Uri.parse(apiURL), headers: {
+      "Authorization": "Bearer $token",
+      'ngrok-skip-browser-warning': 'true'
+    });
     var userResult = json.decode(apiResult.body);
     return UserApi.createUserApi(userResult);
   }
@@ -59,7 +61,8 @@ class UserApi {
     try {
       String apiURL = '$api/auth/forgotPassword';
       var apiResult = await http.post(Uri.parse(apiURL),
-          body: {"role": "seller", "phone_number": sellerPhone});
+          body: {"role": "seller", "phone_number": sellerPhone},
+          headers: {'ngrok-skip-browser-warning': 'true'});
 
       var passResult = json.decode(apiResult.body);
 
@@ -81,6 +84,8 @@ class UserApi {
         "role": "seller",
         "phone_number": sellerPhone,
         "verification_code": codeVerification
+      }, headers: {
+        'ngrok-skip-browser-warning': 'true'
       });
 
       var passResult = json.decode(apiResult.body);
@@ -100,9 +105,13 @@ class UserApi {
       String token, String password, String confirmPassword) async {
     try {
       String apiURL = '$api/auth/changePassword';
-      var apiResult = await http.post(Uri.parse(apiURL),
-          body: {"password": password, "confirm_password": confirmPassword},
-          headers: {"Authorization": "Bearer $token"});
+      var apiResult = await http.post(Uri.parse(apiURL), body: {
+        "password": password,
+        "confirm_password": confirmPassword
+      }, headers: {
+        "Authorization": "Bearer $token",
+        'ngrok-skip-browser-warning': 'true'
+      });
 
       var passResult = json.decode(apiResult.body);
 
@@ -125,7 +134,8 @@ class UserApi {
         "newPasswordInput": newPass,
         "newPasswordInput2": newPass2
       }, headers: {
-        "Authorization": token
+        "Authorization": token,
+        'ngrok-skip-browser-warning': 'true'
       });
 
       var passResult = json.decode(apiResult.body);
@@ -142,6 +152,7 @@ class UserApi {
       String apiURL = '$api/users/update';
       var apiResult = http.MultipartRequest("PATCH", Uri.parse(apiURL));
       apiResult.headers["Authorization"] = 'Bearer $token';
+      apiResult.headers['ngrok-skip-browser-warning'] = 'true';
       apiResult.fields["seller_name"] = name;
       apiResult.fields["seller_address"] = address;
       apiResult.fields["seller_phone"] = phone;

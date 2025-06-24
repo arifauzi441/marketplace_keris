@@ -14,10 +14,15 @@ class RegisterApi {
     return RegisterApi(msg: object['msg'], statusCode: object['statusCode']);
   }
 
-  static Future<RegisterApi> register(username, password, sellerName, phone) async {
+  static Future<RegisterApi> register(
+      username, password, sellerName, phone) async {
     String apiURL = "$api/auth/register";
-    var apiResult = await http.post(Uri.parse(apiURL),
-        body: {"username": username, "password": password, "seller_phone": phone, "seller_name": sellerName});
+    var apiResult = await http.post(Uri.parse(apiURL), body: {
+      "username": username,
+      "password": password,
+      "seller_phone": phone,
+      "seller_name": sellerName
+    }, headers : {'ngrok-skip-browser-warning': 'true'});
 
     var registerResult = json.decode(apiResult.body);
 

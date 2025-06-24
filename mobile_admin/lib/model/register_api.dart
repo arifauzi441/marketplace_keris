@@ -22,6 +22,8 @@ class RegisterApi {
       "password": password,
       "admin_phone": phone,
       "admin_name": adminName
+    }, headers: {
+      'ngrok-skip-browser-warning': 'true'
     });
 
     var registerResult = json.decode(apiResult.body);

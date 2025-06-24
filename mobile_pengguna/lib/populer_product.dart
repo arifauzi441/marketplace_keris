@@ -1,8 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile_pengguna/detail_product.dart';
 import 'package:mobile_pengguna/model/product_api.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:http/http.dart' as http;
 
 class PopulerProduct extends StatefulWidget {
   const PopulerProduct({super.key});
@@ -30,6 +33,17 @@ class _PopulerProductState extends State<PopulerProduct> {
     } catch (e) {
       print("hai");
       print(e);
+    }
+  }
+
+  Future<Uint8List?> fetchImageBytes(String url) async {
+    final response = await http
+        .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
+
+    if (response.statusCode == 200) {
+      return response.bodyBytes; // <-- Ini kembalian berupa Uint8List
+    } else {
+      return null;
     }
   }
 
@@ -78,7 +92,9 @@ class _PopulerProductState extends State<PopulerProduct> {
                                     borderRadius: BorderRadius.circular(20)),
                                 contentPadding:
                                     EdgeInsets.symmetric(horizontal: 10)),
-                            onChanged: (value) => setState(() {}),
+                            onChanged: (value) => setState(() {
+                              fetchPopularProduct(value);
+                            }),
                           ),
                         ),
                       )
@@ -94,7 +110,8 @@ class _PopulerProductState extends State<PopulerProduct> {
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.5 * 0.5,
-                      height: MediaQuery.of(context).size.height * 0.04 + MediaQuery.of(context).size.width * 0.5 * 0.01,
+                      height: MediaQuery.of(context).size.height * 0.04 +
+                          MediaQuery.of(context).size.width * 0.5 * 0.01,
                       color: Color(0xFF53C737),
                       child: Material(
                         color: Colors.transparent,
@@ -219,11 +236,24 @@ class _PopulerProductState extends State<PopulerProduct> {
                                               image: AssetImage('images/2.png'),
                                               fit: BoxFit.cover,
                                             )
-                                          : Image(
-                                              image: NetworkImage(
+                                          : FutureBuilder<Uint8List?>(
+                                              future: fetchImageBytes(
                                                   '${popularProduct?[index].productPict[0].path}'),
-                                              fit: BoxFit.cover,
-                                              width: double.infinity,
+                                              builder: (context, snapshot) {
+                                                if (snapshot.connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return CircularProgressIndicator();
+                                                } else if (snapshot.hasData) {
+                                                  return Image.memory(
+                                                    snapshot.data!,
+                                                    fit: BoxFit.cover,
+                                                    width: double.infinity,
+                                                  ); // <-- Tampilkan gambar
+                                                } else {
+                                                  return Text(
+                                                      "Gagal memuat gambar");
+                                                }
+                                              },
                                             ),
                                     )),
                                 SizedBox(

@@ -42,7 +42,7 @@ const getActiveProduct = async (req, res, next) => {
             },
             include: [
                 { model: ProductPict },
-                { model: Seller, attributes: ['seller_name','seller_phone','seller_photo'] }
+                { model: Seller, where: {status: "diterima"}, attributes: ['seller_name','seller_phone','seller_photo'] }
             ]
         })
         res.status(200).json({ product })
@@ -73,7 +73,7 @@ const getProductById = async (req, res, next) => {
             where: { id_product: req.params.id },
             include: [
                 { model: ProductPict },
-                { model: Seller, attributes: ['seller_name','seller_phone'] }
+                { model: Seller, attributes: ['seller_name','seller_phone','seller_photo'] }
             ]
         })
 
@@ -98,7 +98,7 @@ const getPopularProductByCounts = async (req, res, next) => {
             order: [['click_counts', 'DESC']],
             include: [
                 { model: ProductPict },
-                { model: Seller, attributes: ['seller_name','seller_phone','seller_photo'] }
+                { model: Seller, where: {status: "diterima"}, attributes: ['seller_name','seller_phone','seller_photo'] }
             ]
         })
 
@@ -142,9 +142,9 @@ const updateProduct = async (req, res, next) => {
         })
 
         let oldPictId = []
-        if (data.ProductPicts.length > 0) {
-            oldPictId = data.ProductPicts.map(pict => pict.id_product_pict)
-            data.ProductPicts.forEach(pict => {
+        if (data.productpicts.length > 0) {
+            oldPictId = data.productpicts.map(pict => pict.id_product_pict)
+            data.productpicts.forEach(pict => {
                 let oldPath = path.join(__dirname, '../public', pict.path)
                 fs.unlinkSync(oldPath)
             })

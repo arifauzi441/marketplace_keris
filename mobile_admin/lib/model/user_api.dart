@@ -17,6 +17,7 @@ class UserApi {
   String? photo;
   String? phone;
   String? status;
+  DateTime? createdAt;
 
   UserApi({
     required this.idSeller,
@@ -28,6 +29,7 @@ class UserApi {
     required this.phone,
     required this.photo,
     required this.status,
+    required this.createdAt,
   });
 
   factory UserApi.createUserApi(Map<String, dynamic> object) {
@@ -43,6 +45,7 @@ class UserApi {
         phone: data['admin_phone'],
         photo: data['admin_photo'],
         status: data['status'],
+        createdAt: DateTime.parse(data['createdAt']),
       );
     }
 
@@ -56,22 +59,27 @@ class UserApi {
       phone: data['seller_phone'],
       photo: data['seller_photo'],
       status: data['status'],
+      createdAt: DateTime.parse(data['createdAt']),
     );
   }
 
   static Future<UserApi> getUser(String token) async {
     String apiURL = '$api/users/admin';
-    var apiResult = await http
-        .get(Uri.parse(apiURL), headers: {"Authorization": "Bearer $token"});
+    var apiResult = await http.get(Uri.parse(apiURL), headers: {
+      "Authorization": "Bearer $token",
+      'ngrok-skip-browser-warning': 'true'
+    });
     var userResult = json.decode(apiResult.body);
-    return UserApi.createUserApi(userResult);
+    print(userResult);
+    return UserApi.createUserApi(userResult['data']);
   }
 
   static Future<Map<String, dynamic>> forgotPassword(String adminPhone) async {
     try {
       String apiURL = '$api/auth/forgotPassword';
       var apiResult = await http.post(Uri.parse(apiURL),
-          body: {"role": "admin", "phone_number": adminPhone});
+          body: {"role": "admin", "phone_number": adminPhone},
+          headers: {'ngrok-skip-browser-warning': 'true'});
 
       var passResult = json.decode(apiResult.body);
 
@@ -93,6 +101,8 @@ class UserApi {
         "role": "admin",
         "phone_number": adminPhone,
         "verification_code": codeVerification
+      }, headers: {
+        'ngrok-skip-browser-warning': 'true'
       });
 
       var passResult = json.decode(apiResult.body);
@@ -112,9 +122,13 @@ class UserApi {
       String token, String password, String confirmPassword) async {
     try {
       String apiURL = '$api/auth/changePassword';
-      var apiResult = await http.post(Uri.parse(apiURL),
-          body: {"password": password, "confirm_password": confirmPassword},
-          headers: {"Authorization": "Bearer $token"});
+      var apiResult = await http.post(Uri.parse(apiURL), body: {
+        "password": password,
+        "confirm_password": confirmPassword
+      }, headers: {
+        "Authorization": "Bearer $token",
+        'ngrok-skip-browser-warning': 'true'
+      });
 
       var passResult = json.decode(apiResult.body);
 
@@ -132,7 +146,10 @@ class UserApi {
     String apiURL = '$api/users/all-users?search=$search';
     var apiResult = await http.get(
       Uri.parse(apiURL),
-      headers: {"Authorization": "Bearer $token"},
+      headers: {
+        "Authorization": "Bearer $token",
+        'ngrok-skip-browser-warning': 'true'
+      },
     );
     var userResult = json.decode(apiResult.body);
 
@@ -146,8 +163,10 @@ class UserApi {
   static Future<Map<String, dynamic>> changeStatus(
       String token, String role, int id) async {
     String apiUrl = '$api/users/change-status/$role/$id';
-    var apiResult =
-        await http.get(Uri.parse(apiUrl), headers: {"Authorization": token});
+    var apiResult = await http.get(Uri.parse(apiUrl), headers: {
+      "Authorization": token,
+      'ngrok-skip-browser-warning': 'true'
+    });
 
     var statusResult = json.decode(apiResult.body);
     return {"msg": statusResult['msg'], 'status': apiResult.statusCode};
@@ -162,7 +181,8 @@ class UserApi {
         "newPasswordInput": newPass,
         "newPasswordInput2": newPass2
       }, headers: {
-        "Authorization": token
+        "Authorization": token,
+        'ngrok-skip-browser-warning': 'true'
       });
 
       var passResult = json.decode(apiResult.body);

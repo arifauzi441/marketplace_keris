@@ -7,6 +7,13 @@ const SellerVerificationCode = require("../model/SellerVerificationCode")
 const twilio = require("twilio")
 const { default: axios } = require("axios")
 const qs = require('querystring');
+const admin = require('firebase-admin');
+
+const serviceAccount = require('../marketplace-keris-firebase-adminsdk-fbsvc-ddea34fe93.json');
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+});
 
 const client = twilio(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN)
 
@@ -27,6 +34,24 @@ const register = async (req, res, next) => {
         let data = { seller_phone, password, username, seller_name, status: "belum diterima" }
 
         await Seller.create(data, { fields: ["seller_phone", "password", "seller_name", "username", "status"] })
+
+        const admins = await Admin.findAll({ attributes: ['fcm_token'] })
+
+        const tokens = admins.map(a => a.fcm_token).filter(t => t);
+
+        if (tokens.length > 0) {
+            const message = {
+                notification: {
+                    title: "Seller Baru",
+                    body: `Seller ${seller_name} baru saja mendaftar.`,
+                },
+                tokens: tokens,
+            };
+
+            const response = await admin.messaging().sendEachForMulticast(message);
+            console.log('Notifikasi terkirim:', response.successCount);
+        }
+
         res.status(201).json({ msg: "Berhasil melakukan registrasi, menunggu konfirmasi" })
     } catch (error) {
         console.log(error)
@@ -121,23 +146,22 @@ const forgotPassword = async (req, res) => {
                     ' ' + expired_at.toLocaleTimeString('id-ID', { hour12: false }).replace(/\./g, ':')
             })
             let global_phone_number = (phone_number.startsWith('0')) ? `62` + phone_number.slice(1) : phone_number
-            const payload = qs.stringify({
-                userkey: process.env.ZANZIVA_USER_KEY,
-                passkey: process.env.ZANZIVA_PASS_KEY,
-                to: global_phone_number,
-                brand: "(Marketplace Keris)",
-                otp: codeVerification.dataValues.verification_code
-            });
-
-            const response = await axios.post('https://console.zenziva.net/waofficial/api/sendWAOfficial/', payload, {
+            const response = await axios({
+                method: 'post',
+                url: 'https://api.fonnte.com/send',
                 headers: {
-                    'Content-Type': "application/x-www-form-urlencoded"
+                    Authorization: process.env.API_KEY
+                },
+                data: {
+                    target: global_phone_number,
+                    message: `Kode OTP kamu adalah: ${codeVerification.dataValues.verification_code}`,
+                    countryCode: '62',
                 }
-            })
+            });
             if (response.data.status) {
-                return res.status(200).json({ message: 'WA OTP sent successfully' });
+                return res.status(200).json({ msg: 'WA OTP sent successfully' });
             } else {
-                return res.status(500).json({ error: 'Failed to send WA OTP', details: response.data.status });
+                return res.status(500).json({ msg: 'Failed to send WA OTP', details: response.data });
             }
 
         } else {
@@ -155,23 +179,22 @@ const forgotPassword = async (req, res) => {
             })
 
             let global_phone_number = (phone_number.startsWith('0')) ? `62` + phone_number.slice(1) : phone_number
-            const payload = qs.stringify({
-                userkey: process.env.ZANZIVA_USER_KEY,
-                passkey: process.env.ZANZIVA_PASS_KEY,
-                to: global_phone_number,
-                brand: "(Marketplace Keris)",
-                otp: codeVerification.dataValues.verification_code
-            });
-
-            const response = await axios.post('https://console.zenziva.net/waofficial/api/sendWAOfficial/', payload, {
+            const response = await axios({
+                method: 'post',
+                url: 'https://api.fonnte.com/send',
                 headers: {
-                    'Content-Type': "application/x-www-form-urlencoded"
+                    Authorization: process.env.API_KEY
+                },
+                data: {
+                    target: global_phone_number,
+                    message: `Kode OTP kamu adalah: ${codeVerification.dataValues.verification_code}`,
+                    countryCode: '62',
                 }
-            })
+            });
             if (response.data.status) {
-                return res.status(200).json({ message: 'WA OTP sent successfully' });
+                return res.status(200).json({ msg: 'WA OTP sent successfully' });
             } else {
-                return res.status(500).json({ error: 'Failed to send WA OTP', details: response.data.status });
+                return res.status(500).json({ msg: 'Failed to send WA OTP', details: response.data });
             }
         }
 
@@ -184,7 +207,6 @@ const forgotPassword = async (req, res) => {
 const verifyCode = async (req, res) => {
     try {
         let { phone_number, role, verification_code } = req.body
-        console.log(req.body)
         let nowDate = new Date()
 
         if (role == "admin") {
@@ -203,7 +225,7 @@ const verifyCode = async (req, res) => {
 
             if (!data) return res.status(401).json({ msg: "kode verifikasi salah" })
             if (nowDate >= data.AdminVerificationCode.expired_at) return res.status(401).json({ msg: "expired code" })
-
+            
             let token = jwt.sign({
                 adminId: data.id_admin
             }, process.env.JWT_SECRET, { expiresIn: '5m' })
@@ -223,6 +245,8 @@ const verifyCode = async (req, res) => {
                 required: true
             }
         })
+        console.log(nowDate)
+        console.log(data.SellerVerificationCode.expired_at)
 
         if (!data) return res.status(401).json({ msg: "kode verifikasi salah" })
         if (nowDate >= data.SellerVerificationCode.expired_at) return res.status(401).json({ msg: "expired code" })

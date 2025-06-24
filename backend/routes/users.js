@@ -1,7 +1,13 @@
 var express = require('express');
 var router = express.Router();
 const verifyToken = require(`../config/middleware/jwt`)
-const {getUserWithProductById, updateUserById, getUsers, getAllUsers, changePassword, changeStatus} = require(`../controller/userController`) 
+const {saveToken, 
+    getUserWithProductById, 
+    updateUserById, 
+    getUsers, 
+    getAllUsers, 
+    changePassword, 
+    changeStatus, getAdminById} = require(`../controller/userController`) 
 const multer = require("multer") 
 
 const storage = multer.diskStorage({
@@ -9,7 +15,7 @@ const storage = multer.diskStorage({
         cb(null, "public/images/user_images")
     },
     filename: (req, file, cb) => {
-        cb(null, `${Date.now()} - ${file.originalname}`)
+        cb(null, `${Date.now()}`)
     }
 })
 
@@ -29,6 +35,8 @@ router.get('/', function(req, res, next) {
 router.get('/all-seller', getUsers);
 router.get('/all-users', getAllUsers);
 router.get('/change-status/:role/:id', verifyToken, changeStatus);
+router.post('/admin/save-token', saveToken)
+router.get('/admin', verifyToken, getAdminById);
 router.get('/seller', verifyToken, getUserWithProductById);
 router.patch('/change-password', verifyToken, changePassword);
 router.patch('/update', verifyToken, upload.single('path'), updateUserById);
