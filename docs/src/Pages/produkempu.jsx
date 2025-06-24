@@ -34,7 +34,7 @@ export default function Tokokeris() {
       } else {
         setSellerImage("")
       }
-
+      console.log(response.data.product)
       const blobUrls = await Promise.all(
         response.data?.product?.Products?.map(async (product) => {
           const response = await axios.get(`${API_URL}/${product?.ProductPicts?.[0]?.path}`, {
