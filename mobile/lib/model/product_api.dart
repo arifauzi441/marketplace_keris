@@ -28,7 +28,7 @@ class ProductApi {
       required this.productPict});
 
   factory ProductApi.createProductApi(Map<String, dynamic> object) {
-    List<dynamic> temp = object['ProductPicts'] ?? [];
+    List<dynamic> temp = object['productpicts'] ?? [];
 
     return ProductApi(
         idProduct: object['id_product'],
@@ -99,9 +99,9 @@ class ProductApi {
             contentType: MediaType(mimeParts[0], mimeParts[1])));
       }
     }
-
     var productResult = await apiResult.send();
     var response = json.decode(await productResult.stream.bytesToString());
+    print(response);
     return {"msg": response['msg'], "status": productResult.statusCode};
   }
 

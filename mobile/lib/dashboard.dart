@@ -48,16 +48,14 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
-  Future<Uint8List?> fetchImageBytes(String url) async {
-    final response = await http
-        .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
-
-    if (response.statusCode == 200) {
-      return response.bodyBytes; // <-- Ini kembalian berupa Uint8List
-    } else {
-      return null;
-    }
-  }
+  // Future<Uint8List?> fetchImageBytes(String url) async {
+  //   final response = await http.get(Uri.parse(url));
+  //   if (response.statusCode == 200) {
+  //     return response.bodyBytes; // <-- Ini kembalian berupa Uint8List
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   Widget _buildProductList() {
     if (user == null) {
@@ -107,24 +105,28 @@ class _DashboardState extends State<Dashboard> {
                                       height: 40.0,
                                       fit: BoxFit.cover,
                                     )
-                                  : FutureBuilder<Uint8List?>(
-                                      future: fetchImageBytes(
-                                          "$api/${user?.sellerPhoto}"),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return CircularProgressIndicator();
-                                        } else if (snapshot.hasData) {
-                                          return Image.memory(snapshot.data!,
-                                              width: 40.0,
-                                              height: 40.0,
-                                              fit: BoxFit
-                                                  .cover); // <-- Tampilkan gambar
-                                        } else {
-                                          return Text("Gagal memuat gambar");
-                                        }
-                                      },
-                                    ),
+                                  : Image.network("$api/${user?.sellerPhoto}",
+                                      width: 40.0,
+                                      height: 40.0,
+                                      fit: BoxFit.cover),
+                              // : FutureBuilder<Uint8List?>(
+                              //     future: fetchImageBytes(
+                              //         "$api/${user?.sellerPhoto}"),
+                              //     builder: (context, snapshot) {
+                              //       if (snapshot.connectionState ==
+                              //           ConnectionState.waiting) {
+                              //         return CircularProgressIndicator();
+                              //       } else if (snapshot.hasData) {
+                              //         return Image.memory(snapshot.data!,
+                              //             width: 40.0,
+                              //             height: 40.0,
+                              //             fit: BoxFit
+                              //                 .cover); // <-- Tampilkan gambar
+                              //       } else {
+                              //         return Text("Gagal memuat gambar");
+                              //       }
+                              //     },
+                              //   ),
                             ),
                           ),
                         ],
@@ -406,25 +408,29 @@ class _DashboardState extends State<Dashboard> {
                                         height: 40.0,
                                         fit: BoxFit.cover,
                                       )
-                                    : FutureBuilder<Uint8List?>(
-                                        future: fetchImageBytes(
-                                            '$api/${user?.sellerPhoto}'),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return CircularProgressIndicator();
-                                          } else if (snapshot.hasData) {
-                                            return Image.memory(
-                                              snapshot.data!,
-                                              width: 40.0,
-                                              height: 40.0,
-                                              fit: BoxFit.cover,
-                                            ); // <-- Tampilkan gambar
-                                          } else {
-                                            return Text("Gagal memuat gambar");
-                                          }
-                                        },
-                                      ),
+                                    : Image.network("$api/${user?.sellerPhoto}",
+                                        width: 40.0,
+                                        height: 40.0,
+                                        fit: BoxFit.cover),
+                                // : FutureBuilder<Uint8List?>(
+                                //     future: fetchImageBytes(
+                                //         '$api/${user?.sellerPhoto}'),
+                                //     builder: (context, snapshot) {
+                                //       if (snapshot.connectionState ==
+                                //           ConnectionState.waiting) {
+                                //         return CircularProgressIndicator();
+                                //       } else if (snapshot.hasData) {
+                                //         return Image.memory(
+                                //           snapshot.data!,
+                                //           width: 40.0,
+                                //           height: 40.0,
+                                //           fit: BoxFit.cover,
+                                //         ); // <-- Tampilkan gambar
+                                //       } else {
+                                //         return Text("Gagal memuat gambar");
+                                //       }
+                                //     },
+                                //   ),
                               ),
                             ),
                           ],
@@ -450,7 +456,6 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   ),
                 ),
-            
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: MasonryGridView.extent(
@@ -495,14 +500,15 @@ class _DashboardState extends State<Dashboard> {
                                         borderRadius: BorderRadius.circular(10),
                                         child: Container(
                                           width: 100,
-                                          height:
-                                              MediaQuery.of(context).size.height *
-                                                  0.04,
-                                          color:
-                                              (user?.product[index].productStatus ==
-                                                      'aktif')
-                                                  ? Color(0xFFFF3636)
-                                                  : Color(0xFF53c737),
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.04,
+                                          color: (user?.product[index]
+                                                      .productStatus ==
+                                                  'aktif')
+                                              ? Color(0xFFFF3636)
+                                              : Color(0xFF53c737),
                                           child: Material(
                                             color: Colors.transparent,
                                             child: InkWell(
@@ -514,7 +520,8 @@ class _DashboardState extends State<Dashboard> {
                                                                   .idProduct ??
                                                               0,
                                                           token ?? "");
-                                                  if (response['status'] == 200) {
+                                                  if (response['status'] ==
+                                                      200) {
                                                     fetchUser();
                                                   }
                                                   print(response);
@@ -544,34 +551,39 @@ class _DashboardState extends State<Dashboard> {
                               Container(
                                 width: double.infinity,
                                 height: 150,
-                                child: (user?.product[index].productPict
-                                            .isEmpty ??
-                                        true)
-                                    ? Image.asset(
-                                        'assets/images/keris-sketsa.png',
-                                        fit: BoxFit.cover)
-                                    : FutureBuilder<Uint8List?>(
-                                        future: fetchImageBytes(user
-                                                ?.product[index]
-                                                .productPict[0]
-                                                .path ??
-                                            ""),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return Center(
-                                                child:
-                                                    CircularProgressIndicator());
-                                          } else if (snapshot.hasData) {
-                                            return Image.memory(
-                                              snapshot.data!,
-                                              fit: BoxFit.cover,
-                                            );
-                                          } else {
-                                            return Text("Gagal memuat gambar");
-                                          }
-                                        },
-                                      ),
+                                child:
+                                    (user?.product[index].productPict.isEmpty ??
+                                            true)
+                                        ? Image.asset(
+                                            'assets/images/keris-sketsa.png',
+                                            fit: BoxFit.cover)
+                                        : Image.network(
+                                            user?.product[index].productPict[0]
+                                                    .path ??
+                                                "",
+                                            fit: BoxFit.cover),
+                                // : FutureBuilder<Uint8List?>(
+                                //     future: fetchImageBytes(user
+                                //             ?.product[index]
+                                //             .productPict[0]
+                                //             .path ??
+                                //         ""),
+                                //     builder: (context, snapshot) {
+                                //       if (snapshot.connectionState ==
+                                //           ConnectionState.waiting) {
+                                //         return Center(
+                                //             child:
+                                //                 CircularProgressIndicator());
+                                //       } else if (snapshot.hasData) {
+                                //         return Image.memory(
+                                //           snapshot.data!,
+                                //           fit: BoxFit.cover,
+                                //         );
+                                //       } else {
+                                //         return Text("Gagal memuat gambar");
+                                //       }
+                                //     },
+                                //   ),
                               ),
                               SizedBox(height: 5),
                               Text(
@@ -579,10 +591,12 @@ class _DashboardState extends State<Dashboard> {
                                 style: TextStyle(fontSize: 16),
                               ),
                               Text(user?.product[index].productPrice ?? ""),
-                              Text("stock: ${user?.product[index].productStock}"),
+                              Text(
+                                  "stock: ${user?.product[index].productStock}"),
                               SizedBox(height: 10),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Align(
                                     alignment: Alignment.centerRight,
@@ -603,7 +617,8 @@ class _DashboardState extends State<Dashboard> {
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           EditItem(
-                                                              token: token ?? "",
+                                                              token:
+                                                                  token ?? "",
                                                               product:
                                                                   user?.product[
                                                                       index])));

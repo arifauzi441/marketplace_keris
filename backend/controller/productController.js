@@ -142,9 +142,9 @@ const updateProduct = async (req, res, next) => {
         })
 
         let oldPictId = []
-        if (data.ProductPicts.length > 0) {
-            oldPictId = data.ProductPicts.map(pict => pict.id_product_pict)
-            data.ProductPicts.forEach(pict => {
+        if (data.productpicts.length > 0) {
+            oldPictId = data.productpicts.map(pict => pict.id_product_pict)
+            data.productpicts.forEach(pict => {
                 let oldPath = path.join(__dirname, '../public', pict.path)
                 fs.unlinkSync(oldPath)
             })
