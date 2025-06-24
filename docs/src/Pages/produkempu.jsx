@@ -28,9 +28,6 @@ export default function Tokokeris() {
 
       if (response.data.product.seller_photo) {
         const blobUrlSeller = await axios.get(`${API_URL}/${response.data.product.seller_photo}`, {
-          headers: {
-            'ngrok-skip-browser-warning': 'true'
-          },
           responseType: 'blob'
         })
         setSellerImage(URL.createObjectURL(blobUrlSeller.data))
@@ -41,9 +38,6 @@ export default function Tokokeris() {
       const blobUrls = await Promise.all(
         response.data.product?.Products.map(async (product) => {
           const response = await axios.get(`${API_URL}/${product.ProductPicts[0].path}`, {
-            headers: {
-              'ngrok-skip-browser-warning': 'true'
-            },
             responseType: 'blob'
           })
           return URL.createObjectURL(response.data)
