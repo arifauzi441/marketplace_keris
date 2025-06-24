@@ -162,13 +162,14 @@ class UserApi {
         apiResult.files.add(await http.MultipartFile.fromPath('path', path.path,
             contentType: MediaType(mimeParts[0], mimeParts[1])));
       }
-      
+
       var response = await apiResult.send();
+      print(response.statusCode);
       var userResult = json.decode(await response.stream.bytesToString());
-      print(userResult);
       return {"msg": userResult['msg'], "status": response.statusCode};
     } catch (e) {
-      return {"msg": e};
+      print(e.toString());
+      return {"msg": e.toString()};
     }
   }
 }

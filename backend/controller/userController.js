@@ -125,10 +125,10 @@ const updateUserById = async (req, res, next) => {
                 where:
                     { id_seller: req.user.id }
             });
-        res.json({ msg: "Berhasil memperbarui data" })
+        res.status(200).json({ msg: "Berhasil memperbarui data" })
     } catch (error) {
         console.log(error)
-        res.json({ msg: "gagal memperbarui data" })
+        res.status(401).json({ msg: ' ' + error })
     }
 }
 

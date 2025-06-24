@@ -169,10 +169,7 @@ class _EditProfilState extends State<EditProfil> {
                                           msg = result['msg'];
                                         });
                                       } catch (e) {
-                                        setState(() {
-                                          msg = e.toString();
-                                        });
-                                        print(e);
+                                        print("hai bro" + e.toString());
                                       }
                                     },
                                     child: Center(
