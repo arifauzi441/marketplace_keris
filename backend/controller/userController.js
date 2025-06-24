@@ -128,7 +128,7 @@ const updateUserById = async (req, res, next) => {
         res.json({ msg: "Berhasil memperbarui data" })
     } catch (error) {
         console.log(error)
-        res.json({ msg: error.message })
+        res.json({ msg: "gagal memperbarui data" })
     }
 }
 
