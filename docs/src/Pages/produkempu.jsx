@@ -166,7 +166,7 @@ export default function Tokokeris() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.6 }}
         >
-          {produkData.map((produk, index) => (
+          {produkData?.map((produk, index) => (
             <motion.div
               className="produk-card"
               key={index}
