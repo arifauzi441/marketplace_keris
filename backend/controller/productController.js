@@ -176,7 +176,7 @@ const updateProduct = async (req, res, next) => {
     } catch (error) {
         await t.rollback()
         console.log(error)
-        res.status(401).json({ msg: "Gagal memperbarui data" })
+        res.status(401).json({ msg: "Gagal memperbarui data" + error })
     }
 }
 
@@ -195,7 +195,7 @@ const deleteProduct = async (req, res, next) => {
         return res.status(200).json({ msg: "Berhasil menghapus data" })
     } catch (error) {
         console.log(error)
-        return res.status(401).json({ msg: "Gagal menghapus data" })
+        return res.status(401).json({ msg: "Gagal menghapus data" + error })
     }
 }
 
