@@ -2,9 +2,9 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:mobile_pengguna/detail_product.dart';
-import 'package:mobile_pengguna/model/product_api.dart';
-import 'package:mobile_pengguna/model/user_api.dart';
+import 'package:flutter_application_mobile/detail_product.dart';
+import 'package:flutter_application_mobile/model/product_api.dart';
+import 'package:flutter_application_mobile/model/user_api.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 

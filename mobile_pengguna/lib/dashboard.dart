@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
-import 'package:mobile_pengguna/daftar_empu.dart';
-import 'package:mobile_pengguna/detail_product.dart';
-import 'package:mobile_pengguna/model/product_api.dart';
-import 'package:mobile_pengguna/model/user_api.dart';
-import 'package:mobile_pengguna/product_empu.dart';
+import 'package:flutter_application_mobile/daftar_empu.dart';
+import 'package:flutter_application_mobile/detail_product.dart';
+import 'package:flutter_application_mobile/model/product_api.dart';
+import 'package:flutter_application_mobile/model/user_api.dart';
+import 'package:flutter_application_mobile/product_empu.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class Dashboard extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:mobile_pengguna/splash_screen.dart';
+import 'package:flutter_application_mobile/splash_screen.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: 'assets/.env');
