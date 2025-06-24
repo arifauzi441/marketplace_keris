@@ -30,25 +30,20 @@ export default function Tokokeris() {
                 })
                 setDetailProduct(response.data.product)
 
-                if (response.data.product.Seller.seller_photo == null) {
+                if (response.data.product.seller.seller_photo == null) {
                     setSellerImage(defaultSellerPhoto)
                 } else {
-                    const res = await axios.get(`${API_URL}/${response.data.product.Seller.seller_photo}`, {
-                        headers: {
-                            'ngrok-skip-browser-warning': 'true'
-                        },
+                    const res = await axios.get(`${API_URL}/${response.data.product.seller.seller_photo}`, {
                         responseType: 'blob'
                     });
                     console.log(res.data)
                     setSellerImage(URL.createObjectURL(res.data))
                 }
 
+                let data = response?.data?.product?.productpicts || []
                 const blobUrls = await Promise.all(
-                    response.data.product.ProductPicts.map(async (imageEndpoint) => {
-                        const res = await axios.get(`${API_URL}/${imageEndpoint.path}`, {
-                            headers: {
-                                'ngrok-skip-browser-warning': 'true'
-                            },
+                    data?.map(async (imageEndpoint) => {
+                        const res = await axios.get(`${API_URL}/${imageEndpoint?.path}`, {
                             responseType: 'blob'
                         });
                         return URL.createObjectURL(res.data);
@@ -74,7 +69,7 @@ export default function Tokokeris() {
     }
 
     const GambarThumbnail = () => {
-        if (detailProduct?.ProductPicts && detailProduct.ProductPicts.length > 0) {
+        if (detailProduct?.productpicts && detailProduct?.productpicts?.length > 0) {
             return (
                 <div className="gambar-thumbnail">
                     {image.map((thumb, idx) => {
@@ -93,7 +88,7 @@ export default function Tokokeris() {
     };
 
     const redirectWa = (productName) => {
-        const phoneNumber = detailProduct.Seller.seller_phone || ""
+        const phoneNumber = detailProduct.seller.seller_phone || ""
         const waNumber = (phoneNumber.charAt(0) == '0') ? '62' + phoneNumber.substring(1) : phoneNumber
         const message = `Nama: \nNo hp: \nJenis: ${productName} \njumlah keris: \nAlamat Lengkap: `
         const encodedMessage = encodeURIComponent(message)
@@ -110,7 +105,7 @@ export default function Tokokeris() {
                 <div className="dividers"></div>
                 <div className="profil-empu">
                     <img src={sellerImage} alt="Empu Sepuh" />
-                    <span>{detailProduct.Seller?.seller_name || ""}</span>
+                    <span>{detailProduct.seller?.seller_name || ""}</span>
                 </div>
                 <div className="dividers"></div>
                 <button className="btn-hubungi" onClick={() => redirectWa(detailProduct?.product_name)}>Hubungi Sekarang</button>
