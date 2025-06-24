@@ -37,7 +37,7 @@ export default function Tokokeris() {
       console.log(response.data.product)
       const blobUrls = await Promise.all(
         response.data?.product?.products?.map(async (product) => {
-          const response = await axios.get(`${API_URL}/${product?.productPicts?.[0]?.path}`, {
+          const response = await axios.get(`${API_URL}/${product?.productpicts?.[0]?.path}`, {
             responseType: 'blob'
           })
           return URL.createObjectURL(response.data)
