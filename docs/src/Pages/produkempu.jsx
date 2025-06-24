@@ -36,8 +36,8 @@ export default function Tokokeris() {
       }
 
       const blobUrls = await Promise.all(
-        response.data.product?.Products?.map(async (product) => {
-          const response = await axios.get(`${API_URL}/${product.ProductPicts[0].path}`, {
+        response.data?.product?.Products?.map(async (product) => {
+          const response = await axios.get(`${API_URL}/${product?.ProductPicts?.[0]?.path}`, {
             responseType: 'blob'
           })
           return URL.createObjectURL(response.data)
@@ -166,7 +166,7 @@ export default function Tokokeris() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.6 }}
         >
-          {produkData?.map((produk, index) => (
+          {produkData.map((produk, index) => (
             <motion.div
               className="produk-card"
               key={index}
