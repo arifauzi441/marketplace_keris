@@ -76,6 +76,7 @@ export default function Tokokeris() {
   };
 
   const produkData = sellerProducts?.Products?.map((product, index) => {
+    console.log(sellerProducts)
     return {
       image: productImage[index],
       name: product?.product_name,
