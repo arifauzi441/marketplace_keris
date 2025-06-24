@@ -28,13 +28,11 @@ export default function Tokokeris() {
             })
             setAllSeller(response.data.data)
 
+            let data = response?.data?.data
             const blobUrls = await Promise.all(
-                response.data.data.map(async seller => {
-                    if (!seller.seller_photo) return ""
-                    const response = await axios.get(`${API_URL}/${seller.seller_photo}`, {
-                        headers: {
-                            'ngrok-skip-browser-warning': 'true'
-                        },
+                data?.map(async seller => {
+                    if (!seller?.seller_photo) return ""
+                    const response = await axios.get(`${API_URL}/${seller?.seller_photo}`, {
                         responseType: 'blob'
                     })
                     return URL.createObjectURL(response.data)
