@@ -60,7 +60,7 @@ export default function ProdukTerlaris() {
             <li><a href="#">Profil</a></li>
             <li><a href="#">Berita</a></li>
             <li><a href="#">Arsip</a></li>
-            <li><a href="/toko-keris">Toko</a></li>
+            <li><a href="/">Toko</a></li>
             <li><a href="#">E-tour Guide</a></li>
           </ul>
         </nav>
@@ -72,7 +72,7 @@ export default function ProdukTerlaris() {
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.5 }}
               >
-                  <Link to="/toko-keris">
+                  <Link to="/">
                   <button className="btn-kembali">Kembali</button>
                   </Link>
               </motion.div>

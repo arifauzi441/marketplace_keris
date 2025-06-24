@@ -228,7 +228,7 @@ export default function Tokokeris() {
             <li><a href="#">Profil</a></li>
             <li><a href="#">Berita</a></li>
             <li><a href="#">Arsip</a></li>
-            <li><a href="/toko-keris">Toko</a></li>
+            <li><a href="/">Toko</a></li>
             <li><a href="#">E-tour Guide</a></li>
           </ul>
         </nav>

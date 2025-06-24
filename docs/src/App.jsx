@@ -11,7 +11,7 @@ function App() {
 
   return (
       <Routes>
-        <Route path="/toko-keris" element={<Tokokeris />} />
+        <Route path="/" element={<Tokokeris />} />
         <Route path="/detail-produk" element={<Detailproduk />} />
         <Route path="/produk-terlaris" element={<ProdukTerlaris />} />
         <Route path="/produk-empu/:id" element={<Produkempu />} />
