@@ -247,13 +247,13 @@ class _LoginState extends State<Login> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.5 * 0.10,
             child: TextField(
+              key: Key(label),
               controller: (label == 'Username')
                   ? _usernameController
                   : _passwordController,
               cursorColor: Color(0xFF53C737),
               obscureText: (label == "Username") ? false : _obscureText,
               decoration: InputDecoration(
-                hintText: label,
                   suffixIcon: (label == 'Username')
                       ? Icon(Icons.person)
                       : (!_obscureText)

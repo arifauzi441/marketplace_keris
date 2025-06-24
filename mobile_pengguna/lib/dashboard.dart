@@ -51,16 +51,16 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
-  Future<Uint8List?> fetchImageBytes(String url) async {
-    final response = await http
-        .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
+  // Future<Uint8List?> fetchImageBytes(String url) async {
+  //   final response = await http
+  //       .get(Uri.parse(url));
 
-    if (response.statusCode == 200) {
-      return response.bodyBytes; // <-- Ini kembalian berupa Uint8List
-    } else {
-      return null;
-    }
-  }
+  //   if (response.statusCode == 200) {
+  //     return response.bodyBytes; // <-- Ini kembalian berupa Uint8List
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -274,32 +274,37 @@ class _DashboardState extends State<Dashboard> {
                                                   ),
                                                 )
                                               : ClipOval(
-                                                  child:
-                                                      FutureBuilder<Uint8List?>(
-                                                    future: fetchImageBytes(
-                                                        "$api/${users?[index].sellerPhoto}"),
-                                                    builder:
-                                                        (context, snapshot) {
-                                                      if (snapshot
-                                                              .connectionState ==
-                                                          ConnectionState
-                                                              .waiting) {
-                                                        return CircularProgressIndicator();
-                                                      } else if (snapshot
-                                                          .hasData) {
-                                                        return Image.memory(
-                                                            snapshot.data!,
-                                                            width: 80.0,
-                                                            height: 80.0,
-                                                            fit: BoxFit
-                                                                .cover); // <-- Tampilkan gambar
-                                                      } else {
-                                                        return Text(
-                                                            "Gagal memuat gambar");
-                                                      }
-                                                    },
+                                                  child: Image.network(
+                                                  "$api/${users?[index].sellerPhoto}",
+                                                  width: 80.0,
+                                                  height: 80.0,
+                                                  fit: BoxFit.cover,
+                                                )
+                                                  //     FutureBuilder<Uint8List?>(
+                                                  //   future: fetchImageBytes(
+                                                  //       "$api/${users?[index].sellerPhoto}"),
+                                                  //   builder:
+                                                  //       (context, snapshot) {
+                                                  //     if (snapshot
+                                                  //             .connectionState ==
+                                                  //         ConnectionState
+                                                  //             .waiting) {
+                                                  //       return CircularProgressIndicator();
+                                                  //     } else if (snapshot
+                                                  //         .hasData) {
+                                                  //       return Image.memory(
+                                                  //           snapshot.data!,
+                                                  //           width: 80.0,
+                                                  //           height: 80.0,
+                                                  //           fit: BoxFit
+                                                  //               .cover); // <-- Tampilkan gambar
+                                                  //     } else {
+                                                  //       return Text(
+                                                  //           "Gagal memuat gambar");
+                                                  //     }
+                                                  //   },
+                                                  // ),
                                                   ),
-                                                ),
                                           SizedBox(height: 6),
                                           Text(
                                             "${users?[index].sellerName}",
@@ -371,40 +376,43 @@ class _DashboardState extends State<Dashboard> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Container(
-                                            width: 200,
-                                            height: 150,
-                                            child: (popularProduct?[index]
-                                                        .productPict
-                                                        .isEmpty ??
-                                                    true)
-                                                ? Image.asset(
-                                                    'assets/images/keris-sketsa.png',
-                                                    fit: BoxFit.cover)
-                                                : FutureBuilder<Uint8List?>(
-                                                    future: fetchImageBytes(
-                                                        '${popularProduct?[index].productPict[0].path}'),
-                                                    builder:
-                                                        (context, snapshot) {
-                                                      if (snapshot
-                                                              .connectionState ==
-                                                          ConnectionState
-                                                              .waiting) {
-                                                        return Center(
-                                                            child:
-                                                                CircularProgressIndicator());
-                                                      } else if (snapshot
-                                                          .hasData) {
-                                                        return Image.memory(
-                                                          snapshot.data!,
-                                                          fit: BoxFit.cover,
-                                                        );
-                                                      } else {
-                                                        return Text(
-                                                            "Gagal memuat gambar");
-                                                      }
-                                                    },
-                                                  ),
-                                          ),
+                                              width: 200,
+                                              height: 150,
+                                              child: (popularProduct?[index]
+                                                          .productPict
+                                                          .isEmpty ??
+                                                      true)
+                                                  ? Image.asset(
+                                                      'assets/images/keris-sketsa.png',
+                                                      fit: BoxFit.cover)
+                                                  : Image.network(
+                                                      '${popularProduct?[index].productPict[0].path}',
+                                                      fit: BoxFit.cover)
+                                              // : FutureBuilder<Uint8List?>(
+                                              //     future: fetchImageBytes(
+                                              //         '${popularProduct?[index].productPict[0].path}'),
+                                              //     builder:
+                                              //         (context, snapshot) {
+                                              //       if (snapshot
+                                              //               .connectionState ==
+                                              //           ConnectionState
+                                              //               .waiting) {
+                                              //         return Center(
+                                              //             child:
+                                              //                 CircularProgressIndicator());
+                                              //       } else if (snapshot
+                                              //           .hasData) {
+                                              //         return Image.memory(
+                                              //           snapshot.data!,
+                                              //           fit: BoxFit.cover,
+                                              //         );
+                                              //       } else {
+                                              //         return Text(
+                                              //             "Gagal memuat gambar");
+                                              //       }
+                                              //     },
+                                              //   ),
+                                              ),
                                           SizedBox(height: 5),
                                           Column(
                                             crossAxisAlignment:
@@ -511,36 +519,39 @@ class _DashboardState extends State<Dashboard> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
-                                      width: 200,
-                                      height: 150,
-                                      child: (popularProduct?[index]
-                                                  .productPict
-                                                  .isEmpty ??
-                                              true)
-                                          ? Image.asset(
-                                              'assets/images/keris-sketsa.png',
-                                              fit: BoxFit.cover)
-                                          : FutureBuilder<Uint8List?>(
-                                              future: fetchImageBytes(
-                                                  '${popularProduct?[index].productPict[0].path}'),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.connectionState ==
-                                                    ConnectionState.waiting) {
-                                                  return Center(
-                                                      child:
-                                                          CircularProgressIndicator());
-                                                } else if (snapshot.hasData) {
-                                                  return Image.memory(
-                                                    snapshot.data!,
-                                                    fit: BoxFit.cover,
-                                                  );
-                                                } else {
-                                                  return Text(
-                                                      "Gagal memuat gambar");
-                                                }
-                                              },
-                                            ),
-                                    ),
+                                        width: 200,
+                                        height: 150,
+                                        child: (popularProduct?[index]
+                                                    .productPict
+                                                    .isEmpty ??
+                                                true)
+                                            ? Image.asset(
+                                                'assets/images/keris-sketsa.png',
+                                                fit: BoxFit.cover)
+                                            : Image.network(
+                                                '${popularProduct?[index].productPict[0].path}',
+                                                fit: BoxFit.cover)
+                                        // : FutureBuilder<Uint8List?>(
+                                        //     future: fetchImageBytes(
+                                        //         '${popularProduct?[index].productPict[0].path}'),
+                                        //     builder: (context, snapshot) {
+                                        //       if (snapshot.connectionState ==
+                                        //           ConnectionState.waiting) {
+                                        //         return Center(
+                                        //             child:
+                                        //                 CircularProgressIndicator());
+                                        //       } else if (snapshot.hasData) {
+                                        //         return Image.memory(
+                                        //           snapshot.data!,
+                                        //           fit: BoxFit.cover,
+                                        //         );
+                                        //       } else {
+                                        //         return Text(
+                                        //             "Gagal memuat gambar");
+                                        //       }
+                                        //     },
+                                        //   ),
+                                        ),
                                     SizedBox(height: 5),
                                     Column(
                                       crossAxisAlignment:
