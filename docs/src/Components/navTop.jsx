@@ -8,6 +8,8 @@ const NavTop = () => {
     console.log("Searching:", value);
   };
 
+  const urlKeris = 'https://toko.kerissumenep.com/'
+
   return (
     <div>
       <motion.header
@@ -33,11 +35,9 @@ const NavTop = () => {
 
         <nav className="nav-container">
           <ul className="nav-links">
-            <li><a href="#">Profil</a></li>
-            <li><a href="#">Berita</a></li>
-            <li><a href="#">Arsip</a></li>
-            <li><a href="/">Toko</a></li>
-            <li><a href="#">E-tour Guide</a></li>
+            <li><a href={urlKeris}>Beranda</a></li>
+            <li><a href={`${urlKeris}daftar-empu`}>Empu</a></li>
+            <li><a href="#produk-terbaru">Koleksi</a></li>
           </ul>
         </nav>
       </motion.header>
