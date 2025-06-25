@@ -5,6 +5,9 @@ import axios from 'axios';
 import "../index.css";
 import "../styles/toko.css";
 
+// Component
+import ProductCard from "../Components/productCard"
+
 // Gambar
 import heroImage from "../assets/Images/hero1.png";
 import productHeroImage from "../assets/Images/hero3.png";
@@ -24,22 +27,6 @@ const EmpuCard = ({ image, name, phone, id_seller }) => {
     </Link>
   )
 };
-
-// Komponen ProdukCard - produk terbaru
-const ProdukCard = ({ image, name, price, id_product }) => (
-  <div className="kartu-produk">
-    <div className="gambar-produk">
-      <img src={image == " " ? sketsaKeris : image} alt={name} />
-    </div>
-    <span className="nama-produk">{name}</span>
-    <div className="harga-dan-beli">
-      <span className="harga-produk">{price}</span>
-      <Link to={`/detail-produk/${id_product}`}>
-        <button className="tombol-beli">Beli</button>
-      </Link>
-    </div>
-  </div>
-);
 
 const incrementClick = async (id_product) => {
   try {
@@ -344,7 +331,7 @@ export default function Tokokeris() {
           {popularProducts && popularProducts.length >= 0 &&
             popularProducts.slice(0, 3).map((product, index) => (
               <Link to={`/detail-produk/${product.id_product}`}>
-                <ProductItem image={imagePopularProduct[index]} name={product?.product_name} price={formatRupiah(product?.product_price)} id_product={product?.id_product} />
+                <ProductCard image={imagePopularProduct[index]} name={product?.product_name} price={formatRupiah(product?.product_price)} id_product={product?.id_product} />
               </Link>)
             )
           }
@@ -368,7 +355,7 @@ export default function Tokokeris() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
             ><Link to={`/detail-produk/${produk.id_product}`} onClick={() => incrementClick(produk.id_product)}>
-                <ProdukCard
+                <ProductCard
                   id_product={produk.id_product}
                   image={produk.product && produk.product.length > 0 ? imageProduct[index] : imageProduct[index]}
                   name={produk.product_name}
