@@ -20,10 +20,10 @@ class _DetailItemState extends State<DetailItem> {
   @override
   void initState() {
     super.initState();
+    print(widget.product?.productPict.isEmpty);
     _mainProductPict = (widget.product!.productPict.isNotEmpty)
         ? widget.product?.productPict[0].path ?? ""
         : "";
-    print(widget.product?.productPict[0].path);
   }
 
   // Future<Uint8List?> fetchImageBytes(String url) async {
@@ -79,10 +79,7 @@ class _DetailItemState extends State<DetailItem> {
                       color: Colors.white,
                       child: (widget.product!.productPict.isEmpty ||
                               _mainProductPict == "")
-                          ? Image.asset(
-                              'assets/images/bg.jpg',
-                              fit: BoxFit.cover,
-                            )
+                          ? Container()
                           : Image.network(_mainProductPict)
                       // : FutureBuilder<Uint8List?>(
                       //     future: fetchImageBytes(_mainProductPict),
@@ -114,22 +111,25 @@ class _DetailItemState extends State<DetailItem> {
                           child: Material(
                             color: Colors.transparent,
                             child: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    _mainProductPict =
-                                        (widget.product!.productPict.length <=
-                                                index)
-                                            ? ""
-                                            : widget.product?.productPict[index]
-                                                    .path ??
-                                                "";
-                                  });
-                                },
+                                onTap: (widget.product!.productPict.length <=
+                                        index)
+                                    ? () {}
+                                    : () {
+                                        setState(() {
+                                          _mainProductPict = (widget.product!
+                                                      .productPict.length <=
+                                                  index)
+                                              ? ""
+                                              : widget
+                                                      .product
+                                                      ?.productPict[index]
+                                                      .path ??
+                                                  "";
+                                        });
+                                      },
                                 child: (widget.product!.productPict.length <=
                                         index)
-                                    ? Ink.image(
-                                        image:
-                                            AssetImage('assets/images/bg.jpg'),
+                                    ? Container(
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.86 *
@@ -138,7 +138,6 @@ class _DetailItemState extends State<DetailItem> {
                                             MediaQuery.of(context).size.width *
                                                 0.86 *
                                                 0.2,
-                                        fit: BoxFit.cover,
                                       )
                                     : Image.network(
                                         widget.product!.productPict[index]

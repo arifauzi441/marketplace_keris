@@ -83,15 +83,15 @@ class _EditPasswordState extends State<EditPassword> {
                         SizedBox(
                           height: 20,
                         ),
-                        _getTextField(context, "currPass"),
+                        _getTextField(context, "Password lama"),
                         SizedBox(
                           height: 10,
                         ),
-                        _getTextField(context, "newPass"),
+                        _getTextField(context, "Password baru"),
                         SizedBox(
                           height: 15,
                         ),
-                        _getTextField(context, "newPass2"),
+                        _getTextField(context, "Konfirmasi password baru"),
                         SizedBox(
                           height: 25,
                         ),
@@ -166,9 +166,9 @@ class _EditPasswordState extends State<EditPassword> {
           height: MediaQuery.of(context).size.height * 0.5 * 0.10,
           child: TextField(
             keyboardType: TextInputType.text,
-            controller: (text == 'currPass')
+            controller: (text == 'Password lama')
                 ? _currPasswordController
-                : (text == 'newPass2')
+                : (text == 'Konfirmasi password baru')
                     ? _newPasswordController
                     : _newPassword2Controller,
             cursorColor: Colors.green,
