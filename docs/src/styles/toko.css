@@ -427,31 +427,25 @@
 
 /* PRODUK TERBARU */
 .produk-section {
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 6rem;
-  padding-right: 4rem;
-  margin: auto;
-  margin-bottom: 5rem;
-  width: 100%;
+  margin: 5rem 1rem 4rem 5rem;
+  position: relative;
 }
 
 .judul-produk {
-  padding-left: 5rem;
   margin-bottom: 2rem;
   font-size: 1.5rem;
   font-weight: 500;
-  margin-bottom: 2rem;
 }
 
 .produk-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 30px;
+  min-width: 520px; /* 2 * 250px + gap */
 }
 
 .produk-card {
-  max-width: 260px;
+  max-width: 250px;
   height: 320px;
   flex-shrink: 0;
   display: flex;
@@ -635,5 +629,17 @@
   .empu-photo {
     width: 60px;
     height: 60px;
+  }
+  
+  .product-container {
+    padding: 1rem;
+  }
+
+  .product-header {
+    padding: 1rem;
+  }
+
+  .produk-section {
+    margin: 2rem 1rem;
   }
 }
