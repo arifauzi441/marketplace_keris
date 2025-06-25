@@ -120,7 +120,7 @@
 
 /* Empu List Section */
 .empu-section {
-  margin: 5rem 5rem 4rem 5rem;
+  margin: 5rem 5rem 1rem 5rem;
   position: relative;
 }
 
@@ -227,7 +227,6 @@
 /* produk terlaris */
 .product-container {
   padding: 0 5rem;
-  margin-bottom: 5rem;
 }
 
 .product-header {
@@ -235,13 +234,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
 }
 
 .product-title {
+  margin: 0;
   color: black;
   font-size: 1.5rem;
   font-weight: 500;
+  margin-bottom: 1rem;
 }
 
 .see-more-btn {
@@ -267,11 +267,12 @@
 }
 
 .product-hero {
+  margin-bottom: 2rem;
   width: 100%;
   background-size: cover;
   background-position: center;
   border-radius: 8px;
-  padding: 2rem;
+  padding: 0.2rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border: 1px solid #eee;
   height: 300px;
@@ -279,14 +280,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* Tengah vertikal */
   align-items: center;
-  /* Tengah horizontal */
   text-align: center;
-  /* Tengah teks */
-  margin-bottom: 30px;
-  padding-left: 5rem;
-  padding-right: 5rem;
 }
 
 .product-hero::before {
@@ -301,7 +296,7 @@
 }
 
 .product-subtitle {
-  font-size: 35px;
+  font-size: 5vh;
   font-weight: bold;
   color: white;
   margin-bottom: 10px;
@@ -315,7 +310,7 @@
 }
 
 .product-description {
-  font-size: 18px;
+  font-size: 2.7vh;
   color: white;
   line-height: 1.6;
   justify-content: center;
@@ -427,7 +422,7 @@
 
 /* PRODUK TERBARU */
 .produk-section {
-  margin: 5rem 1rem 4rem 5rem;
+  margin: 2rem 5rem 4rem 5rem;
   position: relative;
 }
 
@@ -441,12 +436,9 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 30px;
-  min-width: 520px; /* 2 * 250px + gap */
 }
 
 .produk-card {
-  max-width: 250px;
-  height: 320px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -455,7 +447,6 @@
 .kartu-produk {
   border: 1px solid #ccc;
   border-radius: 10px;
-  height: 320px;
   padding: 15px;
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s;
@@ -522,31 +513,6 @@
 }
 
 
-
-
-
-
-
-
-
-
-@media screen and (max-width: 1024px) {
-  .produk-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .produk-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .produk-grid {
-    grid-template-columns: 1fr;
-  }
-}
 
 
 
@@ -630,7 +596,7 @@
     width: 60px;
     height: 60px;
   }
-  
+
   .product-container {
     padding: 1rem;
   }
@@ -641,5 +607,80 @@
 
   .produk-section {
     margin: 2rem 1rem;
+  }
+
+  .produk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 30px;
+  }
+
+  .kartu-produk {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 5px;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .kartu-produk:hover {
+    border-color: #53C737;
+    transform: translateY(-5px);
+  }
+
+  .gambar-produk {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .gambar-produk img {
+    width: 100%;
+    height: 120px;
+    border-radius: 20px;
+    object-fit: cover;
+  }
+
+  .nama-produk {
+    margin: 0;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 0 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  .harga-dan-beli {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    margin: 0;
+  }
+
+  .harga-produk {
+    margin: 0;
+    font-size: 8px;
+  }
+
+  .tombol-beli {
+    background-color: #53C737;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  padding: 3px 10px;
+  font-size: 8px;
+  margin-bottom: 4px;
+  }
+
+  .tombol-beli:hover {
+    background-color: #3e8e41;
   }
 }

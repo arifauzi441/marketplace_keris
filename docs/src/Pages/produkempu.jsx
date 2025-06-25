@@ -159,8 +159,8 @@ export default function Tokokeris() {
 
       {/* Produk Terbaru */}
 
-      <div className="judul-produk-empu">Keris Empu Sepuh</div>
       <motion.section className="produk-section">
+      <div className="judul-produk-empu">Keris Empu Sepuh</div>
 
         <motion.div className="produk-grid"
           initial={{ opacity: 0 }}
@@ -187,9 +187,6 @@ export default function Tokokeris() {
 
         </motion.div>
       </motion.section>
-
-
-
 
     </div>
   );
