@@ -30,7 +30,7 @@ export default function Tokokeris() {
       if (response.data.product.seller_photo) {
         const blobUrlSeller = await axios.get(`${API_URL}/${response.data.product.seller_photo}`, {
           responseType: 'blob'
-        })
+        }) 
         setSellerImage(URL.createObjectURL(blobUrlSeller.data))
       } else {
         setSellerImage("")
