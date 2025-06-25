@@ -111,7 +111,6 @@ class _DashboardState extends State<Dashboard> {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     users?.sort((a, b) {
       int statusCompare = (a.status == 'belum diterima' ? 0 : 1)

@@ -3,11 +3,11 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 // import 'package:mime/mime.dart';
-import 'package:mobile_pengguna/model/product_pict_api.dart';
+import 'package:flutter_application_mobile/model/product_pict_api.dart';
 import 'package:http/http.dart' as http;
 // import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';
-import 'package:mobile_pengguna/model/user_api.dart';
+import 'package:flutter_application_mobile/model/user_api.dart';
 
 class ProductApi {
   static final api = dotenv.env['API_URL'] ?? "";

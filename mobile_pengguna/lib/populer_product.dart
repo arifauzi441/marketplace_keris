@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:mobile_pengguna/detail_product.dart';
-import 'package:mobile_pengguna/model/product_api.dart';
+import 'package:flutter_application_mobile/detail_product.dart';
+import 'package:flutter_application_mobile/model/product_api.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:http/http.dart' as http;
 
