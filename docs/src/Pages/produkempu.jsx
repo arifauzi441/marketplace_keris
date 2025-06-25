@@ -38,10 +38,19 @@ export default function Tokokeris() {
       console.log(response.data.product)
       const blobUrls = await Promise.all(
         response.data?.product?.products?.map(async (product) => {
-          const response = await axios.get(`${API_URL}/${product?.productpicts?.[0]?.path}`, {
-            responseType: 'blob'
-          })
-          return URL.createObjectURL(response.data)
+          if (product?.productpicts?.[0]?.path) {
+            try {
+              const response = await axios.get(`${API_URL}/${product?.productpicts?.[0]?.path}`, {
+                responseType: 'blob'
+              })
+              return URL.createObjectURL(response.data)
+            } catch (error) {
+              console.log("gagal mengambil gambar:" + error)
+              return ""
+            }
+          } else {
+            return ""
+          }
         })
       )
       setProductImage(blobUrls)
@@ -132,7 +141,7 @@ export default function Tokokeris() {
       {/* Produk Terbaru */}
 
       <motion.section className="produk-section">
-      <div className="judul-produk-empu">Keris Empu Sepuh</div>
+        <div className="judul-produk-empu">Keris Empu Sepuh</div>
 
         <motion.div className="produk-grid"
           initial={{ opacity: 0 }}
