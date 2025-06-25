@@ -6,6 +6,9 @@ import "../styles/toko.css";
 import "../styles/detail.css";
 import "../styles/daftarempu.css"
 
+// Components
+import EmpuCard from "../Components/empuCard"
+
 import logoImage from "../assets/Images/logo-keris.png";
 import defaultSellerPhoto from "../assets/Images/account.png"
 import empuImage from "../assets/Images/empu1.jpg"
@@ -122,13 +125,12 @@ export default function Tokokeris() {
             <section className="daftar-empu-section">
                 <div className="daftar-grid">
                     {dataEmpu.map((empu, index) => (
-                        <div className="daftar-kartu-empu" key={index}>
-                            <img src={empu.img} alt={empu.nama} className="foto-empu" />
-                            <div className="daftar-info-empu">
-                                <h3 className="daftar-nama-empu">{empu.nama}</h3>
-                                <Link to={`/produk-empu/${empu.sellerId}`} className="link-produk">Lihat Produk</Link>
-                            </div>
-                        </div>
+                        <EmpuCard
+                  image={empu.img}
+                  name={empu.nama}
+                  phone={empu.kontak}
+                  id_seller={empu.sellerId}
+                />
                     ))}
                 </div>
             </section>

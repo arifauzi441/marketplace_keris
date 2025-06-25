@@ -7,6 +7,7 @@ import "../styles/toko.css";
 
 // Component
 import ProductCard from "../Components/productCard"
+import EmpuCard from "../Components/empuCard"
 
 // Gambar
 import heroImage from "../assets/Images/hero1.png";
@@ -16,17 +17,17 @@ import defaultSellerPhoto from "../assets/Images/account.png"
 import sketsaKeris from "../assets/Images/keris-sketsa.png"
 
 const API_URL = import.meta.env.VITE_API_URL
-// Komponen EmpuCard
-const EmpuCard = ({ image, name, phone, id_seller }) => {
-  return (
-    <Link to={`/produk-empu/${id_seller}`}>
-      <div className="empu-card">
-        <img src={image} alt={name} className="empu-photo" />
-        <div className="empu-name">{name}</div>
-      </div>
-    </Link>
-  )
-};
+// // Komponen EmpuCard
+// const EmpuCard = ({ image, name, phone, id_seller }) => {
+//   return (
+//     <Link to={`/produk-empu/${id_seller}`}>
+//       <div className="empu-card">
+//         <img src={image} alt={name} className="empu-photo" />
+//         <div className="empu-name">{name}</div>
+//       </div>
+//     </Link>
+//   )
+// };
 
 const incrementClick = async (id_product) => {
   try {
