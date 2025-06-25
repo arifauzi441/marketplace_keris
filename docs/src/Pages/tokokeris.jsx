@@ -314,7 +314,7 @@ export default function Tokokeris() {
 
       {/* Produk Terbaru */}
       <motion.section className="produk-section">
-      <div className="judul-produk">Produk Terbaru</div>
+      <div className="judul-produk" id="produk-terbaru">Produk Terbaru</div>
 
         <motion.div className="produk-grid"
           initial={{ opacity: 0 }}

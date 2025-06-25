@@ -294,7 +294,7 @@
 }
 
 .product-subtitle {
-  font-size: calc(4vw + 0.5vh);
+  font-size: calc(2.6vw + 0.7vh);
   font-weight: bold;
   color: white;
   margin-bottom: 10px;
@@ -308,7 +308,7 @@
 }
 
 .product-description {
-  font-size: calc(2vw + 0.5vh);
+  font-size: calc(1vw + 0.7vh);
   color: white;
   line-height: 1.6;
   justify-content: center;
