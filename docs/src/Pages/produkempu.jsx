@@ -10,6 +10,7 @@ import "../styles/produkempu.css"
 import logoImage from "../assets/Images/logo-keris.png";
 import defaultSellerPhoto from "../assets/Images/account.png"
 import sketsaKeris from "../assets/Images/keris-sketsa.png"
+import NavTop from "../Components/navTop";
 
 export default function Tokokeris() {
   const API_URL = import.meta.env.VITE_API_URL

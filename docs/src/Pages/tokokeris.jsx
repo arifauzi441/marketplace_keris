@@ -257,6 +257,7 @@ export default function Tokokeris() {
                 transition={{ delay: index * 0.1, duration: 0.5 }}
               >
                 <EmpuCard
+                width={200}
                   image={(imageSellers[index] == " ") ? defaultSellerPhoto : imageSellers[index]}
                   name={empu.seller_name}
                   phone={empu.seller_phone}
