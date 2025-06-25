@@ -64,7 +64,6 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-
   Widget _buildProductList() {
     if (user == null) {
       return Center(

@@ -405,6 +405,7 @@ class _DashboardState extends State<Dashboard> {
                                                     : Image.network(
                                                         '${popularProduct?[index].productPict[0].path}',
                                                         fit: BoxFit.cover)
+                                                        
                                                 // : FutureBuilder<Uint8List?>(
                                                 //     future: fetchImageBytes(
                                                 //         '${popularProduct?[index].productPict[0].path}'),
