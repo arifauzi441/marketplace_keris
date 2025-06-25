@@ -8,6 +8,7 @@ import "../styles/toko.css";
 // Component
 import ProductCard from "../Components/productCard"
 import EmpuCard from "../Components/empuCard"
+import NavTop from "../Components/navTop"
 
 // Gambar
 import heroImage from "../assets/Images/hero1.png";
@@ -191,36 +192,7 @@ export default function Tokokeris() {
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* Header */}
-      <motion.header
-        className="header"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
-      >
-        <div className="header-top">
-          <div className="logo-container">
-            <img src={logoImage} alt="Logo" className="logo-img" />
-            <span className="logo">KerisSumenep</span>
-          </div>
-          <div className="search-container">
-            <input onChange={(event) => submit(event.target.value)}
-              type="text"
-              placeholder="Cari keris..."
-              className="search-input"
-            />
-          </div>
-        </div>
-
-        <nav className="nav-container">
-          <ul className="nav-links">
-            <li><a href="#">Profil</a></li>
-            <li><a href="#">Berita</a></li>
-            <li><a href="#">Arsip</a></li>
-            <li><a href="/">Toko</a></li>
-            <li><a href="#">E-tour Guide</a></li>
-          </ul>
-        </nav>
-      </motion.header>
+      <NavTop />
 
       {/* Divider */}
       <div className="divider"></div>
