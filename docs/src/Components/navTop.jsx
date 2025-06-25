@@ -32,7 +32,6 @@ const NavTop = () => {
             />
           </div>
         </div>
-
         <nav className="nav-container">
           <ul className="nav-links">
             <li><a href={urlKeris}>Beranda</a></li>

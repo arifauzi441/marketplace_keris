@@ -86,11 +86,9 @@ export default function Tokokeris() {
             </motion.div>
 
             <section className="banner-section">
-                <div className="banner-container">
-                    <div className="banner-text">
-                        <h1>DAFTAR EMPU</h1>
-                        <div className="dividerss"></div>
-                    </div>
+                <div className="banner-text">
+                    <h1>DAFTAR EMPU</h1>
+                    <div className="dividerss"></div>
                 </div>
             </section>
 

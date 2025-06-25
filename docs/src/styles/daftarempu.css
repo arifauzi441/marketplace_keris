@@ -1,8 +1,6 @@
-
-
 .banner-section {
-    background: linear-gradient(135deg, #59D248 5%, #2E6C25 50%); /*ini new */
-    padding: 4rem 0;
+    background: linear-gradient(135deg, #59D248 5%, #2E6C25 50%);
+    padding: 4rem 1rem;
     margin: 0 5rem;
     border-radius: 30px;
 }
@@ -26,79 +24,122 @@
 }
 
 .daftar-empu-section {
-    padding: 3rem 5rem;
-  }
-  
-  .daftar-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 0.5rem;
-    justify-content: center;
-  }
-  
-  .daftar-kartu-empu {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    background-color: #fcfffd;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-    transition: transform 0.3s ease;
-    width: 300px;      /*ini new */
-    margin: 0 auto;
+    padding: 50px;
+}
+
+.daftar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.daftar-kartu-empu {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background-color: #fcfffd;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease;
+  width: 300px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.daftar-kartu-empu:hover {
+  transform: translateY(-2px);
+  border: 1px solid #4CAF50;
+}
+
+.foto-empu {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.daftar-info-empu {
+  flex: 1;
+}
+
+.daftar-nama-empu {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
+  border-bottom: 1px solid #000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block; 
+  max-width: 100%;
+}
+
+.daftar-kontak-empu {
+  font-size: 0.95rem;
+  margin: 0.3rem 0;
+}
+
+.link-produk {
+  font-size: 0.8rem;
+  color: gray;
+  text-decoration: none;
+}
+
+@media screen and (max-width: 390px) {
+  .logo-container {
+    width: 100%;
+    justify-content: center !important;
     text-align: center;
   }
-  
-  .daftar-kartu-empu:hover {
-    transform: translateY(-2px);
-    border: 1px solid #4CAF50;
-  }
-  
-  .foto-empu {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 50%;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-  }
-  
-  .daftar-info-empu {
-    flex: 1;
-  }
-  
-  .daftar-nama-empu {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin: 0;
-    border-bottom: 1px solid #000;
-    white-space: nowrap;/*ini new */
-    overflow: hidden;/*ini new */
-    text-overflow: ellipsis;/*ini new */
-    display: block; /*ini new */
-    max-width: 100%;/*ini new */
-  }
-  
-  .daftar-kontak-empu {
-    font-size: 0.95rem;
-    margin: 0.3rem 0;
-  }
-  
-  .link-produk {
-    font-size: 0.8rem;
-    color: gray;
-    text-decoration: none;
-  }
-  
 
-  @media (max-width: 480px) {
-    .banner-section {
-      margin: 0 1rem;
-      padding: 2rem 1rem;
-    }
-  
-    .banner-text h1 {
-      font-size: 26px;
-    }
+  .logo {
+    font-size: 1.2rem;
   }
+
+  .header-top {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .search-container {
+    margin-top: 0.5rem;
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}
+
+
+@media screen and (max-width: 508px) {
+  .daftar-empu-section {
+    padding: 5;
+  }
+
+  .daftar-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.3rem;
+  }
+
+  .daftar-kartu-empu {
+    width: 100%; 
+  }
+}
+
+@media (max-width: 480px) {
+  .banner-section {
+    margin: 0 1rem;
+    padding: 2rem 1rem;
+  }
+
+  .banner-text h1 {
+    font-size: 26px;
+  }
+}
