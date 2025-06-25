@@ -10,6 +10,7 @@ import "../styles/produkempu.css"
 import logoImage from "../assets/Images/logo-keris.png";
 import defaultSellerPhoto from "../assets/Images/account.png"
 import sketsaKeris from "../assets/Images/keris-sketsa.png"
+import NavTop from "../Components/navTop";
 
 export default function Tokokeris() {
   const API_URL = import.meta.env.VITE_API_URL
@@ -130,8 +131,8 @@ export default function Tokokeris() {
 
       {/* Produk Terbaru */}
 
-      <div className="judul-produk-empu">Keris Empu Sepuh</div>
       <motion.section className="produk-section">
+      <div className="judul-produk-empu">Keris Empu Sepuh</div>
 
         <motion.div className="produk-grid"
           initial={{ opacity: 0 }}
@@ -158,9 +159,6 @@ export default function Tokokeris() {
 
         </motion.div>
       </motion.section>
-
-
-
 
     </div>
   );
