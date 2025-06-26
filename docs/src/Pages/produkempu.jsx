@@ -7,6 +7,9 @@ import "../styles/toko.css";
 import "../styles/detail.css";
 import "../styles/produkempu.css"
 
+// Component
+import ProductCard from "../Components/productCard"
+
 import logoImage from "../assets/Images/logo-keris.png";
 import defaultSellerPhoto from "../assets/Images/account.png"
 import sketsaKeris from "../assets/Images/keris-sketsa.png"
@@ -28,10 +31,14 @@ export default function Tokokeris() {
       setSellerProducts(response.data.product)
 
       if (response.data.product.seller_photo) {
-        const blobUrlSeller = await axios.get(`${API_URL}/${response.data.product.seller_photo}`, {
-          responseType: 'blob'
-        })
-        setSellerImage(URL.createObjectURL(blobUrlSeller.data))
+        try {
+          const blobUrlSeller = await axios.get(`${API_URL}/${response.data.product.seller_photo}`, {
+            responseType: 'blob'
+          })
+          setSellerImage(URL.createObjectURL(blobUrlSeller.data))
+        } catch (error) {
+          setSellerImage("")
+        }
       } else {
         setSellerImage("")
       }
@@ -46,6 +53,7 @@ export default function Tokokeris() {
             } catch (error) {
               console.log("gagal mengambil gambar:" + error)
               setProductImage("")
+              return ""
             }
           } else {
             setProductImage("")
@@ -53,7 +61,6 @@ export default function Tokokeris() {
           }
         })
       )
-      console.log(blobUrls)
       setProductImage(blobUrls)
     }
     document.title = "Toko Keris Sumenep";
@@ -70,26 +77,7 @@ export default function Tokokeris() {
     }).format(amount)
   }
 
-  // komponen ProductItem
-  const ProdukCard = ({ image, name, price, id }) => {
-    return (
-      <div className="kartu-produk">
-        <div className="gambar-produk">
-          <img src={image ?? sketsaKeris} alt={name} />
-        </div>
-        <span className="nama-produk">{name}</span>
-        <div className="harga-dan-beli">
-          <span className="harga-produk">{formatRupiah(price)}</span>
-          <Link to={`/detail-produk/${id}`}>
-            <button className="tombol-beli">Beli</button>
-          </Link>
-        </div>
-      </div>
-    )
-  };
-
   const produkData = sellerProducts?.products?.map((product, index) => {
-    console.log(sellerProducts?.products || "")
     return {
       image: productImage[index],
       name: product?.product_name,
@@ -159,10 +147,10 @@ export default function Tokokeris() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
             ><Link to={`/detail-produk/${produk.productId}`}>
-                <ProdukCard
+                <ProductCard
                   image={produk.image}
                   name={produk.name}
-                  price={produk.price}
+                  price={formatRupiah(produk.price)}
                   id={produk.productId}
                 />
               </Link>

@@ -35,11 +35,15 @@ export default function Tokokeris() {
             let data = response?.data?.data
             const blobUrls = await Promise.all(
                 data?.map(async seller => {
-                    if (!seller?.seller_photo) return ""
-                    const response = await axios.get(`${API_URL}/${seller?.seller_photo}`, {
-                        responseType: 'blob'
-                    })
-                    return URL.createObjectURL(response.data)
+                    try {
+                        if (!seller?.seller_photo) return ""
+                        const response = await axios.get(`${API_URL}/${seller?.seller_photo}`, {
+                            responseType: 'blob'
+                        })
+                        return URL.createObjectURL(response.data)
+                    } catch (error) {
+                        return ""
+                    }
                 })
             )
             setSellerImage(blobUrls)
@@ -52,9 +56,9 @@ export default function Tokokeris() {
 
     const submit = (s) => {
         setTimeout(() => {
-          setSearch(s)
+            setSearch(s)
         }, 1000);
-      }
+    }
 
     const dataEmpu = allSeller?.map((seller, index) => {
         return {
@@ -96,11 +100,11 @@ export default function Tokokeris() {
                 <div className="daftar-grid">
                     {dataEmpu.map((empu, index) => (
                         <EmpuCard
-                  image={empu.img}
-                  name={empu.nama}
-                  phone={empu.kontak}
-                  id_seller={empu.sellerId}
-                />
+                            image={empu.img}
+                            name={empu.nama}
+                            phone={empu.kontak}
+                            id_seller={empu.sellerId}
+                        />
                     ))}
                 </div>
             </section>
