@@ -145,10 +145,8 @@ export default function Tokokeris() {
           }
         })
         const productData = response?.data?.product || [];
-        // Generate image URLs
         const blobUrls = await Promise.all(
           productData.map(async (item) => {
-            // Jika tidak ada path produk, return string kosong
             const path = item?.productpicts?.[0]?.path;
             if (path) {
               try {
@@ -158,10 +156,10 @@ export default function Tokokeris() {
                 return URL.createObjectURL(res.data);
               } catch (err) {
                 console.error("Gagal mengambil gambar:", err);
-                return ""; // fallback jika gagal ambil gambar
+                return ""; 
               }
             }
-            return ""; // fallback jika tidak ada path
+            return ""; 
           })
         );
         setImagePopularProduct(blobUrls)

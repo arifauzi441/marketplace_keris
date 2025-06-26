@@ -35,7 +35,6 @@ export default function Tokokeris() {
       } else {
         setSellerImage("")
       }
-      console.log(response.data.product)
       const blobUrls = await Promise.all(
         response.data?.product?.products?.map(async (product) => {
           if (product?.productpicts?.[0]?.path) {
@@ -46,13 +45,15 @@ export default function Tokokeris() {
               return URL.createObjectURL(response.data)
             } catch (error) {
               console.log("gagal mengambil gambar:" + error)
-              return ""
+              setProductImage("")
             }
           } else {
+            setProductImage("")
             return ""
           }
         })
       )
+      console.log(blobUrls)
       setProductImage(blobUrls)
     }
     document.title = "Toko Keris Sumenep";
