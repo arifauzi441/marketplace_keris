@@ -30,7 +30,7 @@ export default function Tokokeris() {
       if (response.data.product.seller_photo) {
         const blobUrlSeller = await axios.get(`${API_URL}/${response.data.product.seller_photo}`, {
           responseType: 'blob'
-        }) 
+        })
         setSellerImage(URL.createObjectURL(blobUrlSeller.data))
       } else {
         setSellerImage("")
@@ -63,7 +63,9 @@ export default function Tokokeris() {
   const formatRupiah = (amount) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
-      currency: "IDR"
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
     }).format(amount)
   }
 

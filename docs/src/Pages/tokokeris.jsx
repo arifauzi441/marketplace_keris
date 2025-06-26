@@ -185,7 +185,9 @@ export default function Tokokeris() {
   const formatRupiah = (amount) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
-      currency: "IDR"
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
     }).format(amount)
   }
 
@@ -257,7 +259,7 @@ export default function Tokokeris() {
                 transition={{ delay: index * 0.1, duration: 0.5 }}
               >
                 <EmpuCard
-                width={200}
+                  width={200}
                   image={(imageSellers[index] == " ") ? defaultSellerPhoto : imageSellers[index]}
                   name={empu.seller_name}
                   phone={empu.seller_phone}
@@ -314,7 +316,7 @@ export default function Tokokeris() {
 
       {/* Produk Terbaru */}
       <motion.section className="produk-section">
-      <div className="judul-produk" id="produk-terbaru">Produk Terbaru</div>
+        <div className="judul-produk" id="produk-terbaru">Produk Terbaru</div>
 
         <motion.div className="produk-grid"
           initial={{ opacity: 0 }}
