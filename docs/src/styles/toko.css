@@ -611,6 +611,12 @@
     margin: 2rem 1rem;
   }
 
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 30px;
+  }
+
   .produk-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
