@@ -121,7 +121,6 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     users?.sort((a, b) {
@@ -208,8 +207,8 @@ class _DashboardState extends State<Dashboard> {
                                       fit: BoxFit.cover,
                                     )
                                   : FutureBuilder<Uint8List?>(
-                                      future:
-                                          fetchImageBytes("$api/${user?.photo}"),
+                                      future: fetchImageBytes(
+                                          "$api/${user?.photo}"),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
                                             ConnectionState.waiting) {
@@ -256,11 +255,12 @@ class _DashboardState extends State<Dashboard> {
                                 child: Container(
                                   color: Colors.white,
                                   height: 30,
-                                  width: MediaQuery.of(context).size.width * 0.4,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.4,
                                   child: TextField(
                                     onChanged: (value) {
-                                      Future.delayed(Duration(milliseconds: 500),
-                                          () {
+                                      Future.delayed(
+                                          Duration(milliseconds: 500), () {
                                         setState(() {
                                           fetchAllUsers(value);
                                         });
@@ -287,8 +287,8 @@ class _DashboardState extends State<Dashboard> {
                             ),
                           ),
                           Container(
-                            padding:
-                                EdgeInsets.symmetric(horizontal: 5, vertical: 7),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 7),
                             color: Color(0xFF2E6C25),
                             child: Row(
                               children: [
@@ -391,65 +391,140 @@ class _DashboardState extends State<Dashboard> {
                                             Expanded(
                                               flex: 2,
                                               child: Center(
-                                                  child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.5 *
-                                                      0.4,
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.05,
-                                                  color: (user.status ==
-                                                          "belum diterima")
-                                                      ? Color(0xFF3B8D28)
-                                                      : Colors.red,
-                                                  child: Material(
-                                                    color: Colors.transparent,
-                                                    child: InkWell(
-                                                      onTap: () async {
-                                                        try {
-                                                          var response = (user
-                                                                      .idAdmin ==
-                                                                  null)
-                                                              ? await UserApi
-                                                                  .changeStatus(
-                                                                      token,
-                                                                      "seller",
-                                                                      user.idSeller ??
-                                                                          0)
-                                                              : await UserApi
-                                                                  .changeStatus(
-                                                                      token,
-                                                                      "admin",
-                                                                      user.idAdmin ??
-                                                                          0);
-                                                          if (response[
-                                                                  'status'] ==
-                                                              200)
-                                                            fetchAllUsers('');
-                                                        } catch (e) {
-                                                          print(e);
-                                                        }
-                                                      },
-                                                      child: Center(
-                                                        child: Text(
-                                                          (user.status ==
-                                                                  "belum diterima")
-                                                              ? "terima"
-                                                              : "tolak",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white),
+                                                  child: Column(
+                                                children: [
+                                                  ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    child: Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.5 *
+                                                              0.4,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              0.05,
+                                                      color: (user.status ==
+                                                              "belum diterima")
+                                                          ? Color(0xFF3B8D28)
+                                                          : Colors.red,
+                                                      child: Material(
+                                                        color:
+                                                            Colors.transparent,
+                                                        child: InkWell(
+                                                          onTap: () async {
+                                                            try {
+                                                              var response = (user
+                                                                          .idAdmin ==
+                                                                      null)
+                                                                  ? await UserApi
+                                                                      .changeStatus(
+                                                                          token,
+                                                                          "seller",
+                                                                          user.idSeller ??
+                                                                              0)
+                                                                  : await UserApi
+                                                                      .changeStatus(
+                                                                          token,
+                                                                          "admin",
+                                                                          user.idAdmin ??
+                                                                              0);
+                                                              if (response[
+                                                                      'status'] ==
+                                                                  200)
+                                                                fetchAllUsers(
+                                                                    '');
+                                                            } catch (e) {
+                                                              print(e);
+                                                            }
+                                                          },
+                                                          child: Center(
+                                                            child: Text(
+                                                              (user.status ==
+                                                                      "belum diterima")
+                                                                  ? "terima"
+                                                                  : "tolak",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
+                                                  SizedBox(height: 5,),
+                                                  ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    child: Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.5 *
+                                                              0.4,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              0.05,
+                                                      color: (user.status ==
+                                                              "belum diterima")
+                                                          ? Color(0xFF3B8D28)
+                                                          : Colors.red,
+                                                      child: Material(
+                                                        color:
+                                                            Colors.transparent,
+                                                        child: InkWell(
+                                                          onTap: () async {
+                                                            try {
+                                                              var response = (user
+                                                                          .idAdmin ==
+                                                                      null)
+                                                                  ? await UserApi
+                                                                      .changeStatus(
+                                                                          token,
+                                                                          "seller",
+                                                                          user.idSeller ??
+                                                                              0)
+                                                                  : await UserApi
+                                                                      .changeStatus(
+                                                                          token,
+                                                                          "admin",
+                                                                          user.idAdmin ??
+                                                                              0);
+                                                              if (response[
+                                                                      'status'] ==
+                                                                  200)
+                                                                fetchAllUsers(
+                                                                    '');
+                                                            } catch (e) {
+                                                              print(e);
+                                                            }
+                                                          },
+                                                          child: Center(
+                                                            child: Text(
+                                                              (user.status ==
+                                                                      "belum diterima")
+                                                                  ? "terima"
+                                                                  : "tolak",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               )),
                                             ),
                                           ],
