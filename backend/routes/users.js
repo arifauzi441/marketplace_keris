@@ -7,7 +7,9 @@ const {saveToken,
     getUsers, 
     getAllUsers, 
     changePassword, 
-    changeStatus, getAdminById} = require(`../controller/userController`) 
+    changeStatus, 
+    getAdminById,
+    deleteUserById} = require(`../controller/userController`) 
 const multer = require("multer") 
 const path = require('path')
 
@@ -41,5 +43,6 @@ router.get('/admin', verifyToken, getAdminById);
 router.get('/seller', verifyToken, getUserWithProductById);
 router.patch('/change-password', verifyToken, changePassword);
 router.patch('/update', verifyToken, upload.single('path'), updateUserById);
+router.delete('/delete/:role/:id', verifyToken, deleteUserById);
 
 module.exports = router;
