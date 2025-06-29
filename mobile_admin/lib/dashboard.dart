@@ -121,6 +121,41 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
+  void showDeleteConfirmationDialog(
+      BuildContext context, VoidCallback onConfirmDelete) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Konfirmasi Hapus"),
+          content: Text("Apakah kamu yakin ingin menghapus user ini?"),
+          actions: [
+            TextButton(
+              child: Text("Batal"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Tutup dialog
+              },
+            ),
+            ElevatedButton.icon(
+              icon: Icon(Icons.delete, color: Colors.white),
+              label: Text(
+                "Hapus",
+                style: TextStyle(color: Colors.white),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); // Tutup dialog terlebih dahulu
+                onConfirmDelete(); // Jalankan fungsi hapus
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     users?.sort((a, b) {
@@ -309,7 +344,7 @@ class _DashboardState extends State<Dashboard> {
                                 Expanded(
                                   flex: 3,
                                   child: Center(
-                                    child: Text("Name",
+                                    child: Text("Username",
                                         style: TextStyle(color: Colors.white)),
                                   ),
                                 ),
@@ -372,7 +407,7 @@ class _DashboardState extends State<Dashboard> {
                                               flex: 3,
                                               child: Center(
                                                 child: Text(
-                                                  user.name ?? "",
+                                                  user. username?? "",
                                                   style: TextStyle(
                                                       color: Colors.black),
                                                 ),
@@ -412,7 +447,7 @@ class _DashboardState extends State<Dashboard> {
                                                       color: (user.status ==
                                                               "belum diterima")
                                                           ? Color(0xFF3B8D28)
-                                                          : Colors.red,
+                                                          : Colors.orange,
                                                       child: Material(
                                                         color:
                                                             Colors.transparent,
@@ -458,7 +493,9 @@ class _DashboardState extends State<Dashboard> {
                                                       ),
                                                     ),
                                                   ),
-                                                  SizedBox(height: 5,),
+                                                  SizedBox(
+                                                    height: 5,
+                                                  ),
                                                   ClipRRect(
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -475,46 +512,42 @@ class _DashboardState extends State<Dashboard> {
                                                                   .size
                                                                   .height *
                                                               0.05,
-                                                      color: (user.status ==
-                                                              "belum diterima")
-                                                          ? Color(0xFF3B8D28)
-                                                          : Colors.red,
+                                                      color: Colors.red,
                                                       child: Material(
                                                         color:
                                                             Colors.transparent,
                                                         child: InkWell(
                                                           onTap: () async {
-                                                            try {
-                                                              var response = (user
-                                                                          .idAdmin ==
-                                                                      null)
-                                                                  ? await UserApi
-                                                                      .changeStatus(
-                                                                          token,
-                                                                          "seller",
-                                                                          user.idSeller ??
-                                                                              0)
-                                                                  : await UserApi
-                                                                      .changeStatus(
-                                                                          token,
-                                                                          "admin",
-                                                                          user.idAdmin ??
-                                                                              0);
-                                                              if (response[
-                                                                      'status'] ==
-                                                                  200)
-                                                                fetchAllUsers(
-                                                                    '');
-                                                            } catch (e) {
-                                                              print(e);
-                                                            }
+                                                            showDeleteConfirmationDialog(
+                                                                context,
+                                                                () async {
+                                                              try {
+                                                                var response = (user
+                                                                            .idAdmin ==
+                                                                        null)
+                                                                    ? await UserApi.deleteUser(
+                                                                        token,
+                                                                        "seller",
+                                                                        user.idSeller ??
+                                                                            0)
+                                                                    : await UserApi.deleteUser(
+                                                                        token,
+                                                                        "admin",
+                                                                        user.idAdmin ??
+                                                                            0);
+                                                                if (response[
+                                                                        'status'] ==
+                                                                    200)
+                                                                  fetchAllUsers(
+                                                                      '');
+                                                              } catch (e) {
+                                                                print(e);
+                                                              }
+                                                            });
                                                           },
                                                           child: Center(
                                                             child: Text(
-                                                              (user.status ==
-                                                                      "belum diterima")
-                                                                  ? "terima"
-                                                                  : "tolak",
+                                                              "hapus",
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .white),

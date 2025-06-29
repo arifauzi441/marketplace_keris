@@ -160,6 +160,18 @@ class UserApi {
     return datas;
   }
 
+  static Future<Map<String, dynamic>> deleteUser(
+      String token, String role, int id) async {
+    String apiUrl = '$api/users/delete/$role/$id';
+    var apiResult = await http.delete(Uri.parse(apiUrl), headers: {
+      "Authorization": token,
+      'ngrok-skip-browser-warning': 'true'
+    });
+
+    var statusResult = json.decode(apiResult.body);
+    return {"msg": statusResult['msg'], 'status': apiResult.statusCode};
+  }
+
   static Future<Map<String, dynamic>> changeStatus(
       String token, String role, int id) async {
     String apiUrl = '$api/users/change-status/$role/$id';
