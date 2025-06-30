@@ -151,7 +151,7 @@ export default function Tokokeris() {
                   image={produk.image}
                   name={produk.name}
                   price={formatRupiah(produk.price)}
-                  id={produk.productId}
+                  id_product={produk.productId}
                 />
               </Link>
             </motion.div>
