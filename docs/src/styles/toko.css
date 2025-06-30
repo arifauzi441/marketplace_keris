@@ -306,7 +306,7 @@
 }
 
 .product-description {
-  font-size: calc(1vw + 0.7vh);
+  font-size: 1.3rem;
   color: white;
   line-height: 1.6;
   justify-content: center;
