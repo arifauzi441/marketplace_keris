@@ -198,12 +198,7 @@ export default function Tokokeris() {
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* Header */}
-<<<<<<< HEAD
-      <TopMenu />
-=======
       <NavTop />
->>>>>>> upstream/main
-
       {/* Divider */}
       <div className="divider"></div>
 
