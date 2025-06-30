@@ -10,7 +10,8 @@ const storage = multer.diskStorage({
         cb(null, "public/images/product_images")
     },
     filename: (req, file, cb) => {
-        cb(null, `${Date.now()}.${path.extname(file.originalname)}`)
+        const randomNumber = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
+        cb(null, `${Date.now()}${randomNumber}.${path.extname(file.originalname)}`)
     }
 })
 
