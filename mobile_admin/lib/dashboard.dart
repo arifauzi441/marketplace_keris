@@ -7,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile_admin/login.dart';
 import 'package:mobile_admin/model/user_api.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Dashboard extends StatefulWidget {
   final String token;
@@ -22,6 +23,11 @@ class _DashboardState extends State<Dashboard> {
   UserApi? user;
   List<UserApi>? users;
   late String token = widget.token;
+  final storage = FlutterSecureStorage();
+
+  Future<void> deleteToken() async {
+    await storage.delete(key: 'jwt_token');
+  }
 
   @override
   void initState() {
@@ -203,6 +209,7 @@ class _DashboardState extends State<Dashboard> {
                                 setState(() {
                                   token = '';
                                 });
+                                deleteToken();
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
@@ -407,7 +414,7 @@ class _DashboardState extends State<Dashboard> {
                                               flex: 3,
                                               child: Center(
                                                 child: Text(
-                                                  user. username?? "",
+                                                  user.username ?? "",
                                                   style: TextStyle(
                                                       color: Colors.black),
                                                 ),
