@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="toko keris penjual"
+        android:label="Toko Keris Penjual"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

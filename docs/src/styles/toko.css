@@ -655,7 +655,7 @@
 
   .nama-produk {
     margin: 0;
-    font-size: 10px;
+    font-size: 16px;
     font-weight: 500;
     padding: 0 10px;
     white-space: nowrap;
@@ -665,27 +665,36 @@
   }
 
   .harga-dan-beli {
+    width: 100%;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
     padding: 0 10px;
     margin: 0;
+    box-sizing: border-box;
   }
 
-  .harga-produk {
-    margin: 0;
-    font-size: 8px;
+  .harga-dan-beli a {
+    width: 100%;
+    display: block;
   }
 
   .tombol-beli {
+    width: 100%;
     background-color: #53C737;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  padding: 3px 10px;
-  font-size: 8px;
-  margin-bottom: 4px;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    padding: 5px 0;
+    font-size: 10px;
+    margin-bottom: 4px;
+  }
+
+  .harga-produk {
+    margin-bottom: 10px;
+    font-size: 14px;
   }
 
   .tombol-beli:hover {

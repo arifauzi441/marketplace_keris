@@ -46,3 +46,12 @@ jobs:
         with:
           name: flutter-apk-keris-admin
           path: mobile_admin/build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: Rilis Admin v1.0.${{ github.run_number }}
+          files: mobile_admin/build/app/outputs/flutter-apk/app-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

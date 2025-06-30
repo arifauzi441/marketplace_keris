@@ -189,7 +189,7 @@ class _DaftarEmpuState extends State<DaftarEmpu> {
                               crossAxisCount: 2,
                               mainAxisSpacing: 10,
                               crossAxisSpacing: 10,
-                              childAspectRatio: 0.58,
+                              childAspectRatio: 0.7,
                             ),
                             itemCount: users?.length ?? 1,
                             itemBuilder: (context, index) {
@@ -275,30 +275,7 @@ class _DaftarEmpuState extends State<DaftarEmpu> {
                                               ],
                                             ),
                                           ),
-                                          Spacer(),
-                                          Align(
-                                            alignment: Alignment.center,
-                                            child: ElevatedButton(
-                                              onPressed: () {},
-                                              style: ElevatedButton.styleFrom(
-                                                elevation: 0,
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                                shadowColor: Colors.transparent,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.zero),
-                                                padding: EdgeInsets.zero,
-                                              ),
-                                              child: Text(
-                                                "Lihat Produk",
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontWeight:
-                                                        FontWeight.normal),
-                                              ),
-                                            ),
-                                          ),
+                                          Spacer()
                                         ],
                                       ),
                                     );
