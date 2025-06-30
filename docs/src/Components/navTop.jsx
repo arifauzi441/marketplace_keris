@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import logoImage from "../assets/Images/logo-keris.png";
 
 const API_URL = import.meta.env.VITE_API_URL
+const urlKeris = "https://toko.kerissumenep.com/"
 const NavTop = ({submit}) => {
   
   return (
@@ -30,8 +31,8 @@ const NavTop = ({submit}) => {
         </div>
         <nav className="nav-container">
           <ul className="nav-links">
-            <li><a href={API_URL}>Beranda</a></li>
-            <li><a href={`${API_URL}daftar-empu`}>Empu</a></li>
+            <li><a href={urlKeris}>Beranda</a></li>
+            <li><a href={`${urlKeris}daftar-empu`}>Empu</a></li>
             <li><a href="#produk-terbaru">Koleksi</a></li>
           </ul>
         </nav>

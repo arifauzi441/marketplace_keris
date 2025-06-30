@@ -9,9 +9,9 @@ const ProductCard = ({ image, name, price, id_product }) => (
     </div>
     <span className="nama-produk">{name}</span>
     <div className="harga-dan-beli">
-      <span className="harga-produk" style={{color: "red"}}>{price}</span>
+      <span className="harga-produk" style={{color: "red", fontWeight: "bold"}}>{price}</span>
       <Link to={`/detail-produk/${id_product}`}>
-        <button className="tombol-beli">Beli</button>
+        <button className="tombol-beli" style={{fontSize: "14px"}}>Beli</button>
       </Link>
     </div>
   </div>

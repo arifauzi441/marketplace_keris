@@ -214,7 +214,7 @@ export default function Tokokeris() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            Keris Warisan Leluhur <br /> dari Sumenep
+            Keris Warisan Leluhur dari Sumenep
           </motion.h1>
 
           <motion.div
@@ -287,7 +287,7 @@ export default function Tokokeris() {
           style={{ backgroundImage: `url(${productHeroImage})` }}
         >
           <div className="product-subtitle">
-            <p>Simbol Keagungan dan Warisan Budaya</p>
+            <h1>Simbol Keagungan dan Warisan Budaya</h1>
           </div>
           <div>
             <p className="product-description">

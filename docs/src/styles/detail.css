@@ -105,7 +105,8 @@
     }
     .harga-produk-detail {
     font-size: 22px;
-    color: #333;
+    color: red;
+    font-weight: bold;
     display: block;
     margin-bottom: 15px;
     }
