@@ -152,7 +152,7 @@ class _DetailProductState extends State<DetailProduct> {
                     child: (widget.product!.productPict.isEmpty ||
                             _mainProductPict == "")
                         ? Image.asset(
-                            'assets/images/bg.jpg',
+                            'assets/images/keris-sketsa.png',
                             fit: BoxFit.cover,
                           )
                         : FutureBuilder<Uint8List?>(

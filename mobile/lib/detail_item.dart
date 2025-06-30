@@ -79,7 +79,10 @@ class _DetailItemState extends State<DetailItem> {
                       color: Colors.white,
                       child: (widget.product!.productPict.isEmpty ||
                               _mainProductPict == "")
-                          ? Container()
+                          ? Image.asset(
+                            'assets/images/keris-sketsa.png',
+                            fit: BoxFit.cover,
+                          )
                           : Image.network(_mainProductPict)
                       // : FutureBuilder<Uint8List?>(
                       //     future: fetchImageBytes(_mainProductPict),

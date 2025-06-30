@@ -17,6 +17,7 @@ import logoImage from "../assets/Images/logo-keris.png";
 import defaultSellerPhoto from "../assets/Images/account.png"
 import sketsaKeris from "../assets/Images/keris-sketsa.png"
 
+
 const API_URL = import.meta.env.VITE_API_URL
 // // Komponen EmpuCard
 // const EmpuCard = ({ image, name, phone, id_seller }) => {
@@ -174,11 +175,6 @@ export default function Tokokeris() {
     fetchSellers();
   }, [search]);
 
-  const submit = (s) => {
-    setTimeout(() => {
-      setSearch(s)
-    }, 1000);
-  }
 
   const formatRupiah = (amount) => {
     return new Intl.NumberFormat("id-ID", {
@@ -192,8 +188,12 @@ export default function Tokokeris() {
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* Header */}
-      <NavTop />
-
+      <NavTop 
+        submit = {(s) => {
+          setTimeout(() => {
+            setSearch(s)
+          }, 1000);
+        }} />
       {/* Divider */}
       <div className="divider"></div>
 

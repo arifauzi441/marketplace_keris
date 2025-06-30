@@ -3,6 +3,7 @@ import 'package:mobile/dashboard.dart';
 import 'package:mobile/input_phone_number.dart';
 import 'package:mobile/model/login_api.dart';
 import 'package:mobile/register.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -17,6 +18,39 @@ class _LoginState extends State<Login> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool isClicked = false;
+  final storage = FlutterSecureStorage();
+
+  Future<void> saveToken(String token) async {
+    await storage.write(key: 'jwt_token', value: token);
+  }
+
+  Future<void> getToken() async {
+    String? token = await storage.read(key: 'jwt_token');
+    print(token);
+    if (token != null) {
+      Future.delayed(
+          Duration(seconds: 0),
+          () => Navigator.pushReplacement(
+              context,
+              PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      Dashboard(token: token),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    );
+                  },
+                  transitionDuration: Duration(milliseconds: 0))));
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getToken();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -174,6 +208,7 @@ class _LoginState extends State<Login> {
                                                     if (result
                                                         .token.isNotEmpty) {
                                                       if (!mounted) return;
+                                                      saveToken(result.token);
                                                       Navigator.pushReplacement(
                                                           context,
                                                           MaterialPageRoute(

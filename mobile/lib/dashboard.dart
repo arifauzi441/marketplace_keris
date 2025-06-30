@@ -11,6 +11,7 @@ import 'package:mobile/model/product_api.dart';
 import 'package:mobile/model/user_api.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Dashboard extends StatefulWidget {
   final String? token;
@@ -26,6 +27,13 @@ class _DashboardState extends State<Dashboard> {
   UserApi? user;
   bool _burgerMenu = false;
   late String? token;
+  final storage = FlutterSecureStorage();
+
+  Future<void> deleteToken() async {
+    print("hai");
+    await storage.delete(key: 'jwt_token');
+  }
+
 
   @override
   void initState() {
@@ -56,7 +64,6 @@ class _DashboardState extends State<Dashboard> {
   //   }
   // }
 
-  
   Future<void> _refreshData() async {
     await Future.delayed(Duration(seconds: 2)); // simulasi delay
     setState(() {
@@ -336,6 +343,7 @@ class _DashboardState extends State<Dashboard> {
                                     setState(() {
                                       token = '';
                                     });
+                                    deleteToken();
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
@@ -386,7 +394,8 @@ class _DashboardState extends State<Dashboard> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         IconButton(
-                          icon: Icon(Icons.menu, size: 40.0, color: Colors.black),
+                          icon:
+                              Icon(Icons.menu, size: 40.0, color: Colors.black),
                           onPressed: () {
                             setState(() {
                               _burgerMenu = true;
@@ -408,7 +417,8 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(right: 10.0, left: 5.0),
+                                padding:
+                                    EdgeInsets.only(right: 10.0, left: 5.0),
                                 child: ClipOval(
                                   child: (user?.sellerPhoto == null)
                                       ? Image.asset(
@@ -417,7 +427,8 @@ class _DashboardState extends State<Dashboard> {
                                           height: 40.0,
                                           fit: BoxFit.cover,
                                         )
-                                      : Image.network("$api/${user?.sellerPhoto}",
+                                      : Image.network(
+                                          "$api/${user?.sellerPhoto}",
                                           width: 40.0,
                                           height: 40.0,
                                           fit: BoxFit.cover),
@@ -490,8 +501,8 @@ class _DashboardState extends State<Dashboard> {
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              border:
-                                  Border.all(color: Color(0xFF2E6C25), width: 2),
+                              border: Border.all(
+                                  color: Color(0xFF2E6C25), width: 2),
                             ),
                             padding: EdgeInsets.all(5),
                             child: Column(
@@ -506,7 +517,8 @@ class _DashboardState extends State<Dashboard> {
                                       Align(
                                         alignment: Alignment.centerRight,
                                         child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           child: Container(
                                             width: 100,
                                             height: MediaQuery.of(context)
@@ -560,17 +572,17 @@ class _DashboardState extends State<Dashboard> {
                                 Container(
                                   width: double.infinity,
                                   height: 150,
-                                  child:
-                                      (user?.product[index].productPict.isEmpty ??
-                                              true)
-                                          ? Image.asset(
-                                              'assets/images/keris-sketsa.png',
-                                              fit: BoxFit.cover)
-                                          : Image.network(
-                                              user?.product[index].productPict[0]
-                                                      .path ??
-                                                  "",
-                                              fit: BoxFit.cover),
+                                  child: (user?.product[index].productPict
+                                              .isEmpty ??
+                                          true)
+                                      ? Image.asset(
+                                          'assets/images/keris-sketsa.png',
+                                          fit: BoxFit.cover)
+                                      : Image.network(
+                                          user?.product[index].productPict[0]
+                                                  .path ??
+                                              "",
+                                          fit: BoxFit.cover),
                                   // : FutureBuilder<Uint8List?>(
                                   //     future: fetchImageBytes(user
                                   //             ?.product[index]
@@ -599,7 +611,10 @@ class _DashboardState extends State<Dashboard> {
                                   user?.product[index].productName ?? "",
                                   style: TextStyle(fontSize: 16),
                                 ),
-                                Text(user?.product[index].productPrice ?? "", style: TextStyle(color: Colors.red),),
+                                Text(
+                                  user?.product[index].productPrice ?? "",
+                                  style: TextStyle(color: Colors.red),
+                                ),
                                 Text(
                                     "stock: ${user?.product[index].productStock}"),
                                 SizedBox(height: 10),
@@ -613,9 +628,10 @@ class _DashboardState extends State<Dashboard> {
                                         borderRadius: BorderRadius.circular(10),
                                         child: Container(
                                           width: 60,
-                                          height:
-                                              MediaQuery.of(context).size.height *
-                                                  0.04,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.04,
                                           color: Color(0xFF53C737),
                                           child: Material(
                                             color: Colors.transparent,
@@ -628,10 +644,11 @@ class _DashboardState extends State<Dashboard> {
                                                             EditItem(
                                                                 token:
                                                                     token ?? "",
-                                                                product:
-                                                                    user?.product[
-                                                                        index])));
-                                                if (mounted && response == true) {
+                                                                product: user
+                                                                        ?.product[
+                                                                    index])));
+                                                if (mounted &&
+                                                    response == true) {
                                                   fetchUser();
                                                 }
                                               },
@@ -653,9 +670,10 @@ class _DashboardState extends State<Dashboard> {
                                         borderRadius: BorderRadius.circular(10),
                                         child: Container(
                                           width: 60,
-                                          height:
-                                              MediaQuery.of(context).size.height *
-                                                  0.04,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.04,
                                           color: Color(0xFFFF3636),
                                           child: Material(
                                             color: Colors.transparent,
@@ -668,7 +686,8 @@ class _DashboardState extends State<Dashboard> {
                                                                   .idProduct ??
                                                               0,
                                                           token ?? "");
-                                                  if (response['status'] == 200) {
+                                                  if (response['status'] ==
+                                                      200) {
                                                     fetchUser();
                                                   }
                                                   print(response);
@@ -742,8 +761,9 @@ class _DashboardState extends State<Dashboard> {
                 AnimatedContainer(
                   duration: Duration(milliseconds: 150),
                   height: MediaQuery.of(context).size.height,
-                  width:
-                      (_burgerMenu) ? MediaQuery.of(context).size.width * 0.5 : 0,
+                  width: (_burgerMenu)
+                      ? MediaQuery.of(context).size.width * 0.5
+                      : 0,
                   child: Container(
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
@@ -821,7 +841,8 @@ class _DashboardState extends State<Dashboard> {
                                         child: Center(
                                           child: Text(
                                             "Ubah Profil",
-                                            style: TextStyle(color: Colors.white),
+                                            style:
+                                                TextStyle(color: Colors.white),
                                           ),
                                         )),
                                   ),
@@ -831,9 +852,11 @@ class _DashboardState extends State<Dashboard> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Container(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.5 * 0.8,
-                                height: MediaQuery.of(context).size.height * 0.05,
+                                width: MediaQuery.of(context).size.width *
+                                    0.5 *
+                                    0.8,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.05,
                                 color: Color(0xFF3B8D28),
                                 child: Material(
                                   color: Colors.transparent,
@@ -873,6 +896,7 @@ class _DashboardState extends State<Dashboard> {
                                       setState(() {
                                         token = '';
                                       });
+                                      deleteToken();
                                       Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
