@@ -174,11 +174,6 @@ export default function Tokokeris() {
     fetchSellers();
   }, [search]);
 
-  const submit = (s) => {
-    setTimeout(() => {
-      setSearch(s)
-    }, 1000);
-  }
 
   const formatRupiah = (amount) => {
     return new Intl.NumberFormat("id-ID", {
@@ -192,7 +187,12 @@ export default function Tokokeris() {
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* Header */}
-      <NavTop />
+      <NavTop 
+        submit = {(s) => {
+          setTimeout(() => {
+            setSearch(s)
+          }, 1000);
+        }} />
       {/* Divider */}
       <div className="divider"></div>
 
