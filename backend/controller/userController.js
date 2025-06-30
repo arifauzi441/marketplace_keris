@@ -135,9 +135,9 @@ const updateUserById = async (req, res, next) => {
 const changePassword = async (req, res, next) => {
     try {
         let { oldPasswordInput, newPasswordInput, newPasswordInput2 } = req.body
-        
+
         let oldData = await Seller.findOne(
-            { attributes: ['password'] , where: {id_seller: req.user.id}})
+            { attributes: ['password'], where: { id_seller: req.user.id } })
         if (oldData.password != oldPasswordInput) return res.status(401).json({ msg: "Password tidak sesuai" })
         if (newPasswordInput != newPasswordInput2) return res.status(401).json({ msg: "Password tidak sama" })
 
@@ -151,6 +151,58 @@ const changePassword = async (req, res, next) => {
     } catch (error) {
         console.log(error)
         res.json({ msg: error })
+    }
+}
+
+const deleteUserById = async (req, res) => {
+    try {
+        let { role, id } = req.params
+        if (role == 'admin') {
+            let dataAdmin = await Admin.findOne({
+                where: { id_admin: id }
+            })
+            if (!dataAdmin) return res.status(404).json({ msg: "User admin tidak ditemukan" })
+            if (dataAdmin.admin_photo) {
+                let photoPath = path.join(__dirname, "../public", dataAdmin.admin_photo)
+                fs.unlinkSync(photoPath)
+            }
+
+            await Admin.destroy({ where: { id_admin: id } })
+        } else {
+            let dataSeller = await Seller.findOne({
+                where: { id_seller: id },
+                include: [{
+                    model: Product,
+                    include: [{ model: ProductPict }]
+                }]
+            })
+            if (!dataSeller) return res.status(404).json({ msg: "User seller tidak ditemukan" })
+            let photoPath = []
+            if (dataSeller.seller_photo) {
+                let sellerPath = path.join(__dirname, "../public", dataSeller.seller_photo)
+                photoPath.push(sellerPath)
+            }
+            if (dataSeller.products.length > 0) {
+                dataSeller.products.forEach(product => {
+                    if(product.productpicts.length > 0){
+                        product.productpicts.forEach(pict => {
+                            let productPath = path.join(__dirname, "../public", pict.path)
+                            photoPath.push(productPath)
+                        })
+                    }
+                })
+            }
+            if(photoPath.length > 0){
+                photoPath.forEach(photo => {
+                    fs.unlinkSync(photo)
+                })
+            }
+            await Seller.destroy({ where: { id_seller: id } })
+        }
+        return res.status(200).json({ msg: "Berhasil menghapus data users" })
+    } catch (error) {
+        console.log(error)
+        return res.status(401).json({ msg: "Gagal menghapus users" })
     }
 }
 
@@ -174,17 +226,28 @@ const changeStatus = async (req, res) => {
 }
 
 const saveToken = async (req, res) => {
-  try {
-    const { token, id_admin } = req.body;
-    console.log(id_admin)
-    await Admin.update({fcm_token: token}, { where: {id_admin}})
-    res.json({ status: 'success' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ status: 'error' });
-  }
+    try {
+        const { token, id_admin } = req.body;
+        console.log(id_admin)
+        await Admin.update({ fcm_token: token }, { where: { id_admin } })
+        res.json({ status: 'success' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ status: 'error' });
+    }
 };
 
 
 
-module.exports = { saveToken, getAdminById, getUserById, getUserWithProductById, getUsers, getAllUsers, updateUserById, changePassword, changeStatus }
+module.exports = {
+    saveToken,
+    getAdminById,
+    getUserById,
+    getUserWithProductById,
+    getUsers,
+    getAllUsers,
+    updateUserById,
+    changePassword,
+    changeStatus,
+    deleteUserById
+}

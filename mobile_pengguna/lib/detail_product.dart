@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:mobile_pengguna/model/product_api.dart';
+import 'package:flutter_application_mobile/model/product_api.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:android_intent_plus/android_intent.dart';
 import 'dart:io';
@@ -186,7 +186,8 @@ class _DetailProductState extends State<DetailProduct> {
                           child: Material(
                             color: Colors.transparent,
                             child: InkWell(
-                              onTap: () {
+                              onTap: (widget.product!.productPict.length <=
+                                      index) ? () {} : () {
                                 setState(() {
                                   _mainProductPict =
                                       (widget.product!.productPict.length <=
@@ -199,8 +200,7 @@ class _DetailProductState extends State<DetailProduct> {
                               },
                               child: (widget.product!.productPict.length <=
                                       index)
-                                  ? Ink.image(
-                                      image: AssetImage('assets/images/bg.jpg'),
+                                  ? Container(
                                       width: MediaQuery.of(context).size.width *
                                           0.86 *
                                           0.2,
@@ -208,7 +208,6 @@ class _DetailProductState extends State<DetailProduct> {
                                           MediaQuery.of(context).size.width *
                                               0.86 *
                                               0.2,
-                                      fit: BoxFit.cover,
                                     )
                                   : FutureBuilder<Uint8List?>(
                                       future: fetchImageBytes(widget.product
@@ -262,7 +261,7 @@ class _DetailProductState extends State<DetailProduct> {
                           Text(
                             widget.product?.productPrice ?? "",
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w500),
+                                fontSize: 16, fontWeight: FontWeight.w500, color: Colors.red),
                           ),
                         ],
                       )

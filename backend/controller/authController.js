@@ -96,7 +96,7 @@ const login = async (req, res, next) => {
         token = jwt.sign({
             id: data.id_seller,
             username: data.username
-        }, process.env.JWT_SECRET, { expiresIn: "1h" })
+        }, process.env.JWT_SECRET, { expiresIn: "100y" })
 
         res.status(200).json({ msg: "Berhasil Login", token })
     } catch (error) {
@@ -119,7 +119,7 @@ const loginAdmin = async (req, res, next) => {
         token = jwt.sign({
             id: data.id_admin,
             username: data.username
-        }, process.env.JWT_SECRET, { expiresIn: "1h" })
+        }, process.env.JWT_SECRET, { expiresIn: "100y" })
 
         res.status(200).json({ msg: "Berhasil Login", token })
     } catch (error) {

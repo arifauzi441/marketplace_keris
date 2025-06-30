@@ -17,6 +17,7 @@ class _RegisterState extends State<Register> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   RegisterApi register = RegisterApi(msg: '', statusCode: 0);
+  bool isClicked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -55,134 +56,148 @@ class _RegisterState extends State<Register> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                    color: Color(0xFF53C737), width: 3),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black12,
-                                      spreadRadius: 5,
-                                      blurRadius: 3,
-                                      offset: Offset(12, 12))
-                                ]),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  height: 50,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xFF53C737),
-                                      borderRadius: BorderRadius.vertical(
-                                          top: Radius.zero,
-                                          bottom: Radius.circular(20))),
-                                  child: Center(
-                                    child: Text(
-                                      "Register",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
+                          GestureDetector(
+                            onTap: () {
+                              FocusScope.of(context).unfocus();
+                            },
+                            behavior: HitTestBehavior.opaque,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      color: Color(0xFF53C737), width: 3),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black12,
+                                        spreadRadius: 5,
+                                        blurRadius: 3,
+                                        offset: Offset(12, 12))
+                                  ]),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    height: 50,
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                        color: Color(0xFF53C737),
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.zero,
+                                            bottom: Radius.circular(20))),
+                                    child: Center(
+                                      child: Text(
+                                        "Register Admin",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Column(
-                                  children: [
-                                    (register.msg.isNotEmpty)
-                                        ? Text(
-                                            register.msg,
-                                            style: (register.statusCode != 201)
-                                                ? TextStyle(color: Colors.red)
-                                                : TextStyle(
-                                                    color: Color(0xFF53C737)),
-                                            textAlign: TextAlign.center,
-                                          )
-                                        : SizedBox(
-                                            height: 0,
-                                          ),
-                                    getTextField(context, "Name"),
-                                    getTextField(context, "Username"),
-                                    getTextField(context, "Password"),
-                                    getTextField(context, "Phone"),
-                                  ],
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.only(top: 25),
-                                      width: 110,
-                                      height: 35,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(20),
-                                        child: Material(
-                                          color: Color(0xFF53C737),
-                                          child: InkWell(
-                                            onTap: () async {
-                                              try {
-                                                var result =
-                                                    await RegisterApi.register(
-                                                        _usernameController
-                                                            .text,
-                                                        _passwordController
-                                                            .text,
-                                                        _adminNameController
-                                                            .text,
-                                                        _phoneController.text);
+                                  Column(
+                                    children: [
+                                      (register.msg.isNotEmpty &&
+                                              register.msg[0] != 'B')
+                                          ? Text(
+                                              register.msg,
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                              textAlign: TextAlign.center,
+                                            )
+                                          : SizedBox(
+                                              height: 0,
+                                            ),
+                                      getTextField(context, "Name"),
+                                      getTextField(context, "Username"),
+                                      getTextField(context, "Password"),
+                                      getTextField(context, "Phone"),
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(top: 25),
+                                        width: 110,
+                                        height: 35,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          child: Material(
+                                            color: Color(0xFF53C737),
+                                            child: InkWell(
+                                              onTap: () async {
+                                                FocusScope.of(context)
+                                                    .unfocus();
+                                                try {
+                                                  var result = await RegisterApi
+                                                      .register(
+                                                          _usernameController
+                                                              .text,
+                                                          _passwordController
+                                                              .text,
+                                                          _adminNameController
+                                                              .text,
+                                                          _phoneController
+                                                              .text);
 
-                                                setState(() {
-                                                  register = result;
-                                                });
-                                              } catch (e) {
-                                                print(e);
-                                              }
-                                            },
-                                            child: Center(
-                                              child: Text(
-                                                "Daftar",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
+                                                  setState(() {
+                                                    if (result.msg[0] == 'B') {
+                                                      isClicked = true;
+                                                    }
+                                                    register = result;
+                                                  });
+                                                } catch (e) {
+                                                  print(e);
+                                                }
+                                              },
+                                              child: Center(
+                                                child: Text(
+                                                  "Daftar",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
                                                 ),
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(0, 10, 0, 30),
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text("Sudah punya akun ? "),
-                                            InkWell(
-                                                onTap: () => {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder:
-                                                                  (context) =>
-                                                                      Login()))
-                                                    },
-                                                child: Text(
-                                                  "Login",
-                                                  style: TextStyle(
-                                                      color: Color(0xFF53C737)),
-                                                ))
-                                          ]),
-                                    )
-                                  ],
-                                )
-                              ],
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(0, 10, 0, 30),
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text("Sudah punya akun ? "),
+                                              InkWell(
+                                                  onTap: () => {
+                                                        Navigator.pushReplacement(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        Login()))
+                                                      },
+                                                  child: Text(
+                                                    "Login",
+                                                    style: TextStyle(
+                                                        color:
+                                                            Color(0xFF53C737)),
+                                                  ))
+                                            ]),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -195,6 +210,95 @@ class _RegisterState extends State<Register> {
                 ),
               );
             }),
+            Align(
+              alignment: Alignment(1, 1),
+              child: Container(
+                height: isClicked ? MediaQuery.of(context).size.height * 1 : 0,
+                width: double.infinity,
+                color: Colors.black12,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      height: isClicked
+                          ? MediaQuery.of(context).size.height * 0.5
+                          : 0,
+                      width: double.infinity,
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(20),
+                      height: isClicked
+                          ? MediaQuery.of(context).size.height * 0.5
+                          : 0,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(50))),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                  color: Colors.orange, shape: BoxShape.circle),
+                              child: Center(
+                                  child: Icon(
+                                Icons.hourglass_empty,
+                                color: Colors.white,
+                                size: 50,
+                              ))),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            register.msg,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          SizedBox(
+                            height: 80,
+                          ),
+                          SizedBox(
+                            width: 300,
+                            height: 50,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Material(
+                                color: Color(0xFF53C737),
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      isClicked = false;
+                                    });
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Login()));
+                                  },
+                                  child: Center(
+                                    child: Text(
+                                      "Login",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
           ],
         ));
   }

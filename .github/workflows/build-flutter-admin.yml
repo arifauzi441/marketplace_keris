@@ -19,6 +19,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -39,4 +45,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: flutter-apk
-          path: mobile_admin/build/app/outputs/flutter-apk/app-release.apk
+          path: mobile_admin/build/app/outputs/flutter-apk/keris-sumenep-admin.apk

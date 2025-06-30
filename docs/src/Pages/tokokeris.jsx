@@ -5,9 +5,16 @@ import axios from 'axios';
 import "../index.css";
 import "../styles/toko.css";
 
+<<<<<<< HEAD
 // Komponen
 import TopMenu from "../Components/topmenu";
 
+=======
+// Component
+import ProductCard from "../Components/productCard"
+import EmpuCard from "../Components/empuCard"
+import NavTop from "../Components/navTop"
+>>>>>>> upstream/main
 
 // Gambar
 import heroImage from "../assets/Images/hero1.png";
@@ -17,33 +24,17 @@ import defaultSellerPhoto from "../assets/Images/account.png"
 import sketsaKeris from "../assets/Images/keris-sketsa.png"
 
 const API_URL = import.meta.env.VITE_API_URL
-// Komponen EmpuCard
-const EmpuCard = ({ image, name, phone, id_seller }) => {
-  return (
-    <Link to={`/produk-empu/${id_seller}`}>
-      <div className="empu-card">
-        <img src={image} alt={name} className="empu-photo" />
-        <div className="empu-name">{name}</div>
-      </div>
-    </Link>
-  )
-};
-
-// Komponen ProdukCard - produk terbaru
-const ProdukCard = ({ image, name, price, id_product }) => (
-  <div className="kartu-produk">
-    <div className="gambar-produk">
-      <img src={image == " " ? sketsaKeris : image} alt={name} />
-    </div>
-    <span className="nama-produk">{name}</span>
-    <div className="harga-dan-beli">
-      <span className="harga-produk">{price}</span>
-      <Link to={`/detail-produk/${id_product}`}>
-        <button className="tombol-beli">Beli</button>
-      </Link>
-    </div>
-  </div>
-);
+// // Komponen EmpuCard
+// const EmpuCard = ({ image, name, phone, id_seller }) => {
+//   return (
+//     <Link to={`/produk-empu/${id_seller}`}>
+//       <div className="empu-card">
+//         <img src={image} alt={name} className="empu-photo" />
+//         <div className="empu-name">{name}</div>
+//       </div>
+//     </Link>
+//   )
+// };
 
 const incrementClick = async (id_product) => {
   try {
@@ -160,10 +151,8 @@ export default function Tokokeris() {
           }
         })
         const productData = response?.data?.product || [];
-        // Generate image URLs
         const blobUrls = await Promise.all(
           productData.map(async (item) => {
-            // Jika tidak ada path produk, return string kosong
             const path = item?.productpicts?.[0]?.path;
             if (path) {
               try {
@@ -173,10 +162,10 @@ export default function Tokokeris() {
                 return URL.createObjectURL(res.data);
               } catch (err) {
                 console.error("Gagal mengambil gambar:", err);
-                return ""; // fallback jika gagal ambil gambar
+                return ""; 
               }
             }
-            return ""; // fallback jika tidak ada path
+            return ""; 
           })
         );
         setImagePopularProduct(blobUrls)
@@ -200,14 +189,20 @@ export default function Tokokeris() {
   const formatRupiah = (amount) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
-      currency: "IDR"
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
     }).format(amount)
   }
 
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* Header */}
+<<<<<<< HEAD
       <TopMenu />
+=======
+      <NavTop />
+>>>>>>> upstream/main
 
       {/* Divider */}
       <div className="divider"></div>
@@ -272,6 +267,7 @@ export default function Tokokeris() {
                 transition={{ delay: index * 0.1, duration: 0.5 }}
               >
                 <EmpuCard
+                  width={200}
                   image={(imageSellers[index] == " ") ? defaultSellerPhoto : imageSellers[index]}
                   name={empu.seller_name}
                   phone={empu.seller_phone}
@@ -317,9 +313,9 @@ export default function Tokokeris() {
           transition={{ delay: 0.2, duration: 0.8 }}
         >
           {popularProducts && popularProducts.length >= 0 &&
-            popularProducts.slice(0, 3).map((product, index) => (
+            popularProducts.slice(0, 4).map((product, index) => (
               <Link to={`/detail-produk/${product.id_product}`}>
-                <ProductItem image={imagePopularProduct[index]} name={product?.product_name} price={formatRupiah(product?.product_price)} id_product={product?.id_product} />
+                <ProductCard image={imagePopularProduct[index]} name={product?.product_name} price={formatRupiah(product?.product_price)} id_product={product?.id_product} />
               </Link>)
             )
           }
@@ -327,8 +323,8 @@ export default function Tokokeris() {
       </motion.section>
 
       {/* Produk Terbaru */}
-      <div className="judul-produk">Produk Terbaru</div>
       <motion.section className="produk-section">
+        <div className="judul-produk" id="produk-terbaru">Produk Terbaru</div>
 
         <motion.div className="produk-grid"
           initial={{ opacity: 0 }}
@@ -343,7 +339,7 @@ export default function Tokokeris() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
             ><Link to={`/detail-produk/${produk.id_product}`} onClick={() => incrementClick(produk.id_product)}>
-                <ProdukCard
+                <ProductCard
                   id_product={produk.id_product}
                   image={produk.product && produk.product.length > 0 ? imageProduct[index] : imageProduct[index]}
                   name={produk.product_name}
