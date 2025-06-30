@@ -294,14 +294,12 @@
 }
 
 .product-subtitle {
-  font-size: calc(2.6vw + 0.7vh);
+  font-size: 3rem;
   font-weight: bold;
   color: white;
   margin-bottom: 10px;
   justify-content: center;
-  /* Tengah vertikal */
   align-items: center;
-  /* Tengah horizontal */
   text-align: center;
   z-index: 1;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
@@ -312,9 +310,7 @@
   color: white;
   line-height: 1.6;
   justify-content: center;
-  /* Tengah vertikal */
   align-items: center;
-  /* Tengah horizontal */
   text-align: center;
   z-index: 1;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
@@ -417,7 +413,6 @@
 }
 
 
-
 /* PRODUK TERBARU */
 .produk-section {
   margin: 2rem 5rem 4rem 5rem;
@@ -511,10 +506,6 @@
 }
 
 
-
-
-
-
 /* Responsive Design */
 @media (max-width: 768px) {
   header {
@@ -551,9 +542,20 @@
   .hero h1 {
     font-size: 2.2rem;
   }
+  .product-subtitle {
+    font-size: 1.5rem;
+  }
+
+  .product-subtitle {
+    font-size: 2.2rem;
+    color: white;
+  }
 
   .hero p {
     font-size: 1rem;
+  }
+  .product-description {
+    font-size: 0.8rem;
   }
 
   .empu-section {
@@ -580,9 +582,16 @@
   .hero h1 {
     font-size: 1.5rem;
   }
+  .product-subtitle {
+    font-size: 1.5rem;
+  }
 
   .hero p {
     font-size: 0.8rem;
+  }
+  .product-description {
+    font-size: 0.8rem;
+    color: white;
   }
 
   .empu-section {
