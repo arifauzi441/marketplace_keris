@@ -44,5 +44,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: flutter-apk
-          path: mobile_admin/build/app/outputs/flutter-apk/keris-sumenep-admin.apk
+          name: flutter-apk-keris-admin
+          path: mobile_admin/build/app/outputs/flutter-apk/app-release.apk
