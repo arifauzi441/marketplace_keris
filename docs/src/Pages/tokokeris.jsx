@@ -5,16 +5,10 @@ import axios from 'axios';
 import "../index.css";
 import "../styles/toko.css";
 
-<<<<<<< HEAD
-// Komponen
-import TopMenu from "../Components/topmenu";
-
-=======
 // Component
 import ProductCard from "../Components/productCard"
 import EmpuCard from "../Components/empuCard"
 import NavTop from "../Components/navTop"
->>>>>>> upstream/main
 
 // Gambar
 import heroImage from "../assets/Images/hero1.png";
