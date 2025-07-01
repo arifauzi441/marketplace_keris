@@ -41,9 +41,9 @@ jobs:
       - name: List APK folder
         run: ls -la mobile_pengguna/build/app/outputs/flutter-apk/
 
-      - name: Copy APK to docs/src/apk
+      - name: Copy APK to docs/src/assets/apk
         run: |
-          mkdir -p docs/src/apk
+          mkdir -p docs/src/assets/apk
           cp mobile_pengguna/build/app/outputs/flutter-apk/app-release.apk docs/src/assets/apk/
 
       - name: Commit and push APK to repo
