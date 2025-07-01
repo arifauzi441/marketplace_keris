@@ -80,7 +80,7 @@ class _DashboardState extends State<Dashboard> {
       print("Failed to save token");
     }
   }  
-
+ 
   Future<void> fetchUser() async {
     try {
       UserApi? fetchedUser = await UserApi.getUser(token);
