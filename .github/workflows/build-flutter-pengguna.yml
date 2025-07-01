@@ -12,6 +12,9 @@ on:
     paths:
       - 'mobile_pengguna/**'
 
+permissions:
+  contents: write
+
 jobs:
   build-flutter:
     runs-on: ubuntu-latest
@@ -50,11 +53,11 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git add docs/src/assets/apk/app-release.apk
           git commit -m "Update APK pengguna"
           git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
