@@ -32,11 +32,28 @@ const NavTop = ({ submit }) => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="info-download">
-          <p>Download Aplikasi Toko Keris Di Android Anda Sekarang Juga</p>
-          <a href={`${API_URL}/apk/app-release.apk`} download>
-            <button className="bg-green-900 text-white font-bold w-30 h-9 rounded hover:bg-green-600">Download</button>
+        <div className="info-download flex flex-wrap items-center justify-between gap-2 text-sm sm:text-base px-4 py-2">
+          <p className="whitespace-nowrap">
+            Download Aplikasi Toko Keris untuk Android
+          </p>
+          <div className="button-download flex flex-wrap gap-2">
+          <a href={`${API_URL}/apk/toko-keris.apk`} download>
+            <button className="bg-green-900 text-white font-bold px-2 sm:px-3 py-2 text-xs sm:text-sm md:text-base rounded-3xl hover:bg-green-600 whitespace-nowrap">
+              Pembeli
+            </button>
           </a>
+          <a href={`${API_URL}/apk/toko-keris-penjual.apk`} download>
+            <button className="bg-green-900 text-white font-bold px-2 sm:px-3 py-2 text-xs sm:text-sm md:text-base rounded-3xl hover:bg-green-600 whitespace-nowrap">
+              Penjual
+            </button>
+          </a>
+          <a href={`${API_URL}/apk/toko-keris-admin.apk`} download>
+            <button className="bg-green-900 text-white font-bold px-2 sm:px-3 py-2 text-xs sm:text-sm md:text-base rounded-3xl hover:bg-green-600 whitespace-nowrap">
+              Admin
+            </button>
+          </a>
+        </div>
+
         </div>
         <div className="header-top">
           <div className="logo-container">
