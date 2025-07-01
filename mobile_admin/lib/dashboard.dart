@@ -79,7 +79,7 @@ class _DashboardState extends State<Dashboard> {
     } else {
       print("Failed to save token");
     }
-  }
+  }  
 
   Future<void> fetchUser() async {
     try {

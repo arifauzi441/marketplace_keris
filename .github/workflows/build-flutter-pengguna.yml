@@ -44,23 +44,31 @@ jobs:
       - name: List APK folder
         run: ls -la mobile_pengguna/build/app/outputs/flutter-apk/
 
-      - name: Copy APK to docs/src/assets/apk
+      - name: Rename APK
+        run: mv mobile_pengguna/build/app/outputs/flutter-apk/app-release.apk mobile_pengguna/build/app/outputs/flutter-apk/toko-keris.apk
+
+      - name: Copy APK to backend/public/apk
         run: |
-          mkdir -p docs/src/assets/apk
-          cp mobile_pengguna/build/app/outputs/flutter-apk/app-release.apk docs/src/assets/apk/
+          mkdir -p backend/public/apk
+          cp mobile_pengguna/build/app/outputs/flutter-apk/toko-keris.apk backend/public/apk/
 
       - name: Commit and push APK to repo
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          git add docs/src/assets/apk/app-release.apk
+          git add backend/public/apk/toko-keris.apk
           git commit -m "Update APK pengguna"
-          git push
-
+          for i in 1 2 3; do
+          git push && break || {
+            echo "Push failed, retrying in 5s..."
+            sleep 5
+            git pull origin main --rebase || true
+          }
+          done
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: flutter-apk-keris
-          path: mobile_pengguna/build/app/outputs/flutter-apk/app-release.apk
+          path: mobile_pengguna/build/app/outputs/flutter-apk/toko-keris.apk
