@@ -185,6 +185,12 @@ export default function Tokokeris() {
     }).format(amount)
   }
 
+  const array = []
+  if (popularProducts?.length <= 4) {
+    const sisa = 4 - popularProducts.length;
+    array.push(...Array(sisa).fill(3));
+  }
+
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* Header */}
@@ -310,6 +316,24 @@ export default function Tokokeris() {
             )
           }
         </motion.div>
+        
+          {array?.map((produk, index) => (
+            <motion.div
+              className="produk-card"
+              initial={{ opacity: 0 }}
+              key={index}
+              animate={{ opacity: 0, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+            ><Link to={`/detail-produk/${produk.productId}`}>
+                <ProductCard
+                  image={produk.image}
+                  name={produk.name}
+                  price={formatRupiah(produk.price)}
+                  id_product={produk.productId}
+                />
+              </Link>
+            </motion.div>
+          ))}
       </motion.section>
 
       {/* Produk Terbaru */}
@@ -334,6 +358,24 @@ export default function Tokokeris() {
                   image={produk.product && produk.product.length > 0 ? imageProduct[index] : imageProduct[index]}
                   name={produk.product_name}
                   price={formatRupiah(produk.product_price)}
+                />
+              </Link>
+            </motion.div>
+          ))}
+          
+          {array?.map((produk, index) => (
+            <motion.div
+              className="produk-card"
+              initial={{ opacity: 0 }}
+              key={index}
+              animate={{ opacity: 0, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+            ><Link to={`/detail-produk/${produk.productId}`}>
+                <ProductCard
+                  image={produk.image}
+                  name={produk.name}
+                  price={formatRupiah(produk.price)}
+                  id_product={produk.productId}
                 />
               </Link>
             </motion.div>

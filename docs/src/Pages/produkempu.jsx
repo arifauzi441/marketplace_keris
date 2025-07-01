@@ -101,6 +101,11 @@ export default function Tokokeris() {
     );
   };
 
+  const array = []
+  if (produkData?.length <= 4) {
+    const sisa = 4 - produkData.length;
+    array.push(...Array(sisa).fill(3));
+  }
 
   return (
     <div className="min-h-screen w-full flex flex-col">
@@ -157,6 +162,23 @@ export default function Tokokeris() {
             </motion.div>
           ))}
 
+          {array?.map((produk, index) => (
+            <motion.div
+              className="produk-card"
+              initial={{ opacity: 0 }}
+              key={index}
+              animate={{ opacity: 0, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+            ><Link to={`/detail-produk/${produk.productId}`}>
+                <ProductCard
+                  image={produk.image}
+                  name={produk.name}
+                  price={formatRupiah(produk.price)}
+                  id_product={produk.productId}
+                />
+              </Link>
+            </motion.div>
+          ))}
         </motion.div>
       </motion.section>
 
