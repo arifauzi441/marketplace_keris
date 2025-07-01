@@ -41,6 +41,21 @@ jobs:
       - name: List APK folder
         run: ls -la mobile_pengguna/build/app/outputs/flutter-apk/
 
+      - name: Copy APK to docs/src/apk
+        run: |
+          mkdir -p docs/src/apk
+          cp mobile_pengguna/build/app/outputs/flutter-apk/app-release.apk docs/src/assets/apk/
+
+      - name: Commit and push APK to repo
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add docs/src/assets/apk/app-release.apk
+          git commit -m "Update APK pengguna"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:

@@ -35,14 +35,8 @@ jobs:
       - name: List APK folder
         run: ls -la mobile/build/app/outputs/flutter-apk/
 
-      - name: Copy APK to docs/src/apk
-        run: |
-          mkdir -p docs/src/apk
-          cp mobile/build/app/outputs/flutter-apk/app-release.apk docs/src/apk/
-
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: flutter-apk-keris-penjual
           path: mobile/build/app/outputs/flutter-apk/app-release.apk
-          
