@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from 'axios';
+import { DevicePhoneMobileIcon } from '@heroicons/react/24/outline';
 import "../index.css";
 import "../styles/toko.css";
 
@@ -244,8 +245,11 @@ export default function Tokokeris() {
           >
             <p>
               Temukan keindahan dan keunikan keris buatan tangan dari Desa Aengtongtong, Sumenep. Setiap keris memiliki filosofi mendalam dan keunikan tersendiri.
-              <br /><strong>Eksklusif hanya di sini!</strong>
+              Ingin belanja langsung dari genggaman Anda? Unduh aplikasi mobile kami untuk pengalaman terbaik.
             </p>
+            <a href={`${API_URL}/apk/app-release.apk`} download>
+              <button className="bg-green-900 text-white font-bold w-53 h-9 rounded hover:bg-green-600">Download Aplikasi Android</button>
+            </a>
           </motion.div>
         </div>
       </motion.section>
@@ -397,7 +401,7 @@ export default function Tokokeris() {
 
         </motion.div>
       </motion.section>
-
+      
     </div>
   );
 }
