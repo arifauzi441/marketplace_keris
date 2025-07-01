@@ -57,7 +57,6 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          git pull origin main --rebase || exit 1
           git add backend/public/apk/toko-keris-penjual.apk
           git commit -m "Update APK pengguna"
           for i in 1 2 3; do
