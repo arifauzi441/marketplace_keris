@@ -32,6 +32,12 @@ const NavTop = ({ submit }) => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
+        <div className="info-download">
+          <p>Download Aplikasi Toko Keris Di Android Anda Sekarang Juga</p>
+          <a href={`${API_URL}/apk/app-release.apk`} download>
+            <button className="bg-green-900 text-white font-bold w-30 h-9 rounded hover:bg-green-600">Download</button>
+          </a>
+        </div>
         <div className="header-top">
           <div className="logo-container">
             <img src={logoImage} alt="Logo" className="logo-img" />
