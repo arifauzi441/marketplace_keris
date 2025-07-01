@@ -5,14 +5,14 @@ import logoImage from "../assets/Images/logo-keris.png";
 import { useLocation } from "react-router-dom"; // Ganti dari "react-router" ke "react-router-dom"
 
 const API_URL = import.meta.env.VITE_API_URL
-const urlKeris = "http://localhost:5173/"
+const urlKeris = "https://toko.kerissumenep.com/"
 
 const NavTop = ({ submit }) => {
   const location = useLocation();
 
   const handleKoleksiClick = (e) => {
     e.preventDefault();
-    const isBeranda = location.pathname === "/" || location.pathname === "/index.html"; // fallback kalau di dev mode
+    const isBeranda = location.pathname === "/";
 
     if (isBeranda) {
       const el = document.getElementById("produk-terbaru");
@@ -20,7 +20,6 @@ const NavTop = ({ submit }) => {
         el.scrollIntoView({ behavior: "smooth" });
       }
     } else {
-      // redirect ke halaman beranda dengan query
       window.location.href = `${urlKeris}?scrollTo=produk-terbaru`;
     }
   };
