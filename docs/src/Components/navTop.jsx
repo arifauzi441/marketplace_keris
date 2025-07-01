@@ -2,11 +2,29 @@ import React from "react";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
 import logoImage from "../assets/Images/logo-keris.png";
+import { useLocation } from "react-router-dom"; // Ganti dari "react-router" ke "react-router-dom"
 
 const API_URL = import.meta.env.VITE_API_URL
-const urlKeris = "https://toko.kerissumenep.com/"
-const NavTop = ({submit}) => {
-  
+const urlKeris = "http://localhost:5173/"
+
+const NavTop = ({ submit }) => {
+  const location = useLocation();
+
+  const handleKoleksiClick = (e) => {
+    e.preventDefault();
+    const isBeranda = location.pathname === "/" || location.pathname === "/index.html"; // fallback kalau di dev mode
+
+    if (isBeranda) {
+      const el = document.getElementById("produk-terbaru");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      // redirect ke halaman beranda dengan query
+      window.location.href = `${urlKeris}?scrollTo=produk-terbaru`;
+    }
+  };
+
   return (
     <div>
       <motion.header
@@ -33,7 +51,7 @@ const NavTop = ({submit}) => {
           <ul className="nav-links">
             <li><a href={urlKeris}>Beranda</a></li>
             <li><a href={`${urlKeris}daftar-empu`}>Empu</a></li>
-            <li><a href="#produk-terbaru">Koleksi</a></li>
+            <li><a href="#" onClick={handleKoleksiClick}>Koleksi</a></li>
           </ul>
         </nav>
       </motion.header>
