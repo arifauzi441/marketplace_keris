@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
+import Lightbox from "yet-another-react-lightbox";
+import Zoom from "yet-another-react-lightbox/plugins/zoom"; // ✅ path benar
+import "yet-another-react-lightbox/styles.css";
 import "../index.css";
 import "../styles/toko.css";
 import "../styles/detail.css";
@@ -20,6 +23,9 @@ export default function Tokokeris() {
     const [sellerImage, setSellerImage] = useState(``)
     const [image, setImage] = useState([])
     const [mainImage, setMainImage] = useState(``);
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [lightboxIndex, setLightboxIndex] = useState(0);
+
 
     useEffect(() => {
         const fetchDetailProducts = async () => {
@@ -147,7 +153,15 @@ export default function Tokokeris() {
                     {/* Gambar Utama dan Thumbnail */}
                     <div className="gambar-wrapper">
                         <div className="gambar-utama">
-                            <img src={mainImage ?? sketsaKeris} alt="Keris Lintang Kemukus" />
+                            <img
+                                src={mainImage ?? sketsaKeris}
+                                alt="Keris Lintang Kemukus"
+                                onClick={() => {
+                                setLightboxIndex(image.indexOf(mainImage));
+                                setLightboxOpen(true);
+                                }}
+                                style={{ cursor: "zoom-in" }}
+                            />
                         </div>
                         <GambarThumbnail />
                     </div>
@@ -163,6 +177,16 @@ export default function Tokokeris() {
                 </div>
 
             </motion.section>
+
+            {lightboxOpen && (
+            <Lightbox
+                open={lightboxOpen}
+                close={() => setLightboxOpen(false)}
+                slides={image.map((img) => ({ src: img }))}
+                index={lightboxIndex}
+                plugins={[Zoom]}
+            />
+            )}
         </div>
     );
 }
