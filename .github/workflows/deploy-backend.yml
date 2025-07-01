@@ -5,11 +5,7 @@ on:
     paths:
       - 'backend/**' 
     branches:
-      - main
-  workflow_run:
-    workflows: ["Build Flutter Mobile Pengguna"]
-    types:
-      - completed     
+      - main     
 
 jobs:
   ftp-deploy:

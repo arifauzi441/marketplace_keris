@@ -5,6 +5,7 @@ on:
     workflows: 
       - "Build Flutter Mobile Pengguna" 
       - "Build Flutter Mobile"
+      - "Build Flutter Mobile Admin"
     types:
       - completed   
 

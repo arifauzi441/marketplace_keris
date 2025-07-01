@@ -12,6 +12,9 @@ on:
     paths:
       - 'mobile/**'
 
+permissions:
+  contents: write
+
 jobs:
   build-flutter:
     runs-on: ubuntu-latest

@@ -11,6 +11,9 @@ on:
       - main
     paths:
       - 'mobile_admin/**'
+      
+permissions:
+  contents: write
 
 jobs:
   build-flutter:
