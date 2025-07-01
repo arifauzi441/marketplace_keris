@@ -54,13 +54,13 @@ class _DashboardState extends State<Dashboard> {
   // Future<Uint8List?> fetchImageBytes(String url) async {
   //   final response = await http
   //       .get(Uri.parse(url));
-
   //   if (response.statusCode == 200) {
   //     return response.bodyBytes; // <-- Ini kembalian berupa Uint8List
   //   } else {
   //     return null;
   //   }
   // }
+  
 
   Future<void> _refreshData() async {
     await Future.delayed(Duration(seconds: 2)); // simulasi delay
@@ -323,14 +323,6 @@ class _DashboardState extends State<Dashboard> {
                                               "${users?[index].sellerName}",
                                               style: TextStyle(
                                                   fontSize: nameFontSize,
-                                                  fontWeight: FontWeight.normal,
-                                                  overflow:
-                                                      TextOverflow.ellipsis),
-                                            ),
-                                            Text(
-                                              "${users?[index].sellerPhone}",
-                                              style: TextStyle(
-                                                  fontSize: nameFontSize2,
                                                   fontWeight: FontWeight.normal,
                                                   overflow:
                                                       TextOverflow.ellipsis),

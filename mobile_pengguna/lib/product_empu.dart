@@ -173,10 +173,6 @@ class _ProductEmpuState extends State<ProductEmpu> {
                                   color: Colors.white,
                                 ),
                               ),
-                              Text(
-                                "${widget.users?.sellerPhone}",
-                                style: TextStyle(color: Colors.white),
-                              )
                             ],
                           ),
                           SizedBox(

@@ -85,6 +85,24 @@ class _DashboardState extends State<Dashboard> {
     try {
       UserApi? fetchedUser = await UserApi.getUser(token);
       if (!mounted) return;
+      if (fetchedUser.idAdmin == null) {
+        deleteToken();
+        Future.delayed(
+            Duration(seconds: 0),
+            () => Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        Login(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                    transitionDuration: Duration(milliseconds: 0))));
+      }
       setState(() {
         user = fetchedUser;
         print(fetchedUser.idAdmin);
@@ -286,136 +304,197 @@ class _DashboardState extends State<Dashboard> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(20),
                       child: Container(
-                        width: MediaQuery.of(context).size.width * 0.5 * 0.4,
-                        height: MediaQuery.of(context).size.height * 0.05,
-                        color: (_selectedUser?.status == "belum diterima")
-                            ? Color(0xFF3B8D28)
-                            : (_selectedUser == null) ? Colors.grey : Colors.orange,
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: (_selectedUser != null) ? () async {
-                              try {
-                                var response =
-                                    (_selectedUser?.idAdmin == null)
-                                        ? await UserApi.changeStatus(
-                                            token,
-                                            "seller",
-                                            _selectedUser?.idSeller ?? 0)
-                                        : await UserApi.changeStatus(
-                                            token,
-                                            "admin",
-                                            _selectedUser?.idAdmin ?? 0);
-                                if (response['status'] == 200) {
-                                  fetchAllUsers('');
-                                  _selectedUser = null;
-                                }
-                              } catch (e) {
-                                print(e);
-                              }
-                            } : null,
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  (_selectedUser?.status == "belum diterima")
-                                      ? Icon(
-                                          Icons.check_circle,
-                                          color: Colors.white,
-                                          size: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.5 *
-                                              0.12,
-                                        )
-                                      : Icon(
-                                          Icons.cancel_outlined,
-                                          color: Colors.white,
-                                          size: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.5 *
-                                              0.12,
-                                        ),
-                                  SizedBox(
-                                    width: 2,
-                                  ),
-                                  Text(
-                                    (_selectedUser?.status ==
-                                            "belum diterima")
-                                        ? "Terima"
-                                        : "Tolak",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.5 * 0.4,
-                        height: MediaQuery.of(context).size.height * 0.05,
-                        color: (_selectedUser != null) ? Colors.red : Color.fromARGB(255, 187, 79, 71),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: (_selectedUser != null) ? () async {
-                              showDeleteConfirmationDialog(context, () async {
-                                try {
-                                  var response =
-                                      (_selectedUser?.idAdmin == null)
-                                          ? await UserApi.deleteUser(
-                                              token,
-                                              "seller",
-                                              _selectedUser?.idSeller ?? 0)
-                                          : await UserApi.deleteUser(
-                                              token,
-                                              "admin",
-                                              _selectedUser?.idAdmin ?? 0);
-                                  if (response['status'] == 200) {
-                                    fetchAllUsers('');
-                                    _selectedUser = null;
-                                  }
-                                } catch (e) {
-                                  print(e);
-                                }
+                        height: 40,
+                        padding: EdgeInsets.all(5),
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        child: TextField(
+                          onTap: () => setState(() {
+                            _selectedUser = null;
+                            _cardColor =
+                                List.filled(users!.length, Colors.white);
+                          }),
+                          onChanged: (value) {
+                            Future.delayed(Duration(milliseconds: 500), () {
+                              setState(() {
+                                fetchAllUsers(value);
                               });
-                            } : null,
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.delete,
-                                    color: Colors.white,
-                                    size: MediaQuery.of(context).size.width *
-                                        0.5 *
-                                        0.12,
-                                  ),SizedBox(
-                                    width: 2,
+                            });
+                          },
+                          cursorColor: Colors.black,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black),
+                                borderRadius: BorderRadius.circular(20)),
+                            hintText: "Cari...",
+                            hintStyle: TextStyle(color: Colors.grey),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black),
+                                borderRadius: BorderRadius.circular(20)),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 10),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            width:
+                                MediaQuery.of(context).size.width * 0.5 * 0.4,
+                            height: MediaQuery.of(context).size.height * 0.05,
+                            color: (_selectedUser?.status == "belum diterima")
+                                ? Color(0xFF3B8D28)
+                                : (_selectedUser == null)
+                                    ? Colors.grey
+                                    : Colors.orange,
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: (_selectedUser != null)
+                                    ? () async {
+                                        try {
+                                          var response = (_selectedUser
+                                                      ?.idAdmin ==
+                                                  null)
+                                              ? await UserApi.changeStatus(
+                                                  token,
+                                                  "seller",
+                                                  _selectedUser?.idSeller ?? 0)
+                                              : await UserApi.changeStatus(
+                                                  token,
+                                                  "admin",
+                                                  _selectedUser?.idAdmin ?? 0);
+                                          if (response['status'] == 200) {
+                                            fetchAllUsers('');
+                                            _selectedUser = null;
+                                          }
+                                        } catch (e) {
+                                          print(e);
+                                        }
+                                      }
+                                    : null,
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      (_selectedUser?.status ==
+                                              "belum diterima")
+                                          ? Icon(
+                                              Icons.check_circle,
+                                              color: Colors.white,
+                                              size: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.5 *
+                                                  0.12,
+                                            )
+                                          : Icon(
+                                              Icons.cancel_outlined,
+                                              color: Colors.white,
+                                              size: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.5 *
+                                                  0.12,
+                                            ),
+                                      SizedBox(
+                                        width: 2,
+                                      ),
+                                      Text(
+                                        (_selectedUser?.status ==
+                                                "belum diterima")
+                                            ? "Terima"
+                                            : "Tolak",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    "Hapus",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            width:
+                                MediaQuery.of(context).size.width * 0.5 * 0.4,
+                            height: MediaQuery.of(context).size.height * 0.05,
+                            color: (_selectedUser != null)
+                                ? Colors.red
+                                : Color.fromARGB(255, 187, 79, 71),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: (_selectedUser != null)
+                                    ? () async {
+                                        showDeleteConfirmationDialog(context,
+                                            () async {
+                                          try {
+                                            var response = (_selectedUser
+                                                        ?.idAdmin ==
+                                                    null)
+                                                ? await UserApi.deleteUser(
+                                                    token,
+                                                    "seller",
+                                                    _selectedUser?.idSeller ??
+                                                        0)
+                                                : await UserApi.deleteUser(
+                                                    token,
+                                                    "admin",
+                                                    _selectedUser?.idAdmin ??
+                                                        0);
+                                            if (response['status'] == 200) {
+                                              fetchAllUsers('');
+                                              _selectedUser = null;
+                                            }
+                                          } catch (e) {
+                                            print(e);
+                                          }
+                                        });
+                                      }
+                                    : null,
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.delete,
+                                        color: Colors.white,
+                                        size:
+                                            MediaQuery.of(context).size.width *
+                                                0.5 *
+                                                0.12,
+                                      ),
+                                      SizedBox(
+                                        width: 2,
+                                      ),
+                                      Text(
+                                        "Hapus",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -429,57 +508,9 @@ class _DashboardState extends State<Dashboard> {
                     ),
                     child: Column(
                       children: [
-                        // Search Box
                         Container(
-                          height: 70,
-                          width: MediaQuery.of(context).size.width,
-                          color: Colors.black,
-                          child: Align(
-                            alignment: Alignment(0, 0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Container(
-                                color: Colors.white,
-                                height: 30,
-                                width:
-                                    MediaQuery.of(context).size.width * 0.4,
-                                child: TextField(
-                                  onTap: () => setState(() {
-                                    _selectedUser = null;
-                                    _cardColor = List.filled(
-                                        users!.length, Colors.white);
-                                  }),
-                                  onChanged: (value) {
-                                    Future.delayed(
-                                        Duration(milliseconds: 500), () {
-                                      setState(() {
-                                        fetchAllUsers(value);
-                                      });
-                                    });
-                                  },
-                                  cursorColor: Colors.black,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black),
-                                    ),
-                                    hintText: "Cari...",
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black),
-                                    ),
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 7, horizontal: 10),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 7),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 5, vertical: 7),
                           color: Color(0xFF2E6C25),
                           child: Row(
                             children: [
@@ -542,16 +573,14 @@ class _DashboardState extends State<Dashboard> {
                                           onTap: () {
                                             setState(() {
                                               _cardColor = List.filled(
-                                                  users!.length,
-                                                  Colors.white);
+                                                  users!.length, Colors.white);
                                               _selectedUser = null;
                                             });
                                           },
                                           onLongPress: () {
                                             setState(() {
                                               _cardColor = List.filled(
-                                                  users!.length,
-                                                  Colors.white);
+                                                  users!.length, Colors.white);
                                               _selectedUser = user;
                                               _cardColor[index] = Colors.grey;
                                             });
@@ -567,22 +596,19 @@ class _DashboardState extends State<Dashboard> {
                                                     child: Text(
                                                       '${index + 1}',
                                                       style: TextStyle(
-                                                          color:
-                                                              Colors.black),
+                                                          color: Colors.black),
                                                     ),
                                                   ),
                                                 ),
                                                 Expanded(
                                                   flex: 2,
                                                   child: Text(
-                                                    (user.idAdmin
-                                                                .toString() !=
+                                                    (user.idAdmin.toString() !=
                                                             "null")
                                                         ? "admin"
                                                         : "seller",
                                                     style: TextStyle(
-                                                        color:
-                                                            Colors.black),
+                                                        color: Colors.black),
                                                   ),
                                                 ),
                                                 Expanded(
@@ -590,19 +616,19 @@ class _DashboardState extends State<Dashboard> {
                                                   child: Text(
                                                     user.name ?? "",
                                                     style: TextStyle(
-                                                        color:
-                                                            Colors.black),
+                                                        color: Colors.black),
                                                   ),
                                                 ),
                                                 Expanded(
                                                   flex: 3,
                                                   child: Padding(
-                                                    padding: const EdgeInsets.only(left: 5),
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 5),
                                                     child: Text(
                                                       user.phone ?? "",
                                                       style: TextStyle(
-                                                          color:
-                                                              Colors.black),
+                                                          color: Colors.black),
                                                     ),
                                                   ),
                                                 ),
@@ -612,10 +638,8 @@ class _DashboardState extends State<Dashboard> {
                                                     child: (user.status ==
                                                             "diterima")
                                                         ? Icon(
-                                                            Icons
-                                                                .check_circle,
-                                                            color:
-                                                                Colors.green,
+                                                            Icons.check_circle,
+                                                            color: Colors.green,
                                                           )
                                                         : Icon(
                                                             Icons.cancel,
