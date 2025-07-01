@@ -1,11 +1,6 @@
 name: Deploy Backend via FTP
 
 on:
-  push:
-    paths:
-      - 'backend/**' 
-    branches:
-      - main
   workflow_run:
     workflows: ["Build Flutter Mobile Pengguna"]
     types:
