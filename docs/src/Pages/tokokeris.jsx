@@ -175,6 +175,20 @@ export default function Tokokeris() {
     fetchSellers();
   }, [search]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const scrollTarget = params.get("scrollTo");
+
+    if (scrollTarget) {
+      const el = document.getElementById(scrollTarget);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: "smooth" });
+        }, 500);
+      }
+    }
+  }, []);
+
 
   const formatRupiah = (amount) => {
     return new Intl.NumberFormat("id-ID", {
