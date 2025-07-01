@@ -34,7 +34,6 @@ class _DashboardState extends State<Dashboard> {
     await storage.delete(key: 'jwt_token');
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -46,6 +45,24 @@ class _DashboardState extends State<Dashboard> {
     try {
       UserApi? fetchedUser = await UserApi.getUser(token ?? "");
       if (!mounted) return;
+      if (fetchedUser.idSeller == null) {
+        deleteToken();
+        Future.delayed(
+            Duration(seconds: 0),
+            () => Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        Login(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                    transitionDuration: Duration(milliseconds: 0))));
+      }
       setState(() {
         user = fetchedUser;
       });
@@ -69,6 +86,41 @@ class _DashboardState extends State<Dashboard> {
     setState(() {
       fetchUser();
     });
+  }
+
+  void showDeleteConfirmationDialog(
+      BuildContext context, VoidCallback onConfirmDelete) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Konfirmasi Hapus"),
+          content: Text("Apakah kamu yakin ingin menghapus produk ini?"),
+          actions: [
+            TextButton(
+              child: Text("Batal"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Tutup dialog
+              },
+            ),
+            ElevatedButton.icon(
+              icon: Icon(Icons.delete, color: Colors.white),
+              label: Text(
+                "Hapus",
+                style: TextStyle(color: Colors.white),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); // Tutup dialog terlebih dahulu
+                onConfirmDelete(); // Jalankan fungsi hapus
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget _buildProductList() {
@@ -679,21 +731,24 @@ class _DashboardState extends State<Dashboard> {
                                             color: Colors.transparent,
                                             child: InkWell(
                                               onTap: () async {
-                                                try {
-                                                  var response = await ProductApi
-                                                      .deleteProduct(
-                                                          user?.product[index]
-                                                                  .idProduct ??
-                                                              0,
-                                                          token ?? "");
-                                                  if (response['status'] ==
-                                                      200) {
-                                                    fetchUser();
+                                                showDeleteConfirmationDialog(
+                                                    context, () async {
+                                                  try {
+                                                    var response = await ProductApi
+                                                        .deleteProduct(
+                                                            user?.product[index]
+                                                                    .idProduct ??
+                                                                0,
+                                                            token ?? "");
+                                                    if (response['status'] ==
+                                                        200) {
+                                                      fetchUser();
+                                                    }
+                                                    print(response);
+                                                  } catch (e) {
+                                                    print(e);
                                                   }
-                                                  print(response);
-                                                } catch (e) {
-                                                  print(e);
-                                                }
+                                                });
                                               },
                                               child: Center(
                                                 child: Text(

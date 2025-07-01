@@ -327,14 +327,6 @@ class _DashboardState extends State<Dashboard> {
                                                   overflow:
                                                       TextOverflow.ellipsis),
                                             ),
-                                            Text(
-                                              "${users?[index].sellerPhone}",
-                                              style: TextStyle(
-                                                  fontSize: nameFontSize2,
-                                                  fontWeight: FontWeight.normal,
-                                                  overflow:
-                                                      TextOverflow.ellipsis),
-                                            ),
                                           ],
                                         );
                                       },

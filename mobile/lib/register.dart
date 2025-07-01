@@ -19,6 +19,7 @@ class _RegisterState extends State<Register> {
   final TextEditingController _phoneController = TextEditingController();
   RegisterApi register = RegisterApi(msg: '', statusCode: 0);
   bool isClicked = false;
+  String? _fieldErrMsg;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +80,8 @@ class _RegisterState extends State<Register> {
                                         offset: Offset(12, 12))
                                   ]),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     height: 50,
@@ -102,17 +104,24 @@ class _RegisterState extends State<Register> {
                                   ),
                                   Column(
                                     children: [
-                                      (register.msg.isNotEmpty &&
-                                              register.msg[0] != 'B')
+                                      (_fieldErrMsg != null)
                                           ? Text(
-                                              register.msg,
+                                              _fieldErrMsg ?? "",
                                               style:
                                                   TextStyle(color: Colors.red),
                                               textAlign: TextAlign.center,
                                             )
-                                          : SizedBox(
-                                              height: 0,
-                                            ),
+                                          : (register.msg.isNotEmpty &&
+                                                  register.msg[0] != 'B')
+                                              ? Text(
+                                                  register.msg,
+                                                  style: TextStyle(
+                                                      color: Colors.red),
+                                                  textAlign: TextAlign.center,
+                                                )
+                                              : SizedBox(
+                                                  height: 0,
+                                                ),
                                       getTextField(context, "Name"),
                                       getTextField(context, "Username"),
                                       getTextField(context, "Password"),
@@ -127,22 +136,39 @@ class _RegisterState extends State<Register> {
                                         width: 110,
                                         height: 35,
                                         child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(20),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                           child: Material(
                                             color: Color(0xFF53C737),
                                             child: InkWell(
                                               onTap: () async {
+                                                FocusScope.of(context)
+                                                    .unfocus();
+                                                if (_usernameController.text == "" ||
+                                                    _passwordController.text ==
+                                                        "" ||
+                                                    _sellerNameController
+                                                            .text ==
+                                                        "" ||
+                                                    _phoneController.text ==
+                                                        "") {
+                                                  return setState(() {
+                                                    _fieldErrMsg =
+                                                        "Semua field wajib diisi";
+                                                  });
+                                                }
                                                 try {
-                                                  var result =
-                                                      await RegisterApi.register(
+                                                  var result = await RegisterApi
+                                                      .register(
                                                           _usernameController
                                                               .text,
                                                           _passwordController
                                                               .text,
                                                           _sellerNameController
                                                               .text,
-                                                          _phoneController.text);
-                            
+                                                          _phoneController
+                                                              .text);
+                                                  _fieldErrMsg = null;
                                                   setState(() {
                                                     if (result.msg[0] == 'B') {
                                                       isClicked = true;
@@ -188,7 +214,8 @@ class _RegisterState extends State<Register> {
                                                   child: Text(
                                                     "Login",
                                                     style: TextStyle(
-                                                        color: Color(0xFF53C737)),
+                                                        color:
+                                                            Color(0xFF53C737)),
                                                   ))
                                             ]),
                                       )

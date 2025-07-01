@@ -54,6 +54,18 @@ class UserApi {
       'ngrok-skip-browser-warning': 'true'
     });
     var userResult = json.decode(apiResult.body);
+    print(userResult);
+    if (userResult['data'] == null) {
+      return UserApi(
+          idSeller: null,
+          username: null,
+          password: null,
+          sellerName: null,
+          sellerAddress: null,
+          sellerPhone: null,
+          sellerPhoto: null,
+          product: []);
+    }
     return UserApi.createUserApi(userResult);
   }
 

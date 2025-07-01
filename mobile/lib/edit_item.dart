@@ -95,7 +95,7 @@ class _EditItemState extends State<EditItem> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Edit Produk", style: TextStyle(fontSize: 20)),
+                  Text("Ubah Produk", style: TextStyle(fontSize: 20)),
                   Container(
                     margin: EdgeInsets.only(top: 30),
                     width: 100,

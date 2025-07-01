@@ -70,6 +70,19 @@ class UserApi {
       'ngrok-skip-browser-warning': 'true'
     });
     var userResult = json.decode(apiResult.body);
+    if (userResult['data'] == null) {
+      return UserApi(
+          idSeller: null,
+          idAdmin: null,
+          username: null,
+          password: null,
+          name: null,
+          address: null,
+          phone: null,
+          photo: null,
+          status: null,
+          createdAt: null);
+    }
     print(userResult);
     return UserApi.createUserApi(userResult['data']);
   }

@@ -18,6 +18,7 @@ class _RegisterState extends State<Register> {
   final TextEditingController _phoneController = TextEditingController();
   RegisterApi register = RegisterApi(msg: '', statusCode: 0);
   bool isClicked = false;
+  String? _fieldErrMsg;
 
   @override
   Widget build(BuildContext context) {
@@ -99,17 +100,24 @@ class _RegisterState extends State<Register> {
                                   ),
                                   Column(
                                     children: [
-                                      (register.msg.isNotEmpty &&
-                                              register.msg[0] != 'B')
+                                      (_fieldErrMsg != null)
                                           ? Text(
-                                              register.msg,
+                                              _fieldErrMsg ?? "",
                                               style:
                                                   TextStyle(color: Colors.red),
                                               textAlign: TextAlign.center,
                                             )
-                                          : SizedBox(
-                                              height: 0,
-                                            ),
+                                          : (register.msg.isNotEmpty &&
+                                                  register.msg[0] != 'B')
+                                              ? Text(
+                                                  register.msg,
+                                                  style: TextStyle(
+                                                      color: Colors.red),
+                                                  textAlign: TextAlign.center,
+                                                )
+                                              : SizedBox(
+                                                  height: 0,
+                                                ),
                                       getTextField(context, "Name"),
                                       getTextField(context, "Username"),
                                       getTextField(context, "Password"),
@@ -132,6 +140,18 @@ class _RegisterState extends State<Register> {
                                               onTap: () async {
                                                 FocusScope.of(context)
                                                     .unfocus();
+                                                if (_usernameController.text == "" ||
+                                                    _passwordController.text ==
+                                                        "" ||
+                                                    _adminNameController.text ==
+                                                        "" ||
+                                                    _phoneController.text ==
+                                                        "") {
+                                                  return setState(() {
+                                                    _fieldErrMsg =
+                                                        "Semua field wajib diisi";
+                                                  });
+                                                }
                                                 try {
                                                   var result = await RegisterApi
                                                       .register(
@@ -143,7 +163,7 @@ class _RegisterState extends State<Register> {
                                                               .text,
                                                           _phoneController
                                                               .text);
-
+                                                  _fieldErrMsg = null;
                                                   setState(() {
                                                     if (result.msg[0] == 'B') {
                                                       isClicked = true;

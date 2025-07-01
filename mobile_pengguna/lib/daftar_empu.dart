@@ -267,11 +267,6 @@ class _DaftarEmpuState extends State<DaftarEmpu> {
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                 ),
-                                                Text(
-                                                  "${users?[index].sellerPhone}",
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
                                               ],
                                             ),
                                           ),
