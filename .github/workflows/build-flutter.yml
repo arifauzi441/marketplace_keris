@@ -57,10 +57,16 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          git pull origin main --rebase
+          git pull origin main --rebase || exit 1
           git add backend/public/apk/toko-keris-penjual.apk
           git commit -m "Update APK pengguna"
-          git push
+          for i in 1 2 3; do
+          git push && break || {
+            echo "Push failed, retrying in 5s..."
+            sleep 5
+            git pull origin main --rebase || true
+          }
+          done
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
