@@ -2,9 +2,11 @@ name: Deploy Backend via FTP
 
 on:
   workflow_run:
-    workflows: ["Build Flutter Mobile Pengguna"]
+    workflows: 
+      - "Build Flutter Mobile Pengguna" 
+      - "Build Flutter Mobile"
     types:
-      - completed     
+      - completed   
 
 jobs:
   ftp-deploy:
