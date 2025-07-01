@@ -8,9 +8,9 @@ html{
 .header {
   background-color: #fff;
   padding: 1rem 5rem;
-  position: fixed;
+  /* position: fixed;
   width: 100%;
-  z-index: 999;
+  z-index: 999; */
 }
 
 .header-top {
@@ -26,6 +26,12 @@ html{
   justify-content: start;
   gap: 10px;
   margin-bottom: 10px;
+}
+
+.info-download button {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  width: auto;
 }
 
 .logo-container {
@@ -96,10 +102,9 @@ html{
 .divider {
   height: 2px;
   background-color: #e0e0e0;
-  margin-top: 10px;
+  margin-top: 0px;
   margin-bottom: 40px;
   margin-inline: 5rem;
-  /* jarak kanan dan kiri */
 }
 
 /* Hero Section */
@@ -116,7 +121,7 @@ html{
   margin: 0 5rem;
   border-radius: 15px;
   overflow: hidden;
-  margin-top: 190px;
+  margin-top: 0px;
 }
 
 .hero h1 {
