@@ -8,12 +8,9 @@ html{
 .header {
   background-color: #fff;
   padding: 1rem 5rem;
-<<<<<<< HEAD
-=======
   /* position: fixed;
   width: 100%;
   z-index: 999; */
->>>>>>> ad892d40eeb9609b393a557f7c31aae6e178a7f4
 }
 
 .header-top {
@@ -124,10 +121,7 @@ html{
   margin: 0 5rem;
   border-radius: 15px;
   overflow: hidden;
-<<<<<<< HEAD
-=======
   margin-top: 0px;
->>>>>>> ad892d40eeb9609b393a557f7c31aae6e178a7f4
 }
 
 .hero h1 {
