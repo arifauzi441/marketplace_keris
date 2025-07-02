@@ -2,9 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
-import Lightbox from "yet-another-react-lightbox";
-import Zoom from "yet-another-react-lightbox/plugins/zoom"; // ✅ path benar
-import "yet-another-react-lightbox/styles.css";
 import "../index.css";
 import "../styles/toko.css";
 import "../styles/detail.css";

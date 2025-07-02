@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from 'axios';
-import { DevicePhoneMobileIcon } from '@heroicons/react/24/outline';
 import "../index.css";
 import "../styles/toko.css";
 

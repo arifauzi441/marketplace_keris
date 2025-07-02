@@ -161,7 +161,7 @@ const forgotPassword = async (req, res) => {
             if (response.data.status) {
                 return res.status(200).json({ msg: 'WA OTP sent successfully' });
             } else {
-                return res.status(500).json({ msg: 'Failed to send WA OTP', details: response.data });
+                return res.status(500).json({ msg: response.data, details: response.data });
             }
 
         } else {
@@ -177,7 +177,7 @@ const forgotPassword = async (req, res) => {
                 expired_at: expired_at.toLocaleDateString().replace(/\//g, '-') +
                     ' ' + expired_at.toLocaleTimeString('id-ID', { hour12: false }).replace(/\./g, ':')
             })
-
+            
             let global_phone_number = (phone_number.startsWith('0')) ? `62` + phone_number.slice(1) : phone_number
             const response = await axios({
                 method: 'post',
@@ -194,7 +194,7 @@ const forgotPassword = async (req, res) => {
             if (response.data.status) {
                 return res.status(200).json({ msg: 'WA OTP sent successfully' });
             } else {
-                return res.status(500).json({ msg: 'Failed to send WA OTP', details: response.data });
+                return res.status(500).json({ msg: response.data, details: response.data });
             }
         }
 
