@@ -8,6 +8,12 @@ html{
 .header {
   background-color: #fff;
   padding: 1rem 5rem;
+<<<<<<< HEAD
+=======
+  /* position: fixed;
+  width: 100%;
+  z-index: 999; */
+>>>>>>> ad892d40eeb9609b393a557f7c31aae6e178a7f4
 }
 
 .header-top {
@@ -23,6 +29,12 @@ html{
   justify-content: start;
   gap: 10px;
   margin-bottom: 10px;
+}
+
+.info-download button {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  width: auto;
 }
 
 .logo-container {
@@ -93,10 +105,9 @@ html{
 .divider {
   height: 2px;
   background-color: #e0e0e0;
-  margin-top: 10px;
+  margin-top: 0px;
   margin-bottom: 40px;
   margin-inline: 5rem;
-  /* jarak kanan dan kiri */
 }
 
 /* Hero Section */
@@ -113,6 +124,10 @@ html{
   margin: 0 5rem;
   border-radius: 15px;
   overflow: hidden;
+<<<<<<< HEAD
+=======
+  margin-top: 0px;
+>>>>>>> ad892d40eeb9609b393a557f7c31aae6e178a7f4
 }
 
 .hero h1 {
