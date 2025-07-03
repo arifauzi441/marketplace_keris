@@ -39,7 +39,7 @@ router.get('/', function(req, res, next) {
 router.get('/all-seller', getUsers);
 router.get('/all-users', getAllUsers);
 router.get('/change-status/:role/:id', verifyToken, changeStatus);
-router.post('/admin/save-token', saveToken)
+router.post('/save-token', saveToken)
 router.get('/admin', verifyToken, getAdminById);
 router.get('/seller', verifyToken, getUserWithProductById);
 router.patch('/change-password', verifyToken, changePassword);
