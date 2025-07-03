@@ -240,7 +240,7 @@ const saveToken = async (req, res) => {
         try {
             const { token, id_seller } = req.body;
             console.log(id_seller)
-            await Seller.update({ fcm_token: token }, { where: { id_admin } })
+            await Seller.update({ fcm_token: token }, { where: { id_seller } })
             res.json({ status: 'success' });
         } catch (error) {
             console.error(error);
