@@ -334,7 +334,7 @@ const sendMessage = async (req, res) => {
                 };
 
                 const response = await admin.messaging().sendEachForMulticast(message);
-                console.log('Notifikasi terkirim:', response.successCount);
+                return res.status(200).json({msg : 'Notifikasi terkirim:'+ response.successCount});
             }
         } catch(e) {
             return res.status(500).json({ msg: e })
