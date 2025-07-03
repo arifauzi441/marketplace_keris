@@ -86,7 +86,7 @@ const login = async (req, res, next) => {
     try {
         let { username, password } = req.body
         let token = "";
-        let data = await Seller.findOne({ where: { username } })
+        let data = await Seller.findOne({ where: { [Op.or] : {username, seller_phone: username} } })
 
         if (!data) return res.status(404).json({ msg: "username tidak ditemukan", token: "" })
 
@@ -109,7 +109,7 @@ const loginAdmin = async (req, res, next) => {
     try {
         let { username, password } = req.body
         let token = "";
-        let data = await Admin.findOne({ where: { username } })
+        let data = await Admin.findOne({ where: { [Op.or] : { username, admin_phone: username }} })
 
         if (!data) return res.status(404).json({ msg: "username tidak ditemukan", token: "" })
 
