@@ -4,6 +4,7 @@ const { Seller, Product, ProductPict } = require(`../model/Associations`)
 const fs = require(`fs`)
 const path = require(`path`)
 const Admin = require('../model/Admin')
+const BuyerToken = require('../model/BuyerToken')
 
 const getUsers = async (req, res, next) => {
     try {
@@ -236,11 +237,22 @@ const saveToken = async (req, res) => {
             console.error(error);
             res.status(500).json({ status: 'error' });
         }
-    } else {
+    } else if(req.body.id_seller) {
         try {
             const { token, id_seller } = req.body;
             console.log(id_seller)
             await Seller.update({ fcm_token: token }, { where: { id_seller } })
+            res.json({ status: 'success' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ status: 'error' });
+        }
+    } else {
+        try {
+            const { token } = req.body;
+            const data = await BuyerToken.findAll({where: {token}})
+            if(data) return res.json({status: "Token sudah ada"})
+            await BuyerToken.create({token})
             res.json({ status: 'success' });
         } catch (error) {
             console.error(error);

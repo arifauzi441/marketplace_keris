@@ -10,6 +10,7 @@ const qs = require('querystring');
 const admin = require('firebase-admin');
 
 const serviceAccount = require('../marketplace-keris-firebase-adminsdk-fbsvc-ddea34fe93.json');
+const BuyerToken = require("../model/BuyerToken")
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -323,6 +324,27 @@ const sendMessage = async (req, res) => {
         try {
             const admins = await Admin.findAll({ attributes: ['fcm_token'] })
             const tokens = admins.map(a => a.fcm_token).filter(t => t);
+
+            if (tokens.length > 0) {
+                const message = {
+                    notification: {
+                        title: title,
+                        body: content,
+                    },
+                    tokens: tokens,
+                };
+
+                const response = await admin.messaging().sendEachForMulticast(message);
+                return res.status(200).json({msg : 'Notifikasi terkirim:'+ response.successCount});
+            }
+        } catch(e) {
+            return res.status(500).json({ msg: e })
+        }
+    } else {
+        let { title, content } = req.body
+        try {
+            const buyers = await BuyerToken.findAll({ attributes: ['fcm_token'] })
+            const tokens = buyers.map(a => a.fcm_token).filter(t => t);
 
             if (tokens.length > 0) {
                 const message = {
