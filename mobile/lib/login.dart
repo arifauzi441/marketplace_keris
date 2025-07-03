@@ -152,7 +152,7 @@ class _LoginState extends State<Login> {
                                             : SizedBox(
                                                 height: 0,
                                               ),
-                                        getTextField(context, "Username"),
+                                        getTextField(context, "Username / No Handphone"),
                                         getTextField(context, "Password"),
                                         Container(
                                           width: MediaQuery.of(context)
@@ -390,13 +390,13 @@ class _LoginState extends State<Login> {
             height: MediaQuery.of(context).size.height * 0.5 * 0.10,
             child: TextField(
               key: Key(label),
-              controller: (label == 'Username')
+              controller: (label == 'Username / No Handphone')
                   ? _usernameController
                   : _passwordController,
               cursorColor: Color(0xFF53C737),
-              obscureText: (label == "Username") ? false : _obscureText,
+              obscureText: (label == "Username / No Handphone") ? false : _obscureText,
               decoration: InputDecoration(
-                  suffixIcon: (label == 'Username')
+                  suffixIcon: (label == 'Username / No Handphone')
                       ? Icon(Icons.person)
                       : (!_obscureText)
                           ? IconButton(

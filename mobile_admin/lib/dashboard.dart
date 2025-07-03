@@ -500,164 +500,176 @@ class _DashboardState extends State<Dashboard> {
                 ),
               ),
               Expanded(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 1),
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 5, vertical: 7),
-                          color: Color(0xFF2E6C25),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Center(
-                                  child: Text("No",
-                                      style: TextStyle(color: Colors.white)),
-                                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 1),
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 5, vertical: 7),
+                        color: Color(0xFF2E6C25),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Center(
+                                child: Text("No",
+                                    style: TextStyle(color: Colors.white)),
                               ),
-                              Expanded(
-                                flex: 2,
-                                child: Center(
-                                  child: Text("Role",
-                                      style: TextStyle(color: Colors.white)),
-                                ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Center(
+                                child: Text("Role",
+                                    style: TextStyle(color: Colors.white)),
                               ),
-                              Expanded(
-                                flex: 3,
-                                child: Center(
-                                  child: Text("Name",
-                                      style: TextStyle(color: Colors.white)),
-                                ),
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Center(
+                                child: Text("Username",
+                                    style: TextStyle(color: Colors.white)),
                               ),
-                              Expanded(
-                                flex: 3,
-                                child: Center(
-                                  child: Text("Phone",
-                                      style: TextStyle(color: Colors.white)),
-                                ),
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Center(
+                                child: Text("Name",
+                                    style: TextStyle(color: Colors.white)),
                               ),
-                              Expanded(
-                                flex: 2,
-                                child: Center(
-                                  child: Text("Status",
-                                      style: TextStyle(color: Colors.white)),
-                                ),
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Center(
+                                child: Text("Phone",
+                                    style: TextStyle(color: Colors.white)),
                               ),
-                            ],
-                          ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Center(
+                                child: Text("Status",
+                                    style: TextStyle(color: Colors.white)),
+                              ),
+                            ),
+                          ],
                         ),
-                        users == null
-                            ? Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: CircularProgressIndicator(),
-                              )
-                            : Expanded(
-                                child: ListView.builder(
-                                  itemCount: users!.length,
-                                  itemBuilder: (context, index) {
-                                    final user = users![index];
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.grey),
-                                          color: _cardColor[index]),
-                                      child: Material(
-                                        color: Colors.transparent,
-                                        child: InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              _cardColor = List.filled(
-                                                  users!.length, Colors.white);
-                                              _selectedUser = null;
-                                            });
-                                          },
-                                          onLongPress: () {
-                                            setState(() {
-                                              _cardColor = List.filled(
-                                                  users!.length, Colors.white);
-                                              _selectedUser = user;
-                                              _cardColor[index] = Colors.grey;
-                                            });
-                                          },
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 7, horizontal: 5),
-                                            child: Row(
-                                              children: [
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Center(
-                                                    child: Text(
-                                                      '${index + 1}',
-                                                      style: TextStyle(
-                                                          color: Colors.black),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 2,
+                      ),
+                      users == null
+                          ? Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: CircularProgressIndicator(),
+                            )
+                          : Expanded(
+                              child: ListView.builder(
+                                itemCount: users!.length,
+                                itemBuilder: (context, index) {
+                                  final user = users![index];
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        border:
+                                            Border.all(color: Colors.grey),
+                                        color: _cardColor[index]),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            _cardColor = List.filled(
+                                                users!.length, Colors.white);
+                                            _selectedUser = null;
+                                          });
+                                        },
+                                        onLongPress: () {
+                                          setState(() {
+                                            _cardColor = List.filled(
+                                                users!.length, Colors.white);
+                                            _selectedUser = user;
+                                            _cardColor[index] = Colors.grey;
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 7, horizontal: 5),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                flex: 1,
+                                                child: Center(
                                                   child: Text(
-                                                    (user.idAdmin.toString() !=
-                                                            "null")
-                                                        ? "admin"
-                                                        : "seller",
+                                                    '${index + 1}',
                                                     style: TextStyle(
                                                         color: Colors.black),
                                                   ),
                                                 ),
-                                                Expanded(
-                                                  flex: 3,
+                                              ),
+                                              Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  (user.idAdmin.toString() !=
+                                                          "null")
+                                                      ? "admin"
+                                                      : "seller",
+                                                  style: TextStyle(
+                                                      color: Colors.black),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 3,
+                                                child: Text(
+                                                  user.username ?? "",
+                                                  style: TextStyle(
+                                                      color: Colors.black),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 3,
+                                                child: Text(
+                                                  user.name ?? "",
+                                                  style: TextStyle(
+                                                      color: Colors.black),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 3,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 5),
                                                   child: Text(
-                                                    user.name ?? "",
+                                                    user.phone ?? "",
                                                     style: TextStyle(
                                                         color: Colors.black),
                                                   ),
                                                 ),
-                                                Expanded(
-                                                  flex: 3,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 5),
-                                                    child: Text(
-                                                      user.phone ?? "",
-                                                      style: TextStyle(
-                                                          color: Colors.black),
-                                                    ),
-                                                  ),
+                                              ),
+                                              Expanded(
+                                                flex: 2,
+                                                child: Center(
+                                                  child: (user.status ==
+                                                          "diterima")
+                                                      ? Icon(
+                                                          Icons.check_circle,
+                                                          color: Colors.green,
+                                                        )
+                                                      : Icon(
+                                                          Icons.cancel,
+                                                          color: Colors.red,
+                                                        ),
                                                 ),
-                                                Expanded(
-                                                  flex: 2,
-                                                  child: Center(
-                                                    child: (user.status ==
-                                                            "diterima")
-                                                        ? Icon(
-                                                            Icons.check_circle,
-                                                            color: Colors.green,
-                                                          )
-                                                        : Icon(
-                                                            Icons.cancel,
-                                                            color: Colors.red,
-                                                          ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
-                                    );
-                                  },
-                                ),
+                                    ),
+                                  );
+                                },
                               ),
-                      ],
-                    ),
+                            ),
+                    ],
                   ),
                 ),
               ),

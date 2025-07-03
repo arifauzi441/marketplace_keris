@@ -77,7 +77,7 @@ class UserApi {
           headers: {'ngrok-skip-browser-warning': 'true'});
 
       var passResult = json.decode(apiResult.body);
-
+      print(passResult);
       return {
         "msg": passResult['msg'],
         "status": apiResult.statusCode,
