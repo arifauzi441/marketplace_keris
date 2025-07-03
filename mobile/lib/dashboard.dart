@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile/add_item.dart';
 import 'package:mobile/detail_item.dart';
@@ -20,9 +23,10 @@ class Dashboard extends StatefulWidget {
 
   @override
   _DashboardState createState() => _DashboardState();
-} 
+}
 
 class _DashboardState extends State<Dashboard> {
+  String? fcmToken;
   static final api = dotenv.env['API_URL'] ?? "";
   UserApi? user;
   bool _burgerMenu = false;
@@ -39,6 +43,43 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
     token = widget.token;
     fetchUser();
+    Future.delayed(Duration(milliseconds: 700), () {
+      setupFCM();
+    });
+  }
+
+  Future<void> setupFCM() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    // Request permission (iOS)
+    await messaging.requestPermission();
+
+    // Dapatkan token
+    String? token = await messaging.getToken();
+    setState(() {
+      fcmToken = token;
+    });
+    print("FCM Token: $token");
+
+    // Kirim token ke backend
+    if (token != null) {
+      print("hai");
+      await sendTokenToServer(token);
+    }
+  }
+
+  Future<void> sendTokenToServer(String token) async {
+    final url = Uri.parse('$api/users/save-token');
+    final response = await http.post(url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(
+            {'token': token, 'id_seller': user?.idSeller}) // misal admin_id 1
+        );
+    if (response.statusCode == 200) {
+      print("Token saved on server");
+    } else {
+      print("Failed to save token");
+    }
   }
 
   Future<void> fetchUser() async {

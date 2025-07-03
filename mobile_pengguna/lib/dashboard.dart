@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -18,6 +20,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  String? fcmToken;
   final String api = dotenv.env['API_URL'] ?? "";
   List<UserApi>? users;
   List<ProductApi>? popularProduct;
@@ -26,6 +29,49 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
     fetchAllUsers('');
     fetchPopularProduct('');
+    Future.delayed(Duration(milliseconds: 700), () {
+      setupFCM();
+    });
+  }
+
+  Future<void> setupFCM() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    // Request permission (iOS)
+    await messaging.requestPermission();
+
+    // Dapatkan token
+    String? token = await messaging.getToken();
+    setState(() {
+      fcmToken = token;
+    });
+    print("FCM Token: $token");
+
+    // Kirim token ke backend
+    if (token != null) {
+      print("hai");
+      await sendTokenToServer(token);
+    }
+
+    // Handle notifikasi saat app di foreground
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Received message in foreground: ${message.notification?.title}');
+      // Bisa tampilkan notifikasi lokal di sini jika mau
+    });
+  }
+
+  Future<void> sendTokenToServer(String token) async {
+    final url = Uri.parse('$api/users/save-token');
+    final response = await http.post(url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(
+            {'token': token})
+        );
+    if (response.statusCode == 200) {
+      print("Token saved on server");
+    } else {
+      print("Failed to save token");
+    }
   }
 
   Future<void> fetchAllUsers(String search) async {

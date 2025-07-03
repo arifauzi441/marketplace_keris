@@ -68,7 +68,7 @@ class _DashboardState extends State<Dashboard> {
   }
 
   Future<void> sendTokenToServer(String token) async {
-    final url = Uri.parse('$api/users/admin/save-token');
+    final url = Uri.parse('$api/users/save-token');
     final response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(
@@ -79,7 +79,7 @@ class _DashboardState extends State<Dashboard> {
     } else {
       print("Failed to save token");
     }
-  }  
+  }
 
   Future<void> fetchUser() async {
     try {
@@ -569,8 +569,7 @@ class _DashboardState extends State<Dashboard> {
                                   final user = users![index];
                                   return Container(
                                     decoration: BoxDecoration(
-                                        border:
-                                            Border.all(color: Colors.grey),
+                                        border: Border.all(color: Colors.grey),
                                         color: _cardColor[index]),
                                     child: Material(
                                       color: Colors.transparent,

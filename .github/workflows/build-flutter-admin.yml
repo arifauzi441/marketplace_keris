@@ -78,3 +78,16 @@ jobs:
         with:
           name: flutter-apk-keris
           path: mobile_admin/build/app/outputs/flutter-apk/toko-keris-admin.apk
+
+      - name: Build AAB release
+        run: flutter build appbundle --release
+        working-directory: mobile_admin
+
+      - name: List AAB folder
+        run: ls -la mobile_admin/build/app/outputs/bundle/release/
+
+      - name: Upload AAB as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-aab-keris-admin
+          path: mobile_admin/build/app/outputs/bundle/release/app-release.aab
