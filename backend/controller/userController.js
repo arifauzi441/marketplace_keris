@@ -237,7 +237,7 @@ const saveToken = async (req, res) => {
             console.error(error);
             res.status(500).json({ status: 'error' });
         }
-    } else if(req.body.id_seller) {
+    } else if (req.body.id_seller) {
         try {
             const { token, id_seller } = req.body;
             console.log(id_seller)
@@ -250,9 +250,10 @@ const saveToken = async (req, res) => {
     } else {
         try {
             const { token } = req.body;
-            const data = await BuyerToken.findAll({where: {token}})
-            if(data) return res.json({status: "Token sudah ada"})
-            await BuyerToken.create({token})
+            const data = await BuyerToken.findAll({ where: { fcm_token: token } })
+            console.log(data)
+            if (data.length != 0) return res.json({ status: "Token sudah ada" })
+            let response = await BuyerToken.create({ fcm_token: token })
             res.json({ status: 'success' });
         } catch (error) {
             console.error(error);
