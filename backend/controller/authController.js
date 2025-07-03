@@ -296,4 +296,50 @@ const changePassword = async (req, res) => {
     }
 }
 
-module.exports = { register, registerAdmin, login, loginAdmin, forgotPassword, verifyCode, changePassword }
+const sendMessage = async (req, res) => {
+    if (req.body.role == "seller") {
+        let { title, content } = req.body
+        try {
+            const sellers = await Seller.findAll({ attributes: ['fcm_token'] })
+            const tokens = sellers.map(a => a.fcm_token).filter(t => t);
+
+            if (tokens.length > 0) {
+                const message = {
+                    notification: {
+                        title: title,
+                        body: content,
+                    },
+                    tokens: tokens,
+                };
+
+                const response = await admin.messaging().sendEachForMulticast(message);
+                console.log('Notifikasi terkirim:', response.successCount);
+            }
+        } catch (e) {
+            return res.status(500).json({ msg: e })
+        }
+    } else if (req.body.role == "admin") {
+        let { title, content } = req.body
+        try {
+            const admins = await Admin.findAll({ attributes: ['fcm_token'] })
+            const tokens = admins.map(a => a.fcm_token).filter(t => t);
+
+            if (tokens.length > 0) {
+                const message = {
+                    notification: {
+                        title: title,
+                        body: content,
+                    },
+                    tokens: tokens,
+                };
+
+                const response = await admin.messaging().sendEachForMulticast(message);
+                console.log('Notifikasi terkirim:', response.successCount);
+            }
+        } catch(e) {
+            return res.status(500).json({ msg: e })
+        }
+    }
+}
+
+module.exports = { register, registerAdmin, login, loginAdmin, forgotPassword, verifyCode, changePassword, sendMessage}

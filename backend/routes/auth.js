@@ -8,9 +8,10 @@ const {
     loginAdmin, 
     forgotPassword, 
     verifyCode, 
-    changePassword
+    changePassword, sendMessage
 } = require(`../controller/authController`)
 
+router.post('/sendMessage', sendMessage)
 router.post(`/register`, register)
 router.post(`/register-admin`, registerAdmin)
 router.post(`/login`, login)

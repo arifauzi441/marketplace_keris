@@ -4,13 +4,6 @@ const { Seller, Product, ProductPict } = require(`../model/Associations`)
 const fs = require(`fs`)
 const path = require(`path`)
 const Admin = require('../model/Admin')
-const admin = require('firebase-admin');
-
-const serviceAccount = require('../marketplace-keris-firebase-adminsdk-fbsvc-ddea34fe93.json');
-
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-});
 
 const getUsers = async (req, res, next) => {
     try {
@@ -256,52 +249,6 @@ const saveToken = async (req, res) => {
     }
 };
 
-const sendMessage = async (req, res) => {
-    if (req.body.role == "seller") {
-        let { title, content } = req.body
-        try {
-            const sellers = await Seller.findAll({ attributes: ['fcm_token'] })
-            const tokens = sellers.map(a => a.fcm_token).filter(t => t);
-
-            if (tokens.length > 0) {
-                const message = {
-                    notification: {
-                        title: title,
-                        body: content,
-                    },
-                    tokens: tokens,
-                };
-
-                const response = await admin.messaging().sendEachForMulticast(message);
-                console.log('Notifikasi terkirim:', response.successCount);
-            }
-        } catch (e) {
-            return res.status(500).json({ msg: e })
-        }
-    } else if (req.body.role == "admin") {
-        let { title, content } = req.body
-        try {
-            const admins = await Admin.findAll({ attributes: ['fcm_token'] })
-            const tokens = admins.map(a => a.fcm_token).filter(t => t);
-
-            if (tokens.length > 0) {
-                const message = {
-                    notification: {
-                        title: title,
-                        body: content,
-                    },
-                    tokens: tokens,
-                };
-
-                const response = await admin.messaging().sendEachForMulticast(message);
-                console.log('Notifikasi terkirim:', response.successCount);
-            }
-        } catch(e) {
-            return res.status(500).json({ msg: e })
-        }
-    }
-}
-
 module.exports = {
     saveToken,
     getAdminById,
@@ -313,5 +260,4 @@ module.exports = {
     changePassword,
     changeStatus,
     deleteUserById,
-    sendMessage
 }
