@@ -9,7 +9,8 @@ const {saveToken,
     changePassword, 
     changeStatus, 
     getAdminById,
-    deleteUserById} = require(`../controller/userController`) 
+    deleteUserById,
+    sendMessage} = require(`../controller/userController`) 
 const multer = require("multer") 
 const path = require('path')
 
@@ -36,6 +37,7 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
+router.get('/sendMessage', sendMessage);
 router.get('/all-seller', getUsers);
 router.get('/all-users', getAllUsers);
 router.get('/change-status/:role/:id', verifyToken, changeStatus);

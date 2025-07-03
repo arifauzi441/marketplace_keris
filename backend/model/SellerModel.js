@@ -13,6 +13,7 @@ const Seller = db.define(`seller`,{
     seller_address: DataTypes.STRING,
     seller_phone: DataTypes.STRING,
     seller_photo: DataTypes.STRING,
+    fcm_token: DataTypes.STRING,
     status: DataTypes.ENUM(`diterima`,`belum diterima`),
 })
 

@@ -4,6 +4,13 @@ const { Seller, Product, ProductPict } = require(`../model/Associations`)
 const fs = require(`fs`)
 const path = require(`path`)
 const Admin = require('../model/Admin')
+const admin = require('firebase-admin');
+
+const serviceAccount = require('../marketplace-keris-firebase-adminsdk-fbsvc-ddea34fe93.json');
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+});
 
 const getUsers = async (req, res, next) => {
     try {
@@ -184,7 +191,7 @@ const deleteUserById = async (req, res) => {
             }
             if (dataSeller.products.length > 0) {
                 dataSeller.products.forEach(product => {
-                    if(product.productpicts.length > 0){
+                    if (product.productpicts.length > 0) {
                         product.productpicts.forEach(pict => {
                             let productPath = path.join(__dirname, "../public", pict.path)
                             photoPath.push(productPath)
@@ -192,7 +199,7 @@ const deleteUserById = async (req, res) => {
                     }
                 })
             }
-            if(photoPath.length > 0){
+            if (photoPath.length > 0) {
                 photoPath.forEach(photo => {
                     fs.unlinkSync(photo)
                 })
@@ -226,18 +233,74 @@ const changeStatus = async (req, res) => {
 }
 
 const saveToken = async (req, res) => {
-    try {
-        const { token, id_admin } = req.body;
-        console.log(id_admin)
-        await Admin.update({ fcm_token: token }, { where: { id_admin } })
-        res.json({ status: 'success' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ status: 'error' });
+    if (req.body.id_admin) {
+        try {
+            const { token, id_admin } = req.body;
+            console.log(id_admin)
+            await Admin.update({ fcm_token: token }, { where: { id_admin } })
+            res.json({ status: 'success' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ status: 'error' });
+        }
+    } else {
+        try {
+            const { token, id_seller } = req.body;
+            console.log(id_seller)
+            await Seller.update({ fcm_token: token }, { where: { id_admin } })
+            res.json({ status: 'success' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ status: 'error' });
+        }
     }
 };
 
+const sendMessage = async (req, res) => {
+    if (req.body.role == "seller") {
+        let { title, content } = req.body
+        try {
+            const sellers = await Seller.findAll({ attributes: ['fcm_token'] })
+            const tokens = sellers.map(a => a.fcm_token).filter(t => t);
 
+            if (tokens.length > 0) {
+                const message = {
+                    notification: {
+                        title: title,
+                        body: content,
+                    },
+                    tokens: tokens,
+                };
+
+                const response = await admin.messaging().sendEachForMulticast(message);
+                console.log('Notifikasi terkirim:', response.successCount);
+            }
+        } catch (e) {
+            return res.status(500).json({ msg: e })
+        }
+    } else if (req.body.role == "admin") {
+        let { title, content } = req.body
+        try {
+            const admins = await Admin.findAll({ attributes: ['fcm_token'] })
+            const tokens = admins.map(a => a.fcm_token).filter(t => t);
+
+            if (tokens.length > 0) {
+                const message = {
+                    notification: {
+                        title: title,
+                        body: content,
+                    },
+                    tokens: tokens,
+                };
+
+                const response = await admin.messaging().sendEachForMulticast(message);
+                console.log('Notifikasi terkirim:', response.successCount);
+            }
+        } catch(e) {
+            return res.status(500).json({ msg: e })
+        }
+    }
+}
 
 module.exports = {
     saveToken,
@@ -249,5 +312,6 @@ module.exports = {
     updateUserById,
     changePassword,
     changeStatus,
-    deleteUserById
+    deleteUserById,
+    sendMessage
 }
