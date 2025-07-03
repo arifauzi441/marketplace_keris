@@ -37,7 +37,7 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-router.get('/sendMessage', sendMessage);
+router.post('/sendMessage', sendMessage);
 router.get('/all-seller', getUsers);
 router.get('/all-users', getAllUsers);
 router.get('/change-status/:role/:id', verifyToken, changeStatus);
