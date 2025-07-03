@@ -67,7 +67,7 @@ class _DashboardState extends State<Dashboard> {
       await sendTokenToServer(token);
     }
   }
-
+ 
   Future<void> sendTokenToServer(String token) async {
     final url = Uri.parse('$api/users/save-token');
     final response = await http.post(url,
