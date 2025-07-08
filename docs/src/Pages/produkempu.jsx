@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
 import "../index.css";
@@ -17,6 +17,10 @@ import NavTop from "../Components/navTop";
 
 export default function Tokokeris() {
   const API_URL = import.meta.env.VITE_API_URL
+
+  const location = useLocation()
+  const navigate = useNavigate()
+  const from = location.state?.from || '/'
   const { id } = useParams()
   const [sellerProducts, setSellerProducts] = useState({})
   const [sellerImage, setSellerImage] = useState('')
@@ -122,9 +126,7 @@ export default function Tokokeris() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <Link to="/">
-          <button className="btn-kembali">Kembali</button>
-        </Link>
+        <button className="btn-kembali" onClick={() => navigate(from)}>Kembali</button>
       </motion.div>
 
       <DetailEmpuSection
@@ -151,12 +153,13 @@ export default function Tokokeris() {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
-            ><Link to={`/detail-produk/${produk.productId}`}>
+            ><Link to={`/detail-produk/${produk.productId}`} state={{from: `/produk-empu/${sellerProducts.id_seller}`}}>
                 <ProductCard
                   image={produk.image}
                   name={produk.name}
                   price={formatRupiah(produk.price)}
                   id_product={produk.productId}
+                  fromPage={`/produk-empu/${sellerProducts.id_seller}`}
                 />
               </Link>
             </motion.div>
@@ -169,12 +172,13 @@ export default function Tokokeris() {
               key={index}
               animate={{ opacity: 0, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
-            ><Link to={`/detail-produk/${produk.productId}`}>
+            ><Link to={`/detail-produk/${produk.productId}`} state={{from: `/produk-empu/${sellerProducts.id_seller}`}}>
                 <ProductCard
                   image={produk.image}
                   name={produk.name}
                   price={formatRupiah(produk.price)}
                   id_product={produk.productId}
+                  fromPage={`/produk-empu/${sellerProducts.id_seller}`}
                 />
               </Link>
             </motion.div>

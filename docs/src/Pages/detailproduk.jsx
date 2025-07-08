@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
+import Lightbox from "yet-another-react-lightbox";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "../index.css";
 import "../styles/toko.css";
 import "../styles/detail.css";
@@ -21,8 +23,10 @@ export default function Tokokeris() {
     const [image, setImage] = useState([])
     const [mainImage, setMainImage] = useState(``);
     const [lightboxOpen, setLightboxOpen] = useState(false);
+    const navigate = useNavigate()
+    const location = useLocation()
+    const from = location.state?.from || '/';
     const [lightboxIndex, setLightboxIndex] = useState(0);
-
 
     useEffect(() => {
         const fetchDetailProducts = async () => {
@@ -120,7 +124,7 @@ export default function Tokokeris() {
     };
 
     return (
-        <div className="min-h-screen w-full flex flex-col">
+        <div className="">
             {/* Header */}
             <NavTop />
 
@@ -134,9 +138,7 @@ export default function Tokokeris() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
             >
-                <Link to="/">
-                    <button className="btn-kembali">Kembali</button>
-                </Link>
+                <button className="btn-kembali" onClick={() => navigate(from)}>Kembali</button>
             </motion.div>
 
             {/* Konten Utama */}
@@ -154,8 +156,8 @@ export default function Tokokeris() {
                                 src={mainImage ?? sketsaKeris}
                                 alt="Keris Lintang Kemukus"
                                 onClick={() => {
-                                setLightboxIndex(image.indexOf(mainImage));
-                                setLightboxOpen(true);
+                                    setLightboxIndex(image.indexOf(mainImage));
+                                    setLightboxOpen(true);
                                 }}
                                 style={{ cursor: "zoom-in" }}
                             />
@@ -176,13 +178,13 @@ export default function Tokokeris() {
             </motion.section>
 
             {lightboxOpen && (
-            <Lightbox
-                open={lightboxOpen}
-                close={() => setLightboxOpen(false)}
-                slides={image.map((img) => ({ src: img }))}
-                index={lightboxIndex}
-                plugins={[Zoom]}
-            />
+                <Lightbox
+                    open={lightboxOpen}
+                    close={() => setLightboxOpen(false)}
+                    slides={image.map((img) => ({ src: img }))}
+                    index={lightboxIndex}
+                    plugins={[Zoom]}
+                />
             )}
         </div>
     );

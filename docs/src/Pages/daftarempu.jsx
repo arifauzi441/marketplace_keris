@@ -104,6 +104,7 @@ export default function Tokokeris() {
                             name={empu.nama}
                             phone={empu.kontak}
                             id_seller={empu.sellerId}
+                            fromPage={'/daftar-empu'}
                         />
                     ))}
                 </div>

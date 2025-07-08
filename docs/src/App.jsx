@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import "./index.css";
 import Tokokeris from "./Pages/tokokeris";
 import Detailproduk from "./Pages/detailproduk";
-import ProdukTerlaris from "./Pages/produkterlaris";
 import Produkempu from "./Pages/produkempu";
 import Daftarempu from "./Pages/daftarempu"
 import Pesan from "./Pages/pesan";
@@ -18,7 +17,6 @@ function App() {
         <Route path="/adduser" element={<Notifikasi />} />
         <Route path="/notifikasi" element={<Notifikasi />} />
         <Route path="/detail-produk" element={<Detailproduk />} />
-        <Route path="/produk-terlaris" element={<ProdukTerlaris />} />
         <Route path="/produk-empu/:id" element={<Produkempu />} />
         <Route path="/detail-produk/:id" element={<Detailproduk />} />
         <Route path="/daftar-empu" element={<Daftarempu />} />
