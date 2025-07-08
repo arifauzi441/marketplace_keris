@@ -14,7 +14,7 @@ const ProductCard = ({ image, name, price, id_product, fromPage }) => (
         <button className="tombol-beli" style={{fontSize: "14px"}}>Beli</button>
       </Link>
     </div>
-  </div>
+  </div> 
 );
 
 export default ProductCard
