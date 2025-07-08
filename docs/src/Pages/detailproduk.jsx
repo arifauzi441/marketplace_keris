@@ -5,7 +5,7 @@ import axios from "axios";
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "../index.css";
-import "../styles/toko.css";
+import "../styles/toko.css"; 
 import "../styles/detail.css";
 
 import empu1 from "../assets/Images/empu1.jpg";
