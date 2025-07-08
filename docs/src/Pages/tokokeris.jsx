@@ -67,12 +67,15 @@ export default function Tokokeris() {
 
   const [products, setProducts] = useState([])
   const [imageProduct, setImageProduct] = useState([])
+  const [emptyProduct, setEmptyProduct] = useState(false)
 
   const [sellers, setSellers] = useState([])
   const [imageSellers, setImageSellers] = useState([])
+  const [emptySeller, setEmptySeller] = useState(false)
 
   const [popularProducts, setPopularProduct] = useState([])
   const [imagePopularProduct, setImagePopularProduct] = useState([])
+  const [emptyPopularProduct, setEmptyPopularProduct] = useState(false)
   const scrollRef = useRef(null);
 
 
@@ -115,6 +118,7 @@ export default function Tokokeris() {
 
         setImageProduct(blobUrls);
         setProducts(productData);
+        setEmptyProduct(response.data.product.length == 0 ? true : false)
 
       } catch (error) {
         console.error("Gagal mengambil data product:", error);
@@ -129,6 +133,7 @@ export default function Tokokeris() {
           }
         });
         setSellers(response.data.data);
+        setEmptySeller(response.data.data.length == 0 ? true : false)
 
         let data = response?.data?.data
         const blobUrls = await Promise.all(
@@ -178,6 +183,7 @@ export default function Tokokeris() {
         );
         setImagePopularProduct(blobUrls)
         setPopularProduct(response.data.product)
+        setEmptyPopularProduct(response.data.product.length == 0 ? true : false)
       } catch (error) {
         console.log(error)
       }
@@ -290,8 +296,8 @@ export default function Tokokeris() {
             {arraySellers?.map((empu, index) => (
               <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: (sellers.length == 0) ? 50 : 0 }}
-                  animate={{ opacity: (sellers.length == 0) ? 1 : 0, y: 0 }}
+                  initial={{ opacity: 0, y: (sellers.length == 0 && !emptySeller) ? 50 : 0 }}
+                  animate={{ opacity: (sellers.length == 0 && !emptySeller) ? 1 : 0, y: 0 }}
                   transition={{ delay: index * 0.1, duration: 0.5 }}
                 >
                   <EmpuSkeleton
@@ -347,21 +353,22 @@ export default function Tokokeris() {
               </Link>)
             )
           }
-        </motion.div>
-
-        <motion.div
-          className="product-grid"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: (popularProducts && popularProducts.length == 0) ? 1 : 0 }}
-          transition={{ delay: 0.2, duration: 0.8 }}
-        >{array?.map((produk, index) => (
-          <ProductSkeleton
-            image={produk.image}
-            name={""}
-            price={""}
-            id_product={produk.productId}
-          />
-        ))}
+          {array?.map((produk, index) => (
+            <motion.div
+              className="produk-card"
+              key={index}
+              initial={{ opacity: 0, y: (popularProducts.length == 0 && !emptyPopularProduct) ? 50 : 0 }}
+              animate={{ opacity: (popularProducts.length == 0 && !emptyPopularProduct) ? 1 : 0 , y : 0}}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+            >
+              <ProductSkeleton
+                image={produk.image}
+                name={""}
+                price={""}
+                id_product={produk.productId}
+              />
+            </motion.div>
+          ))}
         </motion.div>
       </motion.section>
 
@@ -396,8 +403,8 @@ export default function Tokokeris() {
             <motion.div
               className="produk-card"
               key={index}
-              initial={{ opacity: 0, y: (products && products.length == 0) ? 50 : 0 }}
-              animate={{ opacity: (products && products.length == 0) ? 1 : 0, y: 0 }}
+              initial={{ opacity: 0, y: (products.length == 0 && !emptyProduct) ? 50 : 0 }}
+              animate={{ opacity: (products.length == 0 && !emptyProduct) ? 1 : 0, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
             >
               <ProductSkeleton

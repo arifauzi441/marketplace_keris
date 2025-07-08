@@ -7,6 +7,7 @@ import 'package:flutter_application_mobile/model/product_api.dart';
 import 'package:flutter_application_mobile/model/user_api.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ProductEmpu extends StatefulWidget {
   final UserApi? users;
@@ -28,10 +29,12 @@ class _ProductEmpuState extends State<ProductEmpu> {
 
   Future<void> fetchSellerProduct(String search) async {
     try {
-      var response = await ProductApi.getProductbySeller(
-          widget.users?.idSeller ?? 1, search);
-      setState(() {
-        sellerProduct = response;
+      Future.delayed(Duration(seconds: 0), () async {
+        var response = await ProductApi.getProductbySeller(
+            widget.users?.idSeller ?? 1, search);
+        setState(() {
+          sellerProduct = response;
+        });
       });
     } catch (e) {
       print("hai");
@@ -107,6 +110,7 @@ class _ProductEmpuState extends State<ProductEmpu> {
                                   contentPadding:
                                       EdgeInsets.symmetric(horizontal: 10)),
                               onChanged: (value) => setState(() {
+                                sellerProduct = null;
                                 fetchSellerProduct(value);
                               }),
                             ),
@@ -232,107 +236,170 @@ class _ProductEmpuState extends State<ProductEmpu> {
                           maxCrossAxisExtent: 200,
                           mainAxisSpacing: 10,
                           crossAxisSpacing: 10,
-                          children: List.generate(sellerProduct?.length ?? 1,
+                          children: List.generate(sellerProduct?.length ?? 4,
                               (index) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                    color: Color(0xFF2E6C25), width: 2),
-                              ),
-                              padding: EdgeInsets.all(5),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: 200,
-                                    height: 150,
-                                    child: (sellerProduct?[index]
-                                                .productPict
-                                                .isEmpty ??
-                                            true)
-                                        ? Image.asset(
-                                            'assets/images/keris-sketsa.png',
-                                            fit: BoxFit.cover)
-                                        : FutureBuilder<Uint8List?>(
-                                            future: fetchImageBytes(
-                                                '${sellerProduct?[index].productPict[0].path}'),
-                                            builder: (context, snapshot) {
-                                              if (snapshot.connectionState ==
-                                                  ConnectionState.waiting) {
-                                                return Center(
-                                                    child:
-                                                        CircularProgressIndicator());
-                                              } else if (snapshot.hasData) {
-                                                return Image.memory(
-                                                  snapshot.data!,
-                                                  fit: BoxFit.cover,
-                                                );
-                                              } else {
-                                                return Text(
-                                                    "Gagal memuat gambar");
-                                              }
-                                            },
-                                          ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "${sellerProduct?[index].productName}",
-                                        style: TextStyle(fontSize: 16),
-                                      ),
-                                      Text(
-                                        "${sellerProduct?[index].productPrice}",
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                      SizedBox(height: 20),
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          child: Container(
-                                            width: 200,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.04,
-                                            color: Color(0xFF53C737),
-                                            child: Material(
-                                              color: Colors.transparent,
-                                              child: InkWell(
-                                                onTap: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          DetailProduct(
-                                                              product:
-                                                                  sellerProduct?[
-                                                                      index]),
+                            return (sellerProduct != null)
+                                ? Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                          color: Color(0xFF2E6C25), width: 2),
+                                    ),
+                                    padding: EdgeInsets.all(5),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: 200,
+                                          height: 150,
+                                          child: (sellerProduct?[index]
+                                                      .productPict
+                                                      .isEmpty ??
+                                                  true)
+                                              ? Image.asset(
+                                                  'assets/images/keris-sketsa.png',
+                                                  fit: BoxFit.cover)
+                                              : FutureBuilder<Uint8List?>(
+                                                  future: fetchImageBytes(
+                                                      '${sellerProduct?[index].productPict[0].path}'),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return Center(
+                                                          child:
+                                                              CircularProgressIndicator());
+                                                    } else if (snapshot
+                                                        .hasData) {
+                                                      return Image.memory(
+                                                        snapshot.data!,
+                                                        fit: BoxFit.cover,
+                                                      );
+                                                    } else {
+                                                      return Text(
+                                                          "Gagal memuat gambar");
+                                                    }
+                                                  },
+                                                ),
+                                        ),
+                                        SizedBox(height: 5),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "${sellerProduct?[index].productName}",
+                                              style: TextStyle(fontSize: 16),
+                                            ),
+                                            Text(
+                                              "${sellerProduct?[index].productPrice}",
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                            SizedBox(height: 20),
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                child: Container(
+                                                  width: 200,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.04,
+                                                  color: Color(0xFF53C737),
+                                                  child: Material(
+                                                    color: Colors.transparent,
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                DetailProduct(
+                                                                    product:
+                                                                        sellerProduct?[
+                                                                            index]),
+                                                          ),
+                                                        );
+                                                      },
+                                                      child: Center(
+                                                        child: Text(
+                                                          "Beli",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                      ),
                                                     ),
-                                                  );
-                                                },
-                                                child: Center(
-                                                  child: Text(
-                                                    "Beli",
-                                                    style: TextStyle(
-                                                        color: Colors.white),
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   )
-                                ],
-                              ),
-                            );
+                                : Shimmer.fromColors(
+                                    baseColor: Colors.grey.shade300,
+                                    highlightColor: Colors.grey.shade100,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                            color: Color(0xFF2E6C25), width: 2),
+                                      ),
+                                      padding: EdgeInsets.all(5),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            width: 200,
+                                            height: 100,
+                                          ),
+                                          SizedBox(height: 5),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "",
+                                                style: TextStyle(fontSize: 16),
+                                              ),
+                                              Text(
+                                                "",
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                              SizedBox(height: 20),
+                                              Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: Container(
+                                                    width: 200,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.04,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
                           }),
                         ),
                       )

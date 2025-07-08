@@ -22,6 +22,7 @@ export default function Tokokeris() {
     const [search, setSearch] = useState('')
 
     const [allSeller, setAllSeller] = useState([])
+    const [emptyAllSeller, setEmptyAllSeller] = useState(false)
     const [sellerImage, setSellerImage] = useState([])
 
     useEffect(() => {
@@ -37,6 +38,7 @@ export default function Tokokeris() {
                 }
             })
             setAllSeller(response.data.data)
+            setEmptyAllSeller(response.data.data.length == 0 ? true : false)
 
             let data = response?.data?.data
             const blobUrls = await Promise.all(

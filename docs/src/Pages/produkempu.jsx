@@ -24,6 +24,7 @@ export default function Tokokeris() {
   const from = location.state?.from || '/'
   const { id } = useParams()
   const [sellerProducts, setSellerProducts] = useState({})
+  const [emptySellerProducts, setEmptySellerProducts] = useState(false)
   const [sellerImage, setSellerImage] = useState('')
   const [productImage, setProductImage] = useState([])
   useEffect(() => {
@@ -67,13 +68,14 @@ export default function Tokokeris() {
         })
       )
       setProductImage(blobUrls)
+      setEmptySellerProducts(response.data.product.products.length == 0 ? true : false)
     }
     document.title = "Toko Keris Sumenep";
 
     setTimeout(() => {
       fetchSellerProduct()
 
-    }, 0)
+    }, 5000)
   }, []);
 
   const formatRupiah = (amount) => {

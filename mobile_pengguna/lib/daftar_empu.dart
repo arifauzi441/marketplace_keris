@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_application_mobile/model/user_api.dart';
 import 'package:flutter_application_mobile/product_empu.dart';
 import 'package:http/http.dart' as http;
+import 'package:shimmer/shimmer.dart';
 
 class DaftarEmpu extends StatefulWidget {
   const DaftarEmpu({super.key});
@@ -25,9 +26,11 @@ class _DaftarEmpuState extends State<DaftarEmpu> {
 
   Future<void> fetchAllUsers(String search) async {
     try {
-      var response = await UserApi.getAllSeller(search);
-      setState(() {
-        users = response;
+      Future.delayed(Duration(seconds: 0), () async {
+        var response = await UserApi.getAllSeller(search);
+        setState(() {
+          users = response;
+        });
       });
     } catch (e) {
       print("hai");
@@ -191,9 +194,9 @@ class _DaftarEmpuState extends State<DaftarEmpu> {
                               crossAxisSpacing: 10,
                               childAspectRatio: 0.7,
                             ),
-                            itemCount: users?.length ?? 1,
+                            itemCount: users?.length ?? 4,
                             itemBuilder: (context, index) {
-                              return GestureDetector(
+                              return (users != null) ? GestureDetector(
                                 onTap: () {
                                   Navigator.push(
                                     context,
@@ -276,6 +279,44 @@ class _DaftarEmpuState extends State<DaftarEmpu> {
                                     );
                                   },
                                 ),
+                              ) : LayoutBuilder(
+                                builder: (context, constraints) {
+                                  return Shimmer.fromColors(
+                                        baseColor: Colors.grey.shade300,
+                                        highlightColor: Colors.grey.shade100,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(color: Colors.black),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Spacer(),
+                                          Align(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  "",
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Spacer()
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
                               );
                             },
                           ),
