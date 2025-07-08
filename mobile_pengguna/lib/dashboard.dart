@@ -184,7 +184,7 @@ class _DashboardState extends State<Dashboard> {
                                     ),
                                   ),
                                 ],
-                              ),
+                              ), 
                               Container(
                                 height: 35,
                                 width: searchWidth,
