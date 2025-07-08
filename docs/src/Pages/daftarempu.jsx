@@ -36,7 +36,7 @@ export default function Tokokeris() {
                 headers: {
                     'ngrok-skip-browser-warning': 'true'
                 } 
-            }) 
+            })
             setAllSeller(response.data.data)
             setEmptyAllSeller(response.data.data.length == 0 ? true : false)
 
