@@ -7,7 +7,9 @@ import "../styles/toko.css";
 
 // Component
 import ProductCard from "../Components/productCard"
+import ProductSkeleton from "../Components/productSkeleton"
 import EmpuCard from "../Components/empuCard"
+import EmpuSkeleton from "../Components/empuSkeleton"
 import NavTop from "../Components/navTop"
 
 // Gambar
@@ -76,6 +78,12 @@ export default function Tokokeris() {
 
   useEffect(() => {
     document.title = "Toko Keris Sumenep";
+    setTimeout(() => {
+      fetchPopularProducts();
+
+      fetchProducts();
+      fetchSellers();
+    }, 0)
     const fetchProducts = async () => {
       try {
         const response = await axios.get(`${API_URL}/product/active-product?search=${search}`, {
@@ -120,20 +128,25 @@ export default function Tokokeris() {
             'ngrok-skip-browser-warning': 'true'
           }
         });
+        setSellers(response.data.data);
+
+        let data = response?.data?.data
         const blobUrls = await Promise.all(
-          response.data.data.map(async (imageEndpoint) => {
-            if (imageEndpoint.seller_photo == null) {
+          data?.map(async (imageEndpoint) => {
+            try {
+              if (!imageEndpoint?.seller_photo == null) {
+                return " "
+              }
+              const res = await axios.get(`${API_URL}/${imageEndpoint?.seller_photo}`, {
+                responseType: 'blob'
+              });
+              return URL.createObjectURL(res.data);
+            } catch (error) {
               return " "
             }
-            const res = await axios.get(`${API_URL}/${imageEndpoint.seller_photo}`, {
-
-              responseType: 'blob'
-            });
-            return URL.createObjectURL(res.data);
           })
         );
         setImageSellers(blobUrls)
-        setSellers(response.data.data);
       } catch (error) {
         console.error("Gagal mengambil data seller:", error);
       }
@@ -157,10 +170,10 @@ export default function Tokokeris() {
                 return URL.createObjectURL(res.data);
               } catch (err) {
                 console.error("Gagal mengambil gambar:", err);
-                return ""; 
+                return "";
               }
             }
-            return ""; 
+            return "";
           })
         );
         setImagePopularProduct(blobUrls)
@@ -169,10 +182,6 @@ export default function Tokokeris() {
         console.log(error)
       }
     }
-    fetchPopularProducts();
-
-    fetchProducts();
-    fetchSellers();
   }, [search]);
 
   const formatRupiah = (amount) => {
@@ -190,14 +199,20 @@ export default function Tokokeris() {
     array.push(...Array(sisa).fill(3));
   }
 
+  const arraySellers = []
+  if (sellers?.length <= 4) {
+    const sisa = 4 - sellers.length;
+    arraySellers.push(...Array(sisa).fill(3));
+  }
+
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* Header */}
-      <NavTop 
-        submit = {(s) => {
+      <NavTop
+        submit={(s) => {
           setTimeout(() => {
             setSearch(s)
-          }, 1000);
+          }, 5000);
         }} />
       {/* Divider */}
       <div className="divider"></div>
@@ -253,21 +268,40 @@ export default function Tokokeris() {
           transition={{ duration: 1 }}
         >
           <div className="empu-list">
-            {sellers && sellers.length > 0 && sellers.map((empu, index) => (
+            {sellers && sellers.length > 0 && sellers.map((empu, index) => {
+              console.log(imageSellers[index])
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                >
+                  <EmpuCard
+                    width={200}
+                    image={(imageSellers[index] == " " || imageSellers[index] == undefined) ? defaultSellerPhoto : imageSellers[index]}
+                    name={empu.seller_name}
+                    phone={empu.seller_phone}
+                    id_seller={empu.id_seller}
+                  />
+                </motion.div>
+              )
+            })}
+            {arraySellers?.map((empu, index) => (
               <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-              >
-                <EmpuCard
-                  width={200}
-                  image={(imageSellers[index] == " ") ? defaultSellerPhoto : imageSellers[index]}
-                  name={empu.seller_name}
-                  phone={empu.seller_phone}
-                  id_seller={empu.id_seller}
-                />
-              </motion.div>
+                  key={index}
+                  initial={{ opacity: 0, y: (sellers.length == 0) ? 50 : 0 }}
+                  animate={{ opacity: (sellers.length == 0) ? 1 : 0, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                >
+                  <EmpuSkeleton
+                    width={200}
+                    image={(imageSellers[index] == " " || imageSellers[index] == undefined) ? defaultSellerPhoto : imageSellers[index]}
+                    name={empu.seller_name}
+                    phone={empu.seller_phone}
+                    id_seller={empu.id_seller}
+                  />
+                </motion.div>
             ))}
           </div>
         </motion.div>
@@ -314,24 +348,21 @@ export default function Tokokeris() {
             )
           }
         </motion.div>
-        
-          {array?.map((produk, index) => (
-            <motion.div
-              className="produk-card"
-              initial={{ opacity: 0 }}
-              key={index}
-              animate={{ opacity: 0, y: 0 }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
-            ><Link to={`/detail-produk/${produk.productId}`}>
-                <ProductCard
-                  image={produk.image}
-                  name={produk.name}
-                  price={formatRupiah(produk.price)}
-                  id_product={produk.productId}
-                />
-              </Link>
-            </motion.div>
-          ))}
+
+        <motion.div
+          className="product-grid"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: (popularProducts && popularProducts.length == 0) ? 1 : 0 }}
+          transition={{ delay: 0.2, duration: 0.8 }}
+        >{array?.map((produk, index) => (
+          <ProductSkeleton
+            image={produk.image}
+            name={""}
+            price={""}
+            id_product={produk.productId}
+          />
+        ))}
+        </motion.div>
       </motion.section>
 
       {/* Produk Terbaru */}
@@ -360,28 +391,27 @@ export default function Tokokeris() {
               </Link>
             </motion.div>
           ))}
-        
+
           {array?.map((produk, index) => (
             <motion.div
               className="produk-card"
-              initial={{ opacity: 0 }}
               key={index}
-              animate={{ opacity: 0, y: 0 }}
+              initial={{ opacity: 0, y: (products && products.length == 0) ? 50 : 0 }}
+              animate={{ opacity: (products && products.length == 0) ? 1 : 0, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
-            ><Link to={`/detail-produk/${produk.productId}`}>
-                <ProductCard
-                  image={produk.image}
-                  name={produk.name}
-                  price={formatRupiah(produk.price)}
-                  id_product={produk.productId}
-                />
-              </Link>
+            >
+              <ProductSkeleton
+                image={produk.image}
+                name={""}
+                price={""}
+                id_product={produk.productId}
+              />
             </motion.div>
           ))}
 
         </motion.div>
       </motion.section>
-      
+
     </div>
   );
 }

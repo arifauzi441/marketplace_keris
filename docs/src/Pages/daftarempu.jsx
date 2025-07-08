@@ -14,6 +14,7 @@ import defaultSellerPhoto from "../assets/Images/account.png"
 import empuImage from "../assets/Images/empu1.jpg"
 import axios from "axios";
 import NavTop from "../Components/navTop";
+import EmpuSkeleton from "../Components/empuSkeleton";
 
 
 export default function Tokokeris() {
@@ -24,6 +25,11 @@ export default function Tokokeris() {
     const [sellerImage, setSellerImage] = useState([])
 
     useEffect(() => {
+        setTimeout(() => {
+
+            fetchAllSeller()
+
+        }, 0)
         const fetchAllSeller = async () => {
             const response = await axios.get(`${API_URL}/users/all-seller?search=${search}`, {
                 headers: {
@@ -48,8 +54,6 @@ export default function Tokokeris() {
             )
             setSellerImage(blobUrls)
         }
-
-        fetchAllSeller()
         document.title = "Toko Keris Sumenep";
 
     }, [search]);
@@ -68,6 +72,12 @@ export default function Tokokeris() {
             sellerId: seller.id_seller
         }
     })
+
+    const arraySellers = []
+    if (allSeller?.length <= 7) {
+        const sisa = 7 - allSeller.length;
+        arraySellers.push(...Array(sisa).fill(3));
+    }
 
     return (
         <div className="min-h-screen w-full flex flex-col">
@@ -106,6 +116,23 @@ export default function Tokokeris() {
                             id_seller={empu.sellerId}
                             fromPage={'/daftar-empu'}
                         />
+                    ))}
+
+                    {arraySellers?.map((empu, index) => (
+                        <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: (arraySellers.length == 0) ? 0 : 50 }}
+                            animate={{ opacity: (arraySellers.length == 0) ? 0 : 1, y: 0 }}
+                            transition={{ delay: index * 0.1, duration: 0.5 }}
+                        >
+                            <EmpuSkeleton
+                                width={200}
+                                image={(sellerImage[index] == " " || sellerImage[index] == undefined) ? defaultSellerPhoto : sellerImage[index]}
+                                name={empu.seller_name}
+                                phone={empu.seller_phone}
+                                id_seller={empu.id_seller}
+                            />
+                        </motion.div>
                     ))}
                 </div>
             </section>

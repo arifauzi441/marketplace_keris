@@ -212,6 +212,27 @@ html{
   /* Animasi untuk semua properti */
 }
 
+.empu-card-skeleton {
+  background: linear-gradient(
+    to right,
+    #f1f1f1 8%,
+    #d6d6d6 18%,
+    #f1f1f1 33%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 1.5s infinite linear;
+  border: 1px solid #ccc;
+  /* Warna border awal grey */
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease;
+  /* Animasi untuk semua properti */
+}
+
 .empu-card:hover {
   border-color: #53C737;
   /* Warna border saat hover */
@@ -469,6 +490,26 @@ html{
   justify-content: space-between;
 }
 
+.kartu-produk-skeleton {
+  border-radius: 10px;
+  padding: 15px;
+  background: linear-gradient(
+    to right,
+    #f1f1f1 8%,
+    #d6d6d6 18%,
+    #f1f1f1 33%
+  );
+  height: 50px;
+  background-size: 1000px 100%;
+  animation: shimmer 1.5s infinite linear;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 200px; /* atau sesuai kebutuhan */
+}
+
+
 .kartu-produk:hover {
   border-color: #53C737;
   transform: translateY(-5px);
@@ -524,6 +565,15 @@ html{
 
 .tombol-beli:hover {
   background-color: #3e8e41;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
 }
 
 

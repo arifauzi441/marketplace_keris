@@ -14,6 +14,7 @@ import logoImage from "../assets/Images/logo-keris.png";
 import defaultSellerPhoto from "../assets/Images/account.png"
 import sketsaKeris from "../assets/Images/keris-sketsa.png"
 import NavTop from "../Components/navTop";
+import ProductSkeleton from "../Components/productSkeleton";
 
 export default function Tokokeris() {
   const API_URL = import.meta.env.VITE_API_URL
@@ -69,7 +70,10 @@ export default function Tokokeris() {
     }
     document.title = "Toko Keris Sumenep";
 
-    fetchSellerProduct()
+    setTimeout(() => {
+      fetchSellerProduct()
+
+    }, 0)
   }, []);
 
   const formatRupiah = (amount) => {
@@ -153,7 +157,7 @@ export default function Tokokeris() {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
-            ><Link to={`/detail-produk/${produk.productId}`} state={{from: `/produk-empu/${sellerProducts.id_seller}`}}>
+            ><Link to={`/detail-produk/${produk.productId}`} state={{ from: `/produk-empu/${sellerProducts.id_seller}` }}>
                 <ProductCard
                   image={produk.image}
                   name={produk.name}
@@ -168,15 +172,15 @@ export default function Tokokeris() {
           {array?.map((produk, index) => (
             <motion.div
               className="produk-card"
-              initial={{ opacity: 0 }}
               key={index}
-              animate={{ opacity: 0, y: 0 }}
+              initial={{ opacity: 0, y: (!sellerProducts.products || sellerProducts.products.length == 0) ? 50 : 0 }}
+              animate={{ opacity: (!sellerProducts.products || sellerProducts.products.length == 0) ? 1 : 0, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
-            ><Link to={`/detail-produk/${produk.productId}`} state={{from: `/produk-empu/${sellerProducts.id_seller}`}}>
-                <ProductCard
+            ><Link to={`/detail-produk/${produk.productId}`} state={{ from: `/produk-empu/${sellerProducts.id_seller}` }}>
+                <ProductSkeleton
                   image={produk.image}
-                  name={produk.name}
-                  price={formatRupiah(produk.price)}
+                  name={""}
+                  price={""}
                   id_product={produk.productId}
                   fromPage={`/produk-empu/${sellerProducts.id_seller}`}
                 />
