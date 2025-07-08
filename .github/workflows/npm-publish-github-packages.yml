@@ -61,4 +61,4 @@ jobs:
           local-dir: docs/dist/
           server-dir: ${{ secrets.REMOTE_DIR }}
           protocol: ftp
-          timeout: 60000
+          timeout: 120000
