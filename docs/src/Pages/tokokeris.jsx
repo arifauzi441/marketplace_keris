@@ -184,11 +184,26 @@ export default function Tokokeris() {
         setImagePopularProduct(blobUrls)
         setPopularProduct(response.data.product)
         setEmptyPopularProduct(response.data.product.length == 0 ? true : false)
+
       } catch (error) {
         console.log(error)
       }
     }
   }, [search]);
+
+  useEffect(() => {
+    const scrollPos = sessionStorage.getItem('scrollPos');
+    if (
+      scrollPos &&
+      popularProducts.length !== 0 &&
+      sellers.length !== 0 &&
+      products.length !== 0
+    ) {
+      window.scrollTo(0, parseInt(scrollPos));
+      sessionStorage.removeItem('scrollPos');
+    }
+  }, [popularProducts, sellers, products]);
+
 
   const formatRupiah = (amount) => {
     return new Intl.NumberFormat("id-ID", {
@@ -198,6 +213,11 @@ export default function Tokokeris() {
       maximumFractionDigits: 0
     }).format(amount)
   }
+
+  const handleDetailClick = () => {
+    const scrollY = window.scrollY; // ambil posisi scroll saat ini
+    sessionStorage.setItem('scrollPos', scrollY);
+  };
 
   const array = []
   if (popularProducts?.length <= 4) {
@@ -295,19 +315,19 @@ export default function Tokokeris() {
             })}
             {arraySellers?.map((empu, index) => (
               <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: (sellers.length == 0 && !emptySeller) ? 50 : 0 }}
-                  animate={{ opacity: (sellers.length == 0 && !emptySeller) ? 1 : 0, y: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                >
-                  <EmpuSkeleton
-                    width={200}
-                    image={(imageSellers[index] == " " || imageSellers[index] == undefined) ? defaultSellerPhoto : imageSellers[index]}
-                    name={empu.seller_name}
-                    phone={empu.seller_phone}
-                    id_seller={empu.id_seller}
-                  />
-                </motion.div>
+                key={index}
+                initial={{ opacity: 0, y: (sellers.length == 0 && !emptySeller) ? 50 : 0 }}
+                animate={{ opacity: (sellers.length == 0 && !emptySeller) ? 1 : 0, y: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+              >
+                <EmpuSkeleton
+                  width={200}
+                  image={(imageSellers[index] == " " || imageSellers[index] == undefined) ? defaultSellerPhoto : imageSellers[index]}
+                  name={empu.seller_name}
+                  phone={empu.seller_phone}
+                  id_seller={empu.id_seller}
+                />
+              </motion.div>
             ))}
           </div>
         </motion.div>
@@ -358,7 +378,7 @@ export default function Tokokeris() {
               className="produk-card"
               key={index}
               initial={{ opacity: 0, y: (popularProducts.length == 0 && !emptyPopularProduct) ? 50 : 0 }}
-              animate={{ opacity: (popularProducts.length == 0 && !emptyPopularProduct) ? 1 : 0 , y : 0}}
+              animate={{ opacity: (popularProducts.length == 0 && !emptyPopularProduct) ? 1 : 0, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
             >
               <ProductSkeleton
@@ -388,7 +408,10 @@ export default function Tokokeris() {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
-            ><Link to={`/detail-produk/${produk.id_product}`} onClick={() => incrementClick(produk.id_product)}>
+            ><Link to={`/detail-produk/${produk.id_product}`} onClick={() => {
+              handleDetailClick()
+              incrementClick(produk.id_product)
+            }}>
                 <ProductCard
                   id_product={produk.id_product}
                   image={produk.product && produk.product.length > 0 ? imageProduct[index] : imageProduct[index]}
