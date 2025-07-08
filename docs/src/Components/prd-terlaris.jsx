@@ -13,7 +13,7 @@ const ProdukCard = ({ image, name, price }) => (
       <div className="harga-dan-beli-terlaris">
         <span className="harga-produk-terlaris">{price}</span>
         <button className="tombol-beli-terlaris">Beli</button>
-      </div>
+      </div> 
     </div>
   );
 
