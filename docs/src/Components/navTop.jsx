@@ -31,7 +31,7 @@ const NavTop = ({ submit }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-      >
+      > 
         <div className="info-download flex flex-wrap items-center justify-between gap-2 text-sm sm:text-base px-4 py-2">
           <p className="whitespace-nowrap">
             Download Aplikasi Toko Keris untuk Android
