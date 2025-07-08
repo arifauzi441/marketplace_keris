@@ -35,7 +35,7 @@ export default function Tokokeris() {
             const response = await axios.get(`${API_URL}/users/all-seller?search=${search}`, {
                 headers: {
                     'ngrok-skip-browser-warning': 'true'
-                }
+                } 
             })
             setAllSeller(response.data.data)
             setEmptyAllSeller(response.data.data.length == 0 ? true : false)
