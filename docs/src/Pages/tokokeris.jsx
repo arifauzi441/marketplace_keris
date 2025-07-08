@@ -368,7 +368,10 @@ export default function Tokokeris() {
         >
           {popularProducts && popularProducts.length >= 0 &&
             popularProducts.slice(0, 4).map((product, index) => (
-              <Link to={`/detail-produk/${product.id_product}`}>
+              <Link to={`/detail-produk/${product.id_product}`} onClick={() => {
+              handleDetailClick()
+              incrementClick(produk.id_product)
+            }}>
                 <ProductCard image={imagePopularProduct[index]} name={product?.product_name} price={formatRupiah(product?.product_price)} id_product={product?.id_product} />
               </Link>)
             )
