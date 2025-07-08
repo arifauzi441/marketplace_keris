@@ -32,7 +32,7 @@ jobs:
           storePassword=${{ secrets.KEYSTORE_PASSWORD }}
           keyPassword=${{ secrets.KEY_PASSWORD }}
           keyAlias=${{ secrets.KEY_ALIAS }}
-          storeFile=../../mobile_pengguna/android/app/my-release-key.jks
+          storeFile=app/my-release-key.jks
           EOF
 
       - name: Setup Java
