@@ -68,14 +68,15 @@ export default function Tokokeris() {
         })
       )
       setProductImage(blobUrls)
-      setEmptySellerProducts(response.data.product.products.length == 0 ? true : false)
+      console.log(response.data.product?.products.length)
+      setEmptySellerProducts(response.data.product?.products.length == 0 ? true : false)
     }
     document.title = "Toko Keris Sumenep";
 
     setTimeout(() => {
       fetchSellerProduct()
 
-    }, 5000)
+    }, 0)
   }, []);
 
   const formatRupiah = (amount) => {
@@ -171,12 +172,14 @@ export default function Tokokeris() {
             </motion.div>
           ))}
 
-          {array?.map((produk, index) => (
+          {array?.map((produk, index) => {
+            console.log(sellerProducts.products)
+            return(
             <motion.div
               className="produk-card"
               key={index}
-              initial={{ opacity: 0, y: (!sellerProducts.products || sellerProducts.products.length == 0) ? 50 : 0 }}
-              animate={{ opacity: (!sellerProducts.products || sellerProducts.products.length == 0) ? 1 : 0, y: 0 }}
+              initial={{ opacity: 0, y: (!sellerProducts.products || sellerProducts.products.length == 0 && emptySellerProducts == false) ? 50 : 0 }}
+              animate={{ opacity: (!sellerProducts.products || sellerProducts.products.length == 0 && emptySellerProducts == false) ? 1 : 0, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
             ><Link to={`/detail-produk/${produk.productId}`} state={{ from: `/produk-empu/${sellerProducts.id_seller}` }}>
                 <ProductSkeleton
@@ -188,7 +191,7 @@ export default function Tokokeris() {
                 />
               </Link>
             </motion.div>
-          ))}
+          )})}
         </motion.div>
       </motion.section>
 

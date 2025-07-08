@@ -12,3 +12,15 @@ body {
   color: #333;
   line-height: 1.6;
 }
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+
+.yarl__portal {
+  z-index: 9999 !important;
+  position: fixed !important;
+  inset: 0 !important;
+}

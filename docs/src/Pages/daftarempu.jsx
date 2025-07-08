@@ -123,8 +123,8 @@ export default function Tokokeris() {
                     {arraySellers?.map((empu, index) => (
                         <motion.div
                             key={index}
-                            initial={{ opacity: 0, y: (arraySellers.length == 0) ? 0 : 50 }}
-                            animate={{ opacity: (arraySellers.length == 0) ? 0 : 1, y: 0 }}
+                            initial={{ opacity: 0, y: (allSeller.length == 0 && emptyAllSeller == false) ? 50 : 0 }}
+                            animate={{ opacity: (allSeller.length == 0 && emptyAllSeller == false) ? 1 : 0, y: 0 }}
                             transition={{ delay: index * 0.1, duration: 0.5 }}
                         >
                             <EmpuSkeleton

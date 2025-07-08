@@ -2,7 +2,7 @@
 
     /* Tombol kembali */
     .kembali-wrapper {
-        margin-top: -1rem; 
+        margin-top: -1rem;
         margin-bottom: 20px;
         padding: 0 6rem;
     }
@@ -18,134 +18,173 @@
         box-shadow: 2px 2px 4px #aaa;
         transition: 0.3s ease;
     }
-    
-      /* Hover shadow seperti Tailwind shadow-lg */
+
+    /* Hover shadow seperti Tailwind shadow-lg */
     .btn-kembali:hover {
         --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
         --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color),
-        0 4px 6px -4px var(--tw-shadow-color);
+            0 4px 6px -4px var(--tw-shadow-color);
         box-shadow:
-        var(--tw-ring-offset-shadow, 0 0 #0000),
-        var(--tw-ring-shadow, 0 0 #0000),
-        var(--tw-shadow);
+            var(--tw-ring-offset-shadow, 0 0 #0000),
+            var(--tw-ring-shadow, 0 0 #0000),
+            var(--tw-shadow);
     }
 
     /* Section Detail Produk */
     .detail-produk {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 20px;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 20px;
     }
 
     /* Layout konten utama */
     .konten-utama {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 40px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 40px;
     }
 
     /* Gambar utama */
     .gambar-wrapper {
-    flex: 1;
-    min-width: 300px;
+        flex: 1;
+        min-width: 300px;
     }
 
     .gambar-utama {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f1f1f1;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f1f1f1;
+    }
+
+    .overlay-viewer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.95);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .overlay-viewer img {
+        max-width: 90%;
+        max-height: 90%;
+        object-fit: contain;
+    }
+
+    .close-button {
+        position: absolute;
+        top: 20px;
+        right: 25px;
+        font-size: 30px;
+        color: white;
+        background: none;
+        border: none;
+        cursor: pointer;
+        z-index: 10000;
     }
 
     .gambar-utama img {
-    height: 100%;
-    width: auto;
-    object-fit: cover;
-    transition: all 0.3s ease;
+        height: 100%;
+        width: auto;
+        object-fit: cover;
+        transition: all 0.3s ease;
     }
 
     /* Thumbnail */
     .gambar-thumbnail {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-    flex-wrap: wrap;
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        flex-wrap: wrap;
     }
+
     .gambar-thumbnail img {
-    width: 120px;
-    height: 90px;
-    object-fit: cover;
-    cursor: pointer;
-    border: 2px solid #ccc;
-    border-radius: 6px;
-    transition: 0.3s;
+        width: 120px;
+        height: 90px;
+        object-fit: cover;
+        cursor: pointer;
+        border: 2px solid #ccc;
+        border-radius: 6px;
+        transition: 0.3s;
     }
+
     .gambar-thumbnail img:hover {
-    border-color: #4CAF50;
+        border-color: #4CAF50;
     }
 
     /* Detail produk */
     .deskripsi-produk {
-    margin-top: 1.8rem;
-    flex: 1;
-    min-width: 280px;
-    margin-bottom: 5rem;
+        margin-top: 1.8rem;
+        flex: 1;
+        min-width: 280px;
+        margin-bottom: 5rem;
     }
+
     .nama-produk-detail {
-    font-size: 24px;
-    font-weight: bold;
-    display: block;
-    margin-bottom: 10px;
+        font-size: 24px;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 10px;
     }
+
     .harga-produk-detail {
-    font-size: 22px;
-    color: red;
-    font-weight: bold;
-    display: block;
-    margin-bottom: 15px;
+        font-size: 22px;
+        color: red;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 15px;
     }
+
     .dividers {
-    border-top: 1px solid #888;
-    margin: 25px 0;
+        border-top: 1px solid #888;
+        margin: 25px 0;
     }
+
     .teks-deskripsi {
-    display: block;
-    font-size: 14px;
-    line-height: 1.6;
-    color: #555;
+        display: block;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #555;
     }
 
     /* Tombol hubungi */
     .btn-hubungi {
-    background-color: #4CAF50;
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 20px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 20px;
-    box-shadow: 2px 2px 4px #aaa;
-    transition: 0.3s;
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 20px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 20px;
+        box-shadow: 2px 2px 4px #aaa;
+        transition: 0.3s;
     }
+
     .btn-hubungi:hover {
-    background-color: #45a049;
+        background-color: #45a049;
     }
 
     /* Format pembelian */
     .judul-format {
-    display: block;
-    font-size: 20px;
-    margin-top: 40px;
-    font-weight: bold;
+        display: block;
+        font-size: 20px;
+        margin-top: 40px;
+        font-weight: bold;
     }
+
     .format-pembelian {
         background-color: #f9f9f9;
         padding: 15px 20px;
@@ -153,10 +192,12 @@
         font-size: 14px;
         line-height: 1.8;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        margin-bottom: 50px; /* tambahan jarak bawah */
+        margin-bottom: 50px;
+        /* tambahan jarak bawah */
     }
+
     .label-wa {
-    font-weight: bold;
+        font-weight: bold;
     }
 
 
@@ -166,7 +207,7 @@
         gap: 12px;
         margin: 16px 0;
     }
-    
+
     .profil-empu img {
         width: 50px;
         height: 50px;
@@ -184,35 +225,40 @@
         font-size: 20px;
         margin-top: 40px;
         font-weight: bold;
-        }
-        .format-pembelian {
-            background-color: #f9f9f9;
-            padding: 15px 20px;
-            border-radius: 10px;
-            font-size: 14px;
-            line-height: 1.8;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-            margin-bottom: 50px; /* tambahan jarak bawah */
-        }
+    }
+
+    .format-pembelian {
+        background-color: #f9f9f9;
+        padding: 15px 20px;
+        border-radius: 10px;
+        font-size: 14px;
+        line-height: 1.8;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        margin-bottom: 50px;
+        /* tambahan jarak bawah */
+    }
+
     .teks-deskripsi {
         display: block;
         font-size: 14px;
         line-height: 1.6;
         color: #555;
-        }
+    }
 
 
 
 
     /* Responsif */
     @media (max-width: 768px) {
-    .konten-utama {
-        flex-direction: column;
-    }
-    .gambar-thumbnail {
-        justify-content: center;
-    }
-    .btn-kembali {
-        width: 100%;
-    }
+        .konten-utama {
+            flex-direction: column;
+        }
+
+        .gambar-thumbnail {
+            justify-content: center;
+        }
+
+        .btn-kembali {
+            width: 100%;
+        }
     }
