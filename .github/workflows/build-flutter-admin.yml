@@ -57,12 +57,6 @@ jobs:
       - name: List APK folder
         run: ls -la mobile_admin/build/app/outputs/flutter-apk/
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: flutter-apk-keris-admin
-          path: mobile_admin/build/app/outputs/flutter-apk/app-release.apk
-
       - name: Rename APK
         run: mv mobile_admin/build/app/outputs/flutter-apk/app-release.apk mobile_admin/build/app/outputs/flutter-apk/toko-keris-admin.apk
 
@@ -89,7 +83,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: flutter-apk-keris
+          name: flutter-apk-keris-admin
           path: mobile_admin/build/app/outputs/flutter-apk/toko-keris-admin.apk
 
       - name: Build AAB release
