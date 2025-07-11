@@ -84,7 +84,7 @@ class _DashboardState extends State<Dashboard> {
   Future<void> fetchUser() async {
     try {
       UserApi? fetchedUser = await UserApi.getUser(token);
-      if (!mounted) return;
+      if (!mounted) return; 
       if (fetchedUser.idAdmin == null) {
         deleteToken();
         Future.delayed(
