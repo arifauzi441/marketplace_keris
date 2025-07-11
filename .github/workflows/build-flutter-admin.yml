@@ -22,6 +22,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Decode keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64_ADMIN }}" | base64 -d > mobile_admin/android/app/my-release-key2.jks
+
+      - name: Create key.properties
+        run: |
+          cat <<EOF > mobile_admin/android/key.properties
+          storePassword=${{ secrets.KEYSTORE_PASSWORD_ADMIN }}
+          keyPassword=${{ secrets.KEY_PASSWORD_ADMIN }}
+          keyAlias=${{ secrets.KEY_ALIAS_ADMIN }}
+          storeFile=../app/my-release-key2.jks
+          EOF
+
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
