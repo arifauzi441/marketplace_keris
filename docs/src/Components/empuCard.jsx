@@ -9,7 +9,7 @@ const EmpuCard = ({ image, name, width, phone, id_seller, fromPage }) => {
         <div className="empu-name">{name}</div>
       </div>
     </Link>
-  )
+  ) 
 };
 
 export default EmpuCard
