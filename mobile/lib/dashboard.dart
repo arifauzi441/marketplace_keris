@@ -110,7 +110,7 @@ class _DashboardState extends State<Dashboard> {
           () => {
                 setState(() {
                   user = fetchedUser;
-                })
+                }) 
               });
       print("fetching ....");
     } catch (e) {
