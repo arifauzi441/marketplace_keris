@@ -21,8 +21,8 @@ jobs:
       - name: Upload backend via SFTP
         uses: easingthemes/ssh-deploy@v2.1.5
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          remote-user: ${{ secrets.SSH_USERNAME }}
-          remote-host: ${{ secrets.SSH_HOST }}
-          remote-path: /home/toko
-          local-path: ./backend
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_USER: ${{ secrets.SSH_USERNAME }}
+          SOURCE: ./backend
+          TARGET: /home/toko/backend
