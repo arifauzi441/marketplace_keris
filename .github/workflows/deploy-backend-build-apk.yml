@@ -23,6 +23,6 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
           remote-user: ${{ secrets.SSH_USERNAME }}
-          server-ip: ${{ secrets.SSH_HOST }}
+          remote-host: ${{ secrets.SSH_HOST }}
           remote-path: /home/toko
           local-path: ./backend
