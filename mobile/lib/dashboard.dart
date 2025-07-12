@@ -116,7 +116,7 @@ class _DashboardState extends State<Dashboard> {
     } catch (e) {
       print("Error fetching user: $e");
     }
-  }
+  } 
 
   // Future<Uint8List?> fetchImageBytes(String url) async {
   //   final response = await http.get(Uri.parse(url));
