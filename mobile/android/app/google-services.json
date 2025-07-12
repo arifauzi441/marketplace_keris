@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:903717298895:android:0857a68cb497115ef28dba",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQU_avokj3SDg0oQZsjvHmZwuQHl5PQ60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:903717298895:android:4f52e960989519d3f28dba",
         "android_client_info": {
           "package_name": "com.example.mobile"
@@ -29,6 +48,63 @@
         "mobilesdk_app_id": "1:903717298895:android:8e496c7ce49b7faef28dba",
         "android_client_info": {
           "package_name": "com.example.mobile_admin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQU_avokj3SDg0oQZsjvHmZwuQHl5PQ60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:903717298895:android:2cbf0b44fc758b0af28dba",
+        "android_client_info": {
+          "package_name": "com.toko.keris"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQU_avokj3SDg0oQZsjvHmZwuQHl5PQ60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:903717298895:android:b24d2ab30dcc872bf28dba",
+        "android_client_info": {
+          "package_name": "com.toko.keris_admin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQU_avokj3SDg0oQZsjvHmZwuQHl5PQ60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:903717298895:android:c42604bf9e179136f28dba",
+        "android_client_info": {
+          "package_name": "com.toko.keris_penjual"
         }
       },
       "oauth_client": [],

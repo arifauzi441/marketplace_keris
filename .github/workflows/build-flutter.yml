@@ -22,6 +22,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Decode keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64_PENJUAL }}" | base64 -d > mobile_pengguna/android/app/my-release-key3.jks
+
+      - name: Create key.properties
+        run: |
+          cat <<EOF > mobile_pengguna/android/key.properties
+          storePassword=${{ secrets.KEYSTORE_PASSWORD_PENJUAL }}
+          keyPassword=${{ secrets.KEY_PASSWORD_PENJUAL }}
+          keyAlias=${{ secrets.KEY_ALIAS_PENJUAL }}
+          storeFile=../app/my-release-key3.jks
+          EOF
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
