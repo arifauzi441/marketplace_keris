@@ -24,11 +24,11 @@ jobs:
 
       - name: Decode keystore
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64_PENJUAL }}" | base64 -d > mobile_pengguna/android/app/my-release-key3.jks
+          echo "${{ secrets.KEYSTORE_BASE64_PENJUAL }}" | base64 -d > mobile/android/app/my-release-key3.jks
 
       - name: Create key.properties
         run: |
-          cat <<EOF > mobile_pengguna/android/key.properties
+          cat <<EOF > mobile/android/key.properties
           storePassword=${{ secrets.KEYSTORE_PASSWORD_PENJUAL }}
           keyPassword=${{ secrets.KEY_PASSWORD_PENJUAL }}
           keyAlias=${{ secrets.KEY_ALIAS_PENJUAL }}
