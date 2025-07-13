@@ -29,7 +29,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   String? fcmToken;
   static final api = dotenv.env['API_URL'] ?? "";
-  UserApi? user;
+  UserApi? user; 
   bool _burgerMenu = false;
   late String? token;
   final storage = FlutterSecureStorage();
