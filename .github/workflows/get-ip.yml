@@ -1,12 +1,12 @@
+name: Test FTP Access
+
 on:
   workflow_dispatch:
-  push:
 
 jobs:
-  ci:
+  test-ftp:
     runs-on: ubuntu-latest
     steps:
-      - name: 🛒 Checkout
-        uses: actions/checkout@v2
-      - name: 🔎 Check IP
-        run: curl https://api.ipify.org
+      - name: Test FTP port
+        run: |
+          timeout 10 bash -c "</dev/tcp/${{ secrets.FTP_HOST }}/21" && echo "✅ Port 21 terbuka" || echo "❌ Port 21 tidak bisa diakses"
