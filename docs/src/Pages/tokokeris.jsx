@@ -60,7 +60,7 @@ const ProductItem = ({ image, name, price, id_product }) => {
       </div>
     </div>
   )
-};
+}; 
 
 export default function Tokokeris() {
   const [search, setSearch] = useState('')
