@@ -25,8 +25,8 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: backend/
-          server-dir: public_html/backend/
-          protocol: ftps
+          server-dir: ${{ secrets.REMOTE_DIR }}
+          protocol: ftp
           security: loose
 
 
