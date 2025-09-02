@@ -199,6 +199,7 @@ export default function Tokokeris() {
       sellers.length !== 0 &&
       products.length !== 0
     ) {
+      console.log(scrollPos)
       window.scrollTo(0, parseInt(scrollPos));
       sessionStorage.removeItem('scrollPos');
     }
@@ -217,6 +218,7 @@ export default function Tokokeris() {
   const handleDetailClick = () => {
     const scrollY = window.scrollY; // ambil posisi scroll saat ini
     sessionStorage.setItem('scrollPos', scrollY);
+    console.log(window)
   };
 
   const array = []
